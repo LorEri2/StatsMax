@@ -1,0 +1,1818 @@
+
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>I1</title>
+            
+        <style>
+            html { scroll-behavior: smooth; }
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                background-color: #f0f2f5; margin: 0; padding: 0;
+            }
+            .main-header {
+                background-color: #222; color: white; padding: 10px 20px;
+                font-weight: bold; display: flex; justify-content: space-between;
+                align-items: center; position: sticky; top: 0; z-index: 100;
+                flex-wrap: wrap; 
+            }
+            .main-header .logo { font-size: 1.2em; margin-right: 20px; flex-shrink: 0; }
+            .main-header nav { display: flex; flex-wrap: wrap; justify-content: center; }
+            .main-header nav a {
+                color: #ccc; text-decoration: none; margin: 5px; 
+                font-size: 0.8em; font-weight: normal; padding: 8px 10px;
+                border-radius: 5px; transition: background-color 0.3s, color 0.3s;
+            }
+            .main-header nav a:hover { background-color: #555; color: white; }
+            .main-header nav a.active {
+                background-color: #007bff; /* Bleu pour le bouton actif */
+                color: white;
+            }
+            .main-header nav a.alert-button {
+                background-color: #ffc107; color: #333; font-weight: bold;
+            }
+            .main-header nav a.alert-button.active {
+                background-color: #e0a800; color: #000;
+            }
+            .main-content {
+                display: flex; justify-content: center; align-items: center;
+                flex-direction: column; width: 100%; padding-top: 20px; padding-bottom: 20px;
+            }
+            .section-container.tab-content {
+                display: none; width: 90%; 
+                max-width: 900px; margin-bottom: 20px;
+            }
+            .section-container.tab-content.active { display: block; }
+            #welcome-message {
+                text-align: center; color: #555;
+                font-size: 1.5em; margin-top: 100px;
+            }
+            .no-alerts {
+                text-align: center; color: #555;
+                font-size: 1.2em; margin-top: 50px;
+            }
+            .section-title {
+                color: #333; text-align: center; font-size: 1.5em; margin-bottom: 20px;
+            }
+            .styled-table {
+                border-collapse: collapse; width: 100%; 
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                border-radius: 8px; overflow: hidden;
+            }
+            .styled-table thead tr {
+                background-color: #333; color: #ffffff; font-weight: bold;
+            }
+            .styled-table th, .styled-table td { padding: 12px 15px; }
+            .styled-table th:nth-child(1), .styled-table td:nth-child(1) { text-align: left; }
+            .styled-table th:nth-child(n+2), .styled-table td:nth-child(n+2) {
+                text-align: center; font-weight: bold;
+            }
+            .styled-table tbody tr {
+                border-bottom: 1px solid #dddddd; background-color: #ffffff;
+            }
+            .styled-table tbody tr:nth-of-type(even) { background-color: #f8f8f8; }
+            .alerts-table td { font-weight: bold !important; }
+        </style>
+        
+        </head>
+        <body>
+            <header class="main-header">
+                <div class="logo">ANALYSE DE MATCHS - I1</div>
+                <nav><a href="#" onclick="showSection('alert-section', this); event.preventDefault();" class="alert-button">⚠️ Alertes</a>
+<a href="#" onclick="showSection('ft_plus_0_5', this); event.preventDefault();">FT +0.5</a>
+<a href="#" onclick="showSection('ft_moins_0_5', this); event.preventDefault();">FT -0.5</a>
+<a href="#" onclick="showSection('ft_plus_1_5', this); event.preventDefault();">FT +1.5</a>
+<a href="#" onclick="showSection('ft_moins_1_5', this); event.preventDefault();">FT -1.5</a>
+<a href="#" onclick="showSection('ft_plus_2_5', this); event.preventDefault();">FT +2.5</a>
+<a href="#" onclick="showSection('ft_moins_2_5', this); event.preventDefault();">FT -2.5</a>
+<a href="#" onclick="showSection('ft_plus_3_5', this); event.preventDefault();">FT +3.5</a>
+<a href="#" onclick="showSection('ft_moins_3_5', this); event.preventDefault();">FT -3.5</a>
+<a href="#" onclick="showSection('mt_plus_0_5', this); event.preventDefault();">MT +0.5</a>
+<a href="#" onclick="showSection('mt_moins_0_5', this); event.preventDefault();">MT -0.5</a>
+<a href="#" onclick="showSection('mt_plus_1_5', this); event.preventDefault();">MT +1.5</a>
+<a href="#" onclick="showSection('mt_moins_1_5', this); event.preventDefault();">MT -1.5</a>
+</nav>
+            </header>
+            
+            <div class="main-content">
+                <div id="welcome-message">
+                    <h2>Veuillez sélectionner une catégorie dans la barre de navigation.</h2>
+                </div>
+                <div class="section-container tab-content" id="alert-section">
+                    <h2 class="section-title">TABLEAU DES ALERTES (I1)</h2>
+                    <style type="text/css">
+#T_71205_row0_col0, #T_71205_row0_col1, #T_71205_row0_col2, #T_71205_row0_col3, #T_71205_row1_col0, #T_71205_row1_col1, #T_71205_row1_col2, #T_71205_row1_col3, #T_71205_row2_col0, #T_71205_row2_col1, #T_71205_row2_col2, #T_71205_row2_col3, #T_71205_row3_col0, #T_71205_row3_col1, #T_71205_row3_col2, #T_71205_row3_col3, #T_71205_row4_col0, #T_71205_row4_col1, #T_71205_row4_col2, #T_71205_row4_col3, #T_71205_row5_col0, #T_71205_row5_col1, #T_71205_row5_col2, #T_71205_row5_col3 {
+  background-color: #ffebee;
+  color: #c62828;
+  font-weight: bold;
+}
+#T_71205_row6_col0, #T_71205_row6_col1, #T_71205_row6_col2, #T_71205_row6_col3, #T_71205_row7_col0, #T_71205_row7_col1, #T_71205_row7_col2, #T_71205_row7_col3, #T_71205_row8_col0, #T_71205_row8_col1, #T_71205_row8_col2, #T_71205_row8_col3, #T_71205_row9_col0, #T_71205_row9_col1, #T_71205_row9_col2, #T_71205_row9_col3, #T_71205_row10_col0, #T_71205_row10_col1, #T_71205_row10_col2, #T_71205_row10_col3, #T_71205_row11_col0, #T_71205_row11_col1, #T_71205_row11_col2, #T_71205_row11_col3, #T_71205_row12_col0, #T_71205_row12_col1, #T_71205_row12_col2, #T_71205_row12_col3, #T_71205_row13_col0, #T_71205_row13_col1, #T_71205_row13_col2, #T_71205_row13_col3 {
+  background-color: #fff3e0;
+  color: #f57c00;
+  font-weight: bold;
+}
+#T_71205_row14_col0, #T_71205_row14_col1, #T_71205_row14_col2, #T_71205_row14_col3, #T_71205_row15_col0, #T_71205_row15_col1, #T_71205_row15_col2, #T_71205_row15_col3, #T_71205_row16_col0, #T_71205_row16_col1, #T_71205_row16_col2, #T_71205_row16_col3, #T_71205_row17_col0, #T_71205_row17_col1, #T_71205_row17_col2, #T_71205_row17_col3, #T_71205_row18_col0, #T_71205_row18_col1, #T_71205_row18_col2, #T_71205_row18_col3, #T_71205_row19_col0, #T_71205_row19_col1, #T_71205_row19_col2, #T_71205_row19_col3, #T_71205_row20_col0, #T_71205_row20_col1, #T_71205_row20_col2, #T_71205_row20_col3, #T_71205_row21_col0, #T_71205_row21_col1, #T_71205_row21_col2, #T_71205_row21_col3 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: bold;
+}
+</style>
+<table id="T_71205" class="styled-table alerts-table">
+  <thead>
+    <tr>
+      <th id="T_71205_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_71205_level0_col1" class="col_heading level0 col1" >Statistique</th>
+      <th id="T_71205_level0_col2" class="col_heading level0 col2" >Record</th>
+      <th id="T_71205_level0_col3" class="col_heading level0 col3" >Série en Cours</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_71205_row0_col0" class="data row0 col0" >Atalanta</td>
+      <td id="T_71205_row0_col1" class="data row0 col1" >FT -3.5</td>
+      <td id="T_71205_row0_col2" class="data row0 col2" >8</td>
+      <td id="T_71205_row0_col3" class="data row0 col3" >8</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row1_col0" class="data row1 col0" >Como</td>
+      <td id="T_71205_row1_col1" class="data row1 col1" >FT -0.5</td>
+      <td id="T_71205_row1_col2" class="data row1 col2" >2</td>
+      <td id="T_71205_row1_col3" class="data row1 col3" >2</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row2_col0" class="data row2 col0" >Inter</td>
+      <td id="T_71205_row2_col1" class="data row2 col1" >FT +0.5</td>
+      <td id="T_71205_row2_col2" class="data row2 col2" >103</td>
+      <td id="T_71205_row2_col3" class="data row2 col3" >103</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row3_col0" class="data row3 col0" >Roma</td>
+      <td id="T_71205_row3_col1" class="data row3 col1" >FT +0.5</td>
+      <td id="T_71205_row3_col2" class="data row3 col2" >46</td>
+      <td id="T_71205_row3_col3" class="data row3 col3" >46</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row4_col0" class="data row4 col0" >Roma</td>
+      <td id="T_71205_row4_col1" class="data row4 col1" >FT -3.5</td>
+      <td id="T_71205_row4_col2" class="data row4 col2" >12</td>
+      <td id="T_71205_row4_col3" class="data row4 col3" >12</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row5_col0" class="data row5 col0" >Verona</td>
+      <td id="T_71205_row5_col1" class="data row5 col1" >FT -0.5</td>
+      <td id="T_71205_row5_col2" class="data row5 col2" >1</td>
+      <td id="T_71205_row5_col3" class="data row5 col3" >1</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row6_col0" class="data row6 col0" >Cagliari</td>
+      <td id="T_71205_row6_col1" class="data row6 col1" >FT -0.5</td>
+      <td id="T_71205_row6_col2" class="data row6 col2" >2</td>
+      <td id="T_71205_row6_col3" class="data row6 col3" >1</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row7_col0" class="data row7 col0" >Como</td>
+      <td id="T_71205_row7_col1" class="data row7 col1" >FT -1.5</td>
+      <td id="T_71205_row7_col2" class="data row7 col2" >3</td>
+      <td id="T_71205_row7_col3" class="data row7 col3" >2</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row8_col0" class="data row8 col0" >Como</td>
+      <td id="T_71205_row8_col1" class="data row8 col1" >MT -0.5</td>
+      <td id="T_71205_row8_col2" class="data row8 col2" >3</td>
+      <td id="T_71205_row8_col3" class="data row8 col3" >2</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row9_col0" class="data row9 col0" >Lecce</td>
+      <td id="T_71205_row9_col1" class="data row9 col1" >FT -0.5</td>
+      <td id="T_71205_row9_col2" class="data row9 col2" >2</td>
+      <td id="T_71205_row9_col3" class="data row9 col3" >1</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row10_col0" class="data row10 col0" >Lecce</td>
+      <td id="T_71205_row10_col1" class="data row10 col1" >FT -1.5</td>
+      <td id="T_71205_row10_col2" class="data row10 col2" >4</td>
+      <td id="T_71205_row10_col3" class="data row10 col3" >3</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row11_col0" class="data row11 col0" >Napoli</td>
+      <td id="T_71205_row11_col1" class="data row11 col1" >MT -0.5</td>
+      <td id="T_71205_row11_col2" class="data row11 col2" >4</td>
+      <td id="T_71205_row11_col3" class="data row11 col3" >3</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row12_col0" class="data row12 col0" >Torino</td>
+      <td id="T_71205_row12_col1" class="data row12 col1" >FT -0.5</td>
+      <td id="T_71205_row12_col2" class="data row12 col2" >2</td>
+      <td id="T_71205_row12_col3" class="data row12 col3" >1</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row13_col0" class="data row13 col0" >Udinese</td>
+      <td id="T_71205_row13_col1" class="data row13 col1" >MT +0.5</td>
+      <td id="T_71205_row13_col2" class="data row13 col2" >11</td>
+      <td id="T_71205_row13_col3" class="data row13 col3" >10</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row14_col0" class="data row14 col0" >Cagliari</td>
+      <td id="T_71205_row14_col1" class="data row14 col1" >FT -1.5</td>
+      <td id="T_71205_row14_col2" class="data row14 col2" >3</td>
+      <td id="T_71205_row14_col3" class="data row14 col3" >1</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row15_col0" class="data row15 col0" >Cagliari</td>
+      <td id="T_71205_row15_col1" class="data row15 col1" >MT -0.5</td>
+      <td id="T_71205_row15_col2" class="data row15 col2" >5</td>
+      <td id="T_71205_row15_col3" class="data row15 col3" >3</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row16_col0" class="data row16 col0" >Juventus</td>
+      <td id="T_71205_row16_col1" class="data row16 col1" >FT -0.5</td>
+      <td id="T_71205_row16_col2" class="data row16 col2" >3</td>
+      <td id="T_71205_row16_col3" class="data row16 col3" >1</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row17_col0" class="data row17 col0" >Lecce</td>
+      <td id="T_71205_row17_col1" class="data row17 col1" >MT -0.5</td>
+      <td id="T_71205_row17_col2" class="data row17 col2" >3</td>
+      <td id="T_71205_row17_col3" class="data row17 col3" >1</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row18_col0" class="data row18 col0" >Pisa</td>
+      <td id="T_71205_row18_col1" class="data row18 col1" >FT -1.5</td>
+      <td id="T_71205_row18_col2" class="data row18 col2" >3</td>
+      <td id="T_71205_row18_col3" class="data row18 col3" >1</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row19_col0" class="data row19 col0" >Pisa</td>
+      <td id="T_71205_row19_col1" class="data row19 col1" >MT -0.5</td>
+      <td id="T_71205_row19_col2" class="data row19 col2" >3</td>
+      <td id="T_71205_row19_col3" class="data row19 col3" >1</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row20_col0" class="data row20 col0" >Sassuolo</td>
+      <td id="T_71205_row20_col1" class="data row20 col1" >FT -3.5</td>
+      <td id="T_71205_row20_col2" class="data row20 col2" >8</td>
+      <td id="T_71205_row20_col3" class="data row20 col3" >6</td>
+    </tr>
+    <tr>
+      <td id="T_71205_row21_col0" class="data row21 col0" >Sassuolo</td>
+      <td id="T_71205_row21_col1" class="data row21 col1" >MT -1.5</td>
+      <td id="T_71205_row21_col2" class="data row21 col2" >8</td>
+      <td id="T_71205_row21_col3" class="data row21 col3" >6</td>
+    </tr>
+  </tbody>
+</table>
+
+                </div>
+                
+            <div class="section-container tab-content" id="ft_plus_0_5">
+                <h2 class="section-title">Record - Fin de Match +0.5 (1+ Buts)</h2>
+                <style type="text/css">
+#T_c2aa1_row0_col2, #T_c2aa1_row14_col2 {
+  background-color: #ffebee;
+  color: #c62828;
+  font-weight: bold;
+}
+#T_c2aa1_row1_col2, #T_c2aa1_row2_col2, #T_c2aa1_row3_col2, #T_c2aa1_row4_col2, #T_c2aa1_row5_col2, #T_c2aa1_row6_col2, #T_c2aa1_row7_col2, #T_c2aa1_row8_col2, #T_c2aa1_row9_col2, #T_c2aa1_row10_col2, #T_c2aa1_row11_col2, #T_c2aa1_row12_col2, #T_c2aa1_row13_col2, #T_c2aa1_row15_col2, #T_c2aa1_row16_col2, #T_c2aa1_row17_col2, #T_c2aa1_row18_col2, #T_c2aa1_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+</style>
+<table id="T_c2aa1" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_c2aa1_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_c2aa1_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_c2aa1_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_c2aa1_row0_col0" class="data row0 col0" >Inter</td>
+      <td id="T_c2aa1_row0_col1" class="data row0 col1" >103</td>
+      <td id="T_c2aa1_row0_col2" class="data row0 col2" >103</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row1_col0" class="data row1 col0" >Juventus</td>
+      <td id="T_c2aa1_row1_col1" class="data row1 col1" >95</td>
+      <td id="T_c2aa1_row1_col2" class="data row1 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row2_col0" class="data row2 col0" >Sassuolo</td>
+      <td id="T_c2aa1_row2_col1" class="data row2 col1" >77</td>
+      <td id="T_c2aa1_row2_col2" class="data row2 col2" >4</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row3_col0" class="data row3 col0" >Napoli</td>
+      <td id="T_c2aa1_row3_col1" class="data row3 col1" >72</td>
+      <td id="T_c2aa1_row3_col2" class="data row3 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row4_col0" class="data row4 col0" >Fiorentina</td>
+      <td id="T_c2aa1_row4_col1" class="data row4 col1" >61</td>
+      <td id="T_c2aa1_row4_col2" class="data row4 col2" >6</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row5_col0" class="data row5 col0" >Lazio</td>
+      <td id="T_c2aa1_row5_col1" class="data row5 col1" >59</td>
+      <td id="T_c2aa1_row5_col2" class="data row5 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row6_col0" class="data row6 col0" >Milan</td>
+      <td id="T_c2aa1_row6_col1" class="data row6 col1" >56</td>
+      <td id="T_c2aa1_row6_col2" class="data row6 col2" >5</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row7_col0" class="data row7 col0" >Cagliari</td>
+      <td id="T_c2aa1_row7_col1" class="data row7 col1" >55</td>
+      <td id="T_c2aa1_row7_col2" class="data row7 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row8_col0" class="data row8 col0" >Como</td>
+      <td id="T_c2aa1_row8_col1" class="data row8 col1" >53</td>
+      <td id="T_c2aa1_row8_col2" class="data row8 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row9_col0" class="data row9 col0" >Lecce</td>
+      <td id="T_c2aa1_row9_col1" class="data row9 col1" >52</td>
+      <td id="T_c2aa1_row9_col2" class="data row9 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row10_col0" class="data row10 col0" >Parma</td>
+      <td id="T_c2aa1_row10_col1" class="data row10 col1" >50</td>
+      <td id="T_c2aa1_row10_col2" class="data row10 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row11_col0" class="data row11 col0" >Atalanta</td>
+      <td id="T_c2aa1_row11_col1" class="data row11 col1" >49</td>
+      <td id="T_c2aa1_row11_col2" class="data row11 col2" >4</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row12_col0" class="data row12 col0" >Verona</td>
+      <td id="T_c2aa1_row12_col1" class="data row12 col1" >48</td>
+      <td id="T_c2aa1_row12_col2" class="data row12 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row13_col0" class="data row13 col0" >Bologna</td>
+      <td id="T_c2aa1_row13_col1" class="data row13 col1" >47</td>
+      <td id="T_c2aa1_row13_col2" class="data row13 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row14_col0" class="data row14 col0" >Roma</td>
+      <td id="T_c2aa1_row14_col1" class="data row14 col1" >46</td>
+      <td id="T_c2aa1_row14_col2" class="data row14 col2" >46</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row15_col0" class="data row15 col0" >Torino</td>
+      <td id="T_c2aa1_row15_col1" class="data row15 col1" >37</td>
+      <td id="T_c2aa1_row15_col2" class="data row15 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row16_col0" class="data row16 col0" >Udinese</td>
+      <td id="T_c2aa1_row16_col1" class="data row16 col1" >33</td>
+      <td id="T_c2aa1_row16_col2" class="data row16 col2" >15</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row17_col0" class="data row17 col0" >Pisa</td>
+      <td id="T_c2aa1_row17_col1" class="data row17 col1" >32</td>
+      <td id="T_c2aa1_row17_col2" class="data row17 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row18_col0" class="data row18 col0" >Cremonese</td>
+      <td id="T_c2aa1_row18_col1" class="data row18 col1" >31</td>
+      <td id="T_c2aa1_row18_col2" class="data row18 col2" >7</td>
+    </tr>
+    <tr>
+      <td id="T_c2aa1_row19_col0" class="data row19 col0" >Genoa</td>
+      <td id="T_c2aa1_row19_col1" class="data row19 col1" >26</td>
+      <td id="T_c2aa1_row19_col2" class="data row19 col2" >4</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_moins_0_5">
+                <h2 class="section-title">Record - Fin de Match -0.5 (0 Buts)</h2>
+                <style type="text/css">
+#T_99a0c_row0_col2, #T_99a0c_row1_col2, #T_99a0c_row3_col2, #T_99a0c_row6_col2, #T_99a0c_row7_col2, #T_99a0c_row8_col2, #T_99a0c_row10_col2, #T_99a0c_row11_col2, #T_99a0c_row12_col2, #T_99a0c_row14_col2, #T_99a0c_row15_col2, #T_99a0c_row16_col2, #T_99a0c_row17_col2, #T_99a0c_row18_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_99a0c_row2_col2 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: bold;
+}
+#T_99a0c_row4_col2, #T_99a0c_row19_col2 {
+  background-color: #ffebee;
+  color: #c62828;
+  font-weight: bold;
+}
+#T_99a0c_row5_col2, #T_99a0c_row9_col2, #T_99a0c_row13_col2 {
+  background-color: #fff3e0;
+  color: #f57c00;
+  font-weight: bold;
+}
+</style>
+<table id="T_99a0c" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_99a0c_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_99a0c_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_99a0c_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_99a0c_row0_col0" class="data row0 col0" >Bologna</td>
+      <td id="T_99a0c_row0_col1" class="data row0 col1" >3</td>
+      <td id="T_99a0c_row0_col2" class="data row0 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row1_col0" class="data row1 col0" >Genoa</td>
+      <td id="T_99a0c_row1_col1" class="data row1 col1" >3</td>
+      <td id="T_99a0c_row1_col2" class="data row1 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row2_col0" class="data row2 col0" >Juventus</td>
+      <td id="T_99a0c_row2_col1" class="data row2 col1" >3</td>
+      <td id="T_99a0c_row2_col2" class="data row2 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row3_col0" class="data row3 col0" >Atalanta</td>
+      <td id="T_99a0c_row3_col1" class="data row3 col1" >2</td>
+      <td id="T_99a0c_row3_col2" class="data row3 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row4_col0" class="data row4 col0" >Como</td>
+      <td id="T_99a0c_row4_col1" class="data row4 col1" >2</td>
+      <td id="T_99a0c_row4_col2" class="data row4 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row5_col0" class="data row5 col0" >Cagliari</td>
+      <td id="T_99a0c_row5_col1" class="data row5 col1" >2</td>
+      <td id="T_99a0c_row5_col2" class="data row5 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row6_col0" class="data row6 col0" >Fiorentina</td>
+      <td id="T_99a0c_row6_col1" class="data row6 col1" >2</td>
+      <td id="T_99a0c_row6_col2" class="data row6 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row7_col0" class="data row7 col0" >Cremonese</td>
+      <td id="T_99a0c_row7_col1" class="data row7 col1" >2</td>
+      <td id="T_99a0c_row7_col2" class="data row7 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row8_col0" class="data row8 col0" >Milan</td>
+      <td id="T_99a0c_row8_col1" class="data row8 col1" >2</td>
+      <td id="T_99a0c_row8_col2" class="data row8 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row9_col0" class="data row9 col0" >Lecce</td>
+      <td id="T_99a0c_row9_col1" class="data row9 col1" >2</td>
+      <td id="T_99a0c_row9_col2" class="data row9 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row10_col0" class="data row10 col0" >Parma</td>
+      <td id="T_99a0c_row10_col1" class="data row10 col1" >2</td>
+      <td id="T_99a0c_row10_col2" class="data row10 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row11_col0" class="data row11 col0" >Napoli</td>
+      <td id="T_99a0c_row11_col1" class="data row11 col1" >2</td>
+      <td id="T_99a0c_row11_col2" class="data row11 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row12_col0" class="data row12 col0" >Udinese</td>
+      <td id="T_99a0c_row12_col1" class="data row12 col1" >2</td>
+      <td id="T_99a0c_row12_col2" class="data row12 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row13_col0" class="data row13 col0" >Torino</td>
+      <td id="T_99a0c_row13_col1" class="data row13 col1" >2</td>
+      <td id="T_99a0c_row13_col2" class="data row13 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row14_col0" class="data row14 col0" >Pisa</td>
+      <td id="T_99a0c_row14_col1" class="data row14 col1" >2</td>
+      <td id="T_99a0c_row14_col2" class="data row14 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row15_col0" class="data row15 col0" >Sassuolo</td>
+      <td id="T_99a0c_row15_col1" class="data row15 col1" >2</td>
+      <td id="T_99a0c_row15_col2" class="data row15 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row16_col0" class="data row16 col0" >Lazio</td>
+      <td id="T_99a0c_row16_col1" class="data row16 col1" >1</td>
+      <td id="T_99a0c_row16_col2" class="data row16 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row17_col0" class="data row17 col0" >Inter</td>
+      <td id="T_99a0c_row17_col1" class="data row17 col1" >1</td>
+      <td id="T_99a0c_row17_col2" class="data row17 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row18_col0" class="data row18 col0" >Roma</td>
+      <td id="T_99a0c_row18_col1" class="data row18 col1" >1</td>
+      <td id="T_99a0c_row18_col2" class="data row18 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_99a0c_row19_col0" class="data row19 col0" >Verona</td>
+      <td id="T_99a0c_row19_col1" class="data row19 col1" >1</td>
+      <td id="T_99a0c_row19_col2" class="data row19 col2" >1</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_plus_1_5">
+                <h2 class="section-title">Record - Fin de Match +1.5 (2+ Buts)</h2>
+                <style type="text/css">
+#T_c2ebd_row0_col2, #T_c2ebd_row1_col2, #T_c2ebd_row2_col2, #T_c2ebd_row3_col2, #T_c2ebd_row4_col2, #T_c2ebd_row5_col2, #T_c2ebd_row6_col2, #T_c2ebd_row7_col2, #T_c2ebd_row8_col2, #T_c2ebd_row9_col2, #T_c2ebd_row10_col2, #T_c2ebd_row11_col2, #T_c2ebd_row12_col2, #T_c2ebd_row13_col2, #T_c2ebd_row14_col2, #T_c2ebd_row15_col2, #T_c2ebd_row16_col2, #T_c2ebd_row17_col2, #T_c2ebd_row18_col2, #T_c2ebd_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+</style>
+<table id="T_c2ebd" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_c2ebd_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_c2ebd_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_c2ebd_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_c2ebd_row0_col0" class="data row0 col0" >Juventus</td>
+      <td id="T_c2ebd_row0_col1" class="data row0 col1" >46</td>
+      <td id="T_c2ebd_row0_col2" class="data row0 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row1_col0" class="data row1 col0" >Milan</td>
+      <td id="T_c2ebd_row1_col1" class="data row1 col1" >40</td>
+      <td id="T_c2ebd_row1_col2" class="data row1 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row2_col0" class="data row2 col0" >Atalanta</td>
+      <td id="T_c2ebd_row2_col1" class="data row2 col1" >35</td>
+      <td id="T_c2ebd_row2_col2" class="data row2 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row3_col0" class="data row3 col0" >Sassuolo</td>
+      <td id="T_c2ebd_row3_col1" class="data row3 col1" >26</td>
+      <td id="T_c2ebd_row3_col2" class="data row3 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row4_col0" class="data row4 col0" >Lazio</td>
+      <td id="T_c2ebd_row4_col1" class="data row4 col1" >25</td>
+      <td id="T_c2ebd_row4_col2" class="data row4 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row5_col0" class="data row5 col0" >Roma</td>
+      <td id="T_c2ebd_row5_col1" class="data row5 col1" >23</td>
+      <td id="T_c2ebd_row5_col2" class="data row5 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row6_col0" class="data row6 col0" >Inter</td>
+      <td id="T_c2ebd_row6_col1" class="data row6 col1" >23</td>
+      <td id="T_c2ebd_row6_col2" class="data row6 col2" >4</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row7_col0" class="data row7 col0" >Parma</td>
+      <td id="T_c2ebd_row7_col1" class="data row7 col1" >21</td>
+      <td id="T_c2ebd_row7_col2" class="data row7 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row8_col0" class="data row8 col0" >Como</td>
+      <td id="T_c2ebd_row8_col1" class="data row8 col1" >20</td>
+      <td id="T_c2ebd_row8_col2" class="data row8 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row9_col0" class="data row9 col0" >Napoli</td>
+      <td id="T_c2ebd_row9_col1" class="data row9 col1" >19</td>
+      <td id="T_c2ebd_row9_col2" class="data row9 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row10_col0" class="data row10 col0" >Pisa</td>
+      <td id="T_c2ebd_row10_col1" class="data row10 col1" >18</td>
+      <td id="T_c2ebd_row10_col2" class="data row10 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row11_col0" class="data row11 col0" >Cagliari</td>
+      <td id="T_c2ebd_row11_col1" class="data row11 col1" >17</td>
+      <td id="T_c2ebd_row11_col2" class="data row11 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row12_col0" class="data row12 col0" >Genoa</td>
+      <td id="T_c2ebd_row12_col1" class="data row12 col1" >17</td>
+      <td id="T_c2ebd_row12_col2" class="data row12 col2" >4</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row13_col0" class="data row13 col0" >Bologna</td>
+      <td id="T_c2ebd_row13_col1" class="data row13 col1" >15</td>
+      <td id="T_c2ebd_row13_col2" class="data row13 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row14_col0" class="data row14 col0" >Verona</td>
+      <td id="T_c2ebd_row14_col1" class="data row14 col1" >14</td>
+      <td id="T_c2ebd_row14_col2" class="data row14 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row15_col0" class="data row15 col0" >Fiorentina</td>
+      <td id="T_c2ebd_row15_col1" class="data row15 col1" >13</td>
+      <td id="T_c2ebd_row15_col2" class="data row15 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row16_col0" class="data row16 col0" >Lecce</td>
+      <td id="T_c2ebd_row16_col1" class="data row16 col1" >13</td>
+      <td id="T_c2ebd_row16_col2" class="data row16 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row17_col0" class="data row17 col0" >Cremonese</td>
+      <td id="T_c2ebd_row17_col1" class="data row17 col1" >13</td>
+      <td id="T_c2ebd_row17_col2" class="data row17 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row18_col0" class="data row18 col0" >Torino</td>
+      <td id="T_c2ebd_row18_col1" class="data row18 col1" >11</td>
+      <td id="T_c2ebd_row18_col2" class="data row18 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_c2ebd_row19_col0" class="data row19 col0" >Udinese</td>
+      <td id="T_c2ebd_row19_col1" class="data row19 col1" >11</td>
+      <td id="T_c2ebd_row19_col2" class="data row19 col2" >1</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_moins_1_5">
+                <h2 class="section-title">Record - Fin de Match -1.5 (0-1 Buts)</h2>
+                <style type="text/css">
+#T_ca67b_row0_col2, #T_ca67b_row1_col2, #T_ca67b_row2_col2, #T_ca67b_row3_col2, #T_ca67b_row4_col2, #T_ca67b_row5_col2, #T_ca67b_row6_col2, #T_ca67b_row7_col2, #T_ca67b_row9_col2, #T_ca67b_row10_col2, #T_ca67b_row11_col2, #T_ca67b_row12_col2, #T_ca67b_row14_col2, #T_ca67b_row17_col2, #T_ca67b_row18_col2, #T_ca67b_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_ca67b_row8_col2, #T_ca67b_row13_col2 {
+  background-color: #fff3e0;
+  color: #f57c00;
+  font-weight: bold;
+}
+#T_ca67b_row15_col2, #T_ca67b_row16_col2 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: bold;
+}
+</style>
+<table id="T_ca67b" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_ca67b_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_ca67b_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_ca67b_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_ca67b_row0_col0" class="data row0 col0" >Udinese</td>
+      <td id="T_ca67b_row0_col1" class="data row0 col1" >6</td>
+      <td id="T_ca67b_row0_col2" class="data row0 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row1_col0" class="data row1 col0" >Inter</td>
+      <td id="T_ca67b_row1_col1" class="data row1 col1" >6</td>
+      <td id="T_ca67b_row1_col2" class="data row1 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row2_col0" class="data row2 col0" >Fiorentina</td>
+      <td id="T_ca67b_row2_col1" class="data row2 col1" >5</td>
+      <td id="T_ca67b_row2_col2" class="data row2 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row3_col0" class="data row3 col0" >Genoa</td>
+      <td id="T_ca67b_row3_col1" class="data row3 col1" >5</td>
+      <td id="T_ca67b_row3_col2" class="data row3 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row4_col0" class="data row4 col0" >Milan</td>
+      <td id="T_ca67b_row4_col1" class="data row4 col1" >5</td>
+      <td id="T_ca67b_row4_col2" class="data row4 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row5_col0" class="data row5 col0" >Roma</td>
+      <td id="T_ca67b_row5_col1" class="data row5 col1" >4</td>
+      <td id="T_ca67b_row5_col2" class="data row5 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row6_col0" class="data row6 col0" >Torino</td>
+      <td id="T_ca67b_row6_col1" class="data row6 col1" >4</td>
+      <td id="T_ca67b_row6_col2" class="data row6 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row7_col0" class="data row7 col0" >Bologna</td>
+      <td id="T_ca67b_row7_col1" class="data row7 col1" >4</td>
+      <td id="T_ca67b_row7_col2" class="data row7 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row8_col0" class="data row8 col0" >Lecce</td>
+      <td id="T_ca67b_row8_col1" class="data row8 col1" >4</td>
+      <td id="T_ca67b_row8_col2" class="data row8 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row9_col0" class="data row9 col0" >Cremonese</td>
+      <td id="T_ca67b_row9_col1" class="data row9 col1" >4</td>
+      <td id="T_ca67b_row9_col2" class="data row9 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row10_col0" class="data row10 col0" >Lazio</td>
+      <td id="T_ca67b_row10_col1" class="data row10 col1" >4</td>
+      <td id="T_ca67b_row10_col2" class="data row10 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row11_col0" class="data row11 col0" >Juventus</td>
+      <td id="T_ca67b_row11_col1" class="data row11 col1" >4</td>
+      <td id="T_ca67b_row11_col2" class="data row11 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row12_col0" class="data row12 col0" >Verona</td>
+      <td id="T_ca67b_row12_col1" class="data row12 col1" >4</td>
+      <td id="T_ca67b_row12_col2" class="data row12 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row13_col0" class="data row13 col0" >Como</td>
+      <td id="T_ca67b_row13_col1" class="data row13 col1" >3</td>
+      <td id="T_ca67b_row13_col2" class="data row13 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row14_col0" class="data row14 col0" >Atalanta</td>
+      <td id="T_ca67b_row14_col1" class="data row14 col1" >3</td>
+      <td id="T_ca67b_row14_col2" class="data row14 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row15_col0" class="data row15 col0" >Cagliari</td>
+      <td id="T_ca67b_row15_col1" class="data row15 col1" >3</td>
+      <td id="T_ca67b_row15_col2" class="data row15 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row16_col0" class="data row16 col0" >Pisa</td>
+      <td id="T_ca67b_row16_col1" class="data row16 col1" >3</td>
+      <td id="T_ca67b_row16_col2" class="data row16 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row17_col0" class="data row17 col0" >Parma</td>
+      <td id="T_ca67b_row17_col1" class="data row17 col1" >3</td>
+      <td id="T_ca67b_row17_col2" class="data row17 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row18_col0" class="data row18 col0" >Napoli</td>
+      <td id="T_ca67b_row18_col1" class="data row18 col1" >3</td>
+      <td id="T_ca67b_row18_col2" class="data row18 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ca67b_row19_col0" class="data row19 col0" >Sassuolo</td>
+      <td id="T_ca67b_row19_col1" class="data row19 col1" >3</td>
+      <td id="T_ca67b_row19_col2" class="data row19 col2" >0</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_plus_2_5">
+                <h2 class="section-title">Record - Fin de Match +2.5 (3+ Buts)</h2>
+                <style type="text/css">
+#T_5b3f5_row0_col2, #T_5b3f5_row1_col2, #T_5b3f5_row2_col2, #T_5b3f5_row3_col2, #T_5b3f5_row4_col2, #T_5b3f5_row5_col2, #T_5b3f5_row6_col2, #T_5b3f5_row7_col2, #T_5b3f5_row8_col2, #T_5b3f5_row9_col2, #T_5b3f5_row10_col2, #T_5b3f5_row11_col2, #T_5b3f5_row12_col2, #T_5b3f5_row13_col2, #T_5b3f5_row14_col2, #T_5b3f5_row15_col2, #T_5b3f5_row16_col2, #T_5b3f5_row17_col2, #T_5b3f5_row18_col2, #T_5b3f5_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+</style>
+<table id="T_5b3f5" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_5b3f5_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_5b3f5_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_5b3f5_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_5b3f5_row0_col0" class="data row0 col0" >Sassuolo</td>
+      <td id="T_5b3f5_row0_col1" class="data row0 col1" >13</td>
+      <td id="T_5b3f5_row0_col2" class="data row0 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row1_col0" class="data row1 col0" >Lazio</td>
+      <td id="T_5b3f5_row1_col1" class="data row1 col1" >12</td>
+      <td id="T_5b3f5_row1_col2" class="data row1 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row2_col0" class="data row2 col0" >Inter</td>
+      <td id="T_5b3f5_row2_col1" class="data row2 col1" >12</td>
+      <td id="T_5b3f5_row2_col2" class="data row2 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row3_col0" class="data row3 col0" >Parma</td>
+      <td id="T_5b3f5_row3_col1" class="data row3 col1" >12</td>
+      <td id="T_5b3f5_row3_col2" class="data row3 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row4_col0" class="data row4 col0" >Milan</td>
+      <td id="T_5b3f5_row4_col1" class="data row4 col1" >11</td>
+      <td id="T_5b3f5_row4_col2" class="data row4 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row5_col0" class="data row5 col0" >Lecce</td>
+      <td id="T_5b3f5_row5_col1" class="data row5 col1" >11</td>
+      <td id="T_5b3f5_row5_col2" class="data row5 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row6_col0" class="data row6 col0" >Juventus</td>
+      <td id="T_5b3f5_row6_col1" class="data row6 col1" >11</td>
+      <td id="T_5b3f5_row6_col2" class="data row6 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row7_col0" class="data row7 col0" >Bologna</td>
+      <td id="T_5b3f5_row7_col1" class="data row7 col1" >11</td>
+      <td id="T_5b3f5_row7_col2" class="data row7 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row8_col0" class="data row8 col0" >Atalanta</td>
+      <td id="T_5b3f5_row8_col1" class="data row8 col1" >9</td>
+      <td id="T_5b3f5_row8_col2" class="data row8 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row9_col0" class="data row9 col0" >Roma</td>
+      <td id="T_5b3f5_row9_col1" class="data row9 col1" >9</td>
+      <td id="T_5b3f5_row9_col2" class="data row9 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row10_col0" class="data row10 col0" >Genoa</td>
+      <td id="T_5b3f5_row10_col1" class="data row10 col1" >8</td>
+      <td id="T_5b3f5_row10_col2" class="data row10 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row11_col0" class="data row11 col0" >Cagliari</td>
+      <td id="T_5b3f5_row11_col1" class="data row11 col1" >7</td>
+      <td id="T_5b3f5_row11_col2" class="data row11 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row12_col0" class="data row12 col0" >Pisa</td>
+      <td id="T_5b3f5_row12_col1" class="data row12 col1" >6</td>
+      <td id="T_5b3f5_row12_col2" class="data row12 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row13_col0" class="data row13 col0" >Cremonese</td>
+      <td id="T_5b3f5_row13_col1" class="data row13 col1" >6</td>
+      <td id="T_5b3f5_row13_col2" class="data row13 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row14_col0" class="data row14 col0" >Fiorentina</td>
+      <td id="T_5b3f5_row14_col1" class="data row14 col1" >6</td>
+      <td id="T_5b3f5_row14_col2" class="data row14 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row15_col0" class="data row15 col0" >Napoli</td>
+      <td id="T_5b3f5_row15_col1" class="data row15 col1" >6</td>
+      <td id="T_5b3f5_row15_col2" class="data row15 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row16_col0" class="data row16 col0" >Verona</td>
+      <td id="T_5b3f5_row16_col1" class="data row16 col1" >6</td>
+      <td id="T_5b3f5_row16_col2" class="data row16 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row17_col0" class="data row17 col0" >Torino</td>
+      <td id="T_5b3f5_row17_col1" class="data row17 col1" >6</td>
+      <td id="T_5b3f5_row17_col2" class="data row17 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row18_col0" class="data row18 col0" >Udinese</td>
+      <td id="T_5b3f5_row18_col1" class="data row18 col1" >5</td>
+      <td id="T_5b3f5_row18_col2" class="data row18 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5b3f5_row19_col0" class="data row19 col0" >Como</td>
+      <td id="T_5b3f5_row19_col1" class="data row19 col1" >4</td>
+      <td id="T_5b3f5_row19_col2" class="data row19 col2" >0</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_moins_2_5">
+                <h2 class="section-title">Record - Fin de Match -2.5 (0-2 Buts)</h2>
+                <style type="text/css">
+#T_37a47_row0_col2, #T_37a47_row1_col2, #T_37a47_row2_col2, #T_37a47_row3_col2, #T_37a47_row4_col2, #T_37a47_row5_col2, #T_37a47_row6_col2, #T_37a47_row7_col2, #T_37a47_row8_col2, #T_37a47_row9_col2, #T_37a47_row10_col2, #T_37a47_row11_col2, #T_37a47_row12_col2, #T_37a47_row13_col2, #T_37a47_row14_col2, #T_37a47_row15_col2, #T_37a47_row16_col2, #T_37a47_row17_col2, #T_37a47_row18_col2, #T_37a47_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+</style>
+<table id="T_37a47" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_37a47_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_37a47_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_37a47_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_37a47_row0_col0" class="data row0 col0" >Cremonese</td>
+      <td id="T_37a47_row0_col1" class="data row0 col1" >11</td>
+      <td id="T_37a47_row0_col2" class="data row0 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row1_col0" class="data row1 col0" >Pisa</td>
+      <td id="T_37a47_row1_col1" class="data row1 col1" >10</td>
+      <td id="T_37a47_row1_col2" class="data row1 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row2_col0" class="data row2 col0" >Torino</td>
+      <td id="T_37a47_row2_col1" class="data row2 col1" >10</td>
+      <td id="T_37a47_row2_col2" class="data row2 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row3_col0" class="data row3 col0" >Cagliari</td>
+      <td id="T_37a47_row3_col1" class="data row3 col1" >9</td>
+      <td id="T_37a47_row3_col2" class="data row3 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row4_col0" class="data row4 col0" >Parma</td>
+      <td id="T_37a47_row4_col1" class="data row4 col1" >9</td>
+      <td id="T_37a47_row4_col2" class="data row4 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row5_col0" class="data row5 col0" >Verona</td>
+      <td id="T_37a47_row5_col1" class="data row5 col1" >9</td>
+      <td id="T_37a47_row5_col2" class="data row5 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row6_col0" class="data row6 col0" >Inter</td>
+      <td id="T_37a47_row6_col1" class="data row6 col1" >9</td>
+      <td id="T_37a47_row6_col2" class="data row6 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row7_col0" class="data row7 col0" >Genoa</td>
+      <td id="T_37a47_row7_col1" class="data row7 col1" >9</td>
+      <td id="T_37a47_row7_col2" class="data row7 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row8_col0" class="data row8 col0" >Lazio</td>
+      <td id="T_37a47_row8_col1" class="data row8 col1" >9</td>
+      <td id="T_37a47_row8_col2" class="data row8 col2" >5</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row9_col0" class="data row9 col0" >Juventus</td>
+      <td id="T_37a47_row9_col1" class="data row9 col1" >9</td>
+      <td id="T_37a47_row9_col2" class="data row9 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row10_col0" class="data row10 col0" >Roma</td>
+      <td id="T_37a47_row10_col1" class="data row10 col1" >8</td>
+      <td id="T_37a47_row10_col2" class="data row10 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row11_col0" class="data row11 col0" >Bologna</td>
+      <td id="T_37a47_row11_col1" class="data row11 col1" >7</td>
+      <td id="T_37a47_row11_col2" class="data row11 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row12_col0" class="data row12 col0" >Milan</td>
+      <td id="T_37a47_row12_col1" class="data row12 col1" >7</td>
+      <td id="T_37a47_row12_col2" class="data row12 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row13_col0" class="data row13 col0" >Como</td>
+      <td id="T_37a47_row13_col1" class="data row13 col1" >7</td>
+      <td id="T_37a47_row13_col2" class="data row13 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row14_col0" class="data row14 col0" >Fiorentina</td>
+      <td id="T_37a47_row14_col1" class="data row14 col1" >7</td>
+      <td id="T_37a47_row14_col2" class="data row14 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row15_col0" class="data row15 col0" >Lecce</td>
+      <td id="T_37a47_row15_col1" class="data row15 col1" >7</td>
+      <td id="T_37a47_row15_col2" class="data row15 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row16_col0" class="data row16 col0" >Udinese</td>
+      <td id="T_37a47_row16_col1" class="data row16 col1" >7</td>
+      <td id="T_37a47_row16_col2" class="data row16 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row17_col0" class="data row17 col0" >Atalanta</td>
+      <td id="T_37a47_row17_col1" class="data row17 col1" >6</td>
+      <td id="T_37a47_row17_col2" class="data row17 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row18_col0" class="data row18 col0" >Napoli</td>
+      <td id="T_37a47_row18_col1" class="data row18 col1" >6</td>
+      <td id="T_37a47_row18_col2" class="data row18 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_37a47_row19_col0" class="data row19 col0" >Sassuolo</td>
+      <td id="T_37a47_row19_col1" class="data row19 col1" >6</td>
+      <td id="T_37a47_row19_col2" class="data row19 col2" >0</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_plus_3_5">
+                <h2 class="section-title">Record - Fin de Match +3.5 (4+ Buts)</h2>
+                <style type="text/css">
+#T_ddd4c_row0_col2, #T_ddd4c_row1_col2, #T_ddd4c_row2_col2, #T_ddd4c_row3_col2, #T_ddd4c_row4_col2, #T_ddd4c_row5_col2, #T_ddd4c_row6_col2, #T_ddd4c_row7_col2, #T_ddd4c_row8_col2, #T_ddd4c_row9_col2, #T_ddd4c_row10_col2, #T_ddd4c_row11_col2, #T_ddd4c_row12_col2, #T_ddd4c_row13_col2, #T_ddd4c_row14_col2, #T_ddd4c_row15_col2, #T_ddd4c_row16_col2, #T_ddd4c_row17_col2, #T_ddd4c_row18_col2, #T_ddd4c_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+</style>
+<table id="T_ddd4c" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_ddd4c_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_ddd4c_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_ddd4c_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_ddd4c_row0_col0" class="data row0 col0" >Inter</td>
+      <td id="T_ddd4c_row0_col1" class="data row0 col1" >10</td>
+      <td id="T_ddd4c_row0_col2" class="data row0 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row1_col0" class="data row1 col0" >Juventus</td>
+      <td id="T_ddd4c_row1_col1" class="data row1 col1" >6</td>
+      <td id="T_ddd4c_row1_col2" class="data row1 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row2_col0" class="data row2 col0" >Verona</td>
+      <td id="T_ddd4c_row2_col1" class="data row2 col1" >6</td>
+      <td id="T_ddd4c_row2_col2" class="data row2 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row3_col0" class="data row3 col0" >Atalanta</td>
+      <td id="T_ddd4c_row3_col1" class="data row3 col1" >5</td>
+      <td id="T_ddd4c_row3_col2" class="data row3 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row4_col0" class="data row4 col0" >Sassuolo</td>
+      <td id="T_ddd4c_row4_col1" class="data row4 col1" >5</td>
+      <td id="T_ddd4c_row4_col2" class="data row4 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row5_col0" class="data row5 col0" >Pisa</td>
+      <td id="T_ddd4c_row5_col1" class="data row5 col1" >5</td>
+      <td id="T_ddd4c_row5_col2" class="data row5 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row6_col0" class="data row6 col0" >Napoli</td>
+      <td id="T_ddd4c_row6_col1" class="data row6 col1" >5</td>
+      <td id="T_ddd4c_row6_col2" class="data row6 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row7_col0" class="data row7 col0" >Milan</td>
+      <td id="T_ddd4c_row7_col1" class="data row7 col1" >5</td>
+      <td id="T_ddd4c_row7_col2" class="data row7 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row8_col0" class="data row8 col0" >Parma</td>
+      <td id="T_ddd4c_row8_col1" class="data row8 col1" >5</td>
+      <td id="T_ddd4c_row8_col2" class="data row8 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row9_col0" class="data row9 col0" >Fiorentina</td>
+      <td id="T_ddd4c_row9_col1" class="data row9 col1" >5</td>
+      <td id="T_ddd4c_row9_col2" class="data row9 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row10_col0" class="data row10 col0" >Bologna</td>
+      <td id="T_ddd4c_row10_col1" class="data row10 col1" >4</td>
+      <td id="T_ddd4c_row10_col2" class="data row10 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row11_col0" class="data row11 col0" >Cagliari</td>
+      <td id="T_ddd4c_row11_col1" class="data row11 col1" >4</td>
+      <td id="T_ddd4c_row11_col2" class="data row11 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row12_col0" class="data row12 col0" >Como</td>
+      <td id="T_ddd4c_row12_col1" class="data row12 col1" >4</td>
+      <td id="T_ddd4c_row12_col2" class="data row12 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row13_col0" class="data row13 col0" >Lecce</td>
+      <td id="T_ddd4c_row13_col1" class="data row13 col1" >4</td>
+      <td id="T_ddd4c_row13_col2" class="data row13 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row14_col0" class="data row14 col0" >Cremonese</td>
+      <td id="T_ddd4c_row14_col1" class="data row14 col1" >4</td>
+      <td id="T_ddd4c_row14_col2" class="data row14 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row15_col0" class="data row15 col0" >Genoa</td>
+      <td id="T_ddd4c_row15_col1" class="data row15 col1" >4</td>
+      <td id="T_ddd4c_row15_col2" class="data row15 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row16_col0" class="data row16 col0" >Torino</td>
+      <td id="T_ddd4c_row16_col1" class="data row16 col1" >4</td>
+      <td id="T_ddd4c_row16_col2" class="data row16 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row17_col0" class="data row17 col0" >Roma</td>
+      <td id="T_ddd4c_row17_col1" class="data row17 col1" >4</td>
+      <td id="T_ddd4c_row17_col2" class="data row17 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row18_col0" class="data row18 col0" >Udinese</td>
+      <td id="T_ddd4c_row18_col1" class="data row18 col1" >4</td>
+      <td id="T_ddd4c_row18_col2" class="data row18 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_ddd4c_row19_col0" class="data row19 col0" >Lazio</td>
+      <td id="T_ddd4c_row19_col1" class="data row19 col1" >3</td>
+      <td id="T_ddd4c_row19_col2" class="data row19 col2" >0</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_moins_3_5">
+                <h2 class="section-title">Record - Fin de Match -3.5 (0-3 Buts)</h2>
+                <style type="text/css">
+#T_98d55_row0_col2, #T_98d55_row1_col2, #T_98d55_row2_col2, #T_98d55_row3_col2, #T_98d55_row4_col2, #T_98d55_row5_col2, #T_98d55_row6_col2, #T_98d55_row7_col2, #T_98d55_row8_col2, #T_98d55_row9_col2, #T_98d55_row10_col2, #T_98d55_row11_col2, #T_98d55_row12_col2, #T_98d55_row13_col2, #T_98d55_row14_col2, #T_98d55_row15_col2, #T_98d55_row17_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_98d55_row16_col2, #T_98d55_row18_col2 {
+  background-color: #ffebee;
+  color: #c62828;
+  font-weight: bold;
+}
+#T_98d55_row19_col2 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: bold;
+}
+</style>
+<table id="T_98d55" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_98d55_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_98d55_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_98d55_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_98d55_row0_col0" class="data row0 col0" >Torino</td>
+      <td id="T_98d55_row0_col1" class="data row0 col1" >23</td>
+      <td id="T_98d55_row0_col2" class="data row0 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row1_col0" class="data row1 col0" >Lecce</td>
+      <td id="T_98d55_row1_col1" class="data row1 col1" >22</td>
+      <td id="T_98d55_row1_col2" class="data row1 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row2_col0" class="data row2 col0" >Cagliari</td>
+      <td id="T_98d55_row2_col1" class="data row2 col1" >20</td>
+      <td id="T_98d55_row2_col2" class="data row2 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row3_col0" class="data row3 col0" >Udinese</td>
+      <td id="T_98d55_row3_col1" class="data row3 col1" >20</td>
+      <td id="T_98d55_row3_col2" class="data row3 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row4_col0" class="data row4 col0" >Genoa</td>
+      <td id="T_98d55_row4_col1" class="data row4 col1" >20</td>
+      <td id="T_98d55_row4_col2" class="data row4 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row5_col0" class="data row5 col0" >Juventus</td>
+      <td id="T_98d55_row5_col1" class="data row5 col1" >19</td>
+      <td id="T_98d55_row5_col2" class="data row5 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row6_col0" class="data row6 col0" >Fiorentina</td>
+      <td id="T_98d55_row6_col1" class="data row6 col1" >19</td>
+      <td id="T_98d55_row6_col2" class="data row6 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row7_col0" class="data row7 col0" >Pisa</td>
+      <td id="T_98d55_row7_col1" class="data row7 col1" >18</td>
+      <td id="T_98d55_row7_col2" class="data row7 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row8_col0" class="data row8 col0" >Cremonese</td>
+      <td id="T_98d55_row8_col1" class="data row8 col1" >17</td>
+      <td id="T_98d55_row8_col2" class="data row8 col2" >5</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row9_col0" class="data row9 col0" >Bologna</td>
+      <td id="T_98d55_row9_col1" class="data row9 col1" >16</td>
+      <td id="T_98d55_row9_col2" class="data row9 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row10_col0" class="data row10 col0" >Verona</td>
+      <td id="T_98d55_row10_col1" class="data row10 col1" >15</td>
+      <td id="T_98d55_row10_col2" class="data row10 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row11_col0" class="data row11 col0" >Napoli</td>
+      <td id="T_98d55_row11_col1" class="data row11 col1" >15</td>
+      <td id="T_98d55_row11_col2" class="data row11 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row12_col0" class="data row12 col0" >Milan</td>
+      <td id="T_98d55_row12_col1" class="data row12 col1" >14</td>
+      <td id="T_98d55_row12_col2" class="data row12 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row13_col0" class="data row13 col0" >Parma</td>
+      <td id="T_98d55_row13_col1" class="data row13 col1" >12</td>
+      <td id="T_98d55_row13_col2" class="data row13 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row14_col0" class="data row14 col0" >Lazio</td>
+      <td id="T_98d55_row14_col1" class="data row14 col1" >12</td>
+      <td id="T_98d55_row14_col2" class="data row14 col2" >5</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row15_col0" class="data row15 col0" >Inter</td>
+      <td id="T_98d55_row15_col1" class="data row15 col1" >12</td>
+      <td id="T_98d55_row15_col2" class="data row15 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row16_col0" class="data row16 col0" >Roma</td>
+      <td id="T_98d55_row16_col1" class="data row16 col1" >12</td>
+      <td id="T_98d55_row16_col2" class="data row16 col2" >12</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row17_col0" class="data row17 col0" >Como</td>
+      <td id="T_98d55_row17_col1" class="data row17 col1" >10</td>
+      <td id="T_98d55_row17_col2" class="data row17 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row18_col0" class="data row18 col0" >Atalanta</td>
+      <td id="T_98d55_row18_col1" class="data row18 col1" >8</td>
+      <td id="T_98d55_row18_col2" class="data row18 col2" >8</td>
+    </tr>
+    <tr>
+      <td id="T_98d55_row19_col0" class="data row19 col0" >Sassuolo</td>
+      <td id="T_98d55_row19_col1" class="data row19 col1" >8</td>
+      <td id="T_98d55_row19_col2" class="data row19 col2" >6</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="mt_plus_0_5">
+                <h2 class="section-title">Record - Mi-Temps +0.5 (1+ Buts MT)</h2>
+                <style type="text/css">
+#T_d684e_row0_col2, #T_d684e_row1_col2, #T_d684e_row2_col2, #T_d684e_row3_col2, #T_d684e_row4_col2, #T_d684e_row5_col2, #T_d684e_row6_col2, #T_d684e_row7_col2, #T_d684e_row8_col2, #T_d684e_row9_col2, #T_d684e_row10_col2, #T_d684e_row11_col2, #T_d684e_row12_col2, #T_d684e_row13_col2, #T_d684e_row14_col2, #T_d684e_row15_col2, #T_d684e_row17_col2, #T_d684e_row18_col2, #T_d684e_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_d684e_row16_col2 {
+  background-color: #fff3e0;
+  color: #f57c00;
+  font-weight: bold;
+}
+</style>
+<table id="T_d684e" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_d684e_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_d684e_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_d684e_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_d684e_row0_col0" class="data row0 col0" >Sassuolo</td>
+      <td id="T_d684e_row0_col1" class="data row0 col1" >26</td>
+      <td id="T_d684e_row0_col2" class="data row0 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row1_col0" class="data row1 col0" >Bologna</td>
+      <td id="T_d684e_row1_col1" class="data row1 col1" >23</td>
+      <td id="T_d684e_row1_col2" class="data row1 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row2_col0" class="data row2 col0" >Inter</td>
+      <td id="T_d684e_row2_col1" class="data row2 col1" >23</td>
+      <td id="T_d684e_row2_col2" class="data row2 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row3_col0" class="data row3 col0" >Pisa</td>
+      <td id="T_d684e_row3_col1" class="data row3 col1" >18</td>
+      <td id="T_d684e_row3_col2" class="data row3 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row4_col0" class="data row4 col0" >Atalanta</td>
+      <td id="T_d684e_row4_col1" class="data row4 col1" >17</td>
+      <td id="T_d684e_row4_col2" class="data row4 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row5_col0" class="data row5 col0" >Lazio</td>
+      <td id="T_d684e_row5_col1" class="data row5 col1" >17</td>
+      <td id="T_d684e_row5_col2" class="data row5 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row6_col0" class="data row6 col0" >Milan</td>
+      <td id="T_d684e_row6_col1" class="data row6 col1" >16</td>
+      <td id="T_d684e_row6_col2" class="data row6 col2" >4</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row7_col0" class="data row7 col0" >Genoa</td>
+      <td id="T_d684e_row7_col1" class="data row7 col1" >15</td>
+      <td id="T_d684e_row7_col2" class="data row7 col2" >4</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row8_col0" class="data row8 col0" >Juventus</td>
+      <td id="T_d684e_row8_col1" class="data row8 col1" >13</td>
+      <td id="T_d684e_row8_col2" class="data row8 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row9_col0" class="data row9 col0" >Verona</td>
+      <td id="T_d684e_row9_col1" class="data row9 col1" >13</td>
+      <td id="T_d684e_row9_col2" class="data row9 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row10_col0" class="data row10 col0" >Como</td>
+      <td id="T_d684e_row10_col1" class="data row10 col1" >12</td>
+      <td id="T_d684e_row10_col2" class="data row10 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row11_col0" class="data row11 col0" >Cagliari</td>
+      <td id="T_d684e_row11_col1" class="data row11 col1" >12</td>
+      <td id="T_d684e_row11_col2" class="data row11 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row12_col0" class="data row12 col0" >Roma</td>
+      <td id="T_d684e_row12_col1" class="data row12 col1" >12</td>
+      <td id="T_d684e_row12_col2" class="data row12 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row13_col0" class="data row13 col0" >Parma</td>
+      <td id="T_d684e_row13_col1" class="data row13 col1" >12</td>
+      <td id="T_d684e_row13_col2" class="data row13 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row14_col0" class="data row14 col0" >Lecce</td>
+      <td id="T_d684e_row14_col1" class="data row14 col1" >11</td>
+      <td id="T_d684e_row14_col2" class="data row14 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row15_col0" class="data row15 col0" >Torino</td>
+      <td id="T_d684e_row15_col1" class="data row15 col1" >11</td>
+      <td id="T_d684e_row15_col2" class="data row15 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row16_col0" class="data row16 col0" >Udinese</td>
+      <td id="T_d684e_row16_col1" class="data row16 col1" >11</td>
+      <td id="T_d684e_row16_col2" class="data row16 col2" >10</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row17_col0" class="data row17 col0" >Fiorentina</td>
+      <td id="T_d684e_row17_col1" class="data row17 col1" >10</td>
+      <td id="T_d684e_row17_col2" class="data row17 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row18_col0" class="data row18 col0" >Napoli</td>
+      <td id="T_d684e_row18_col1" class="data row18 col1" >10</td>
+      <td id="T_d684e_row18_col2" class="data row18 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_d684e_row19_col0" class="data row19 col0" >Cremonese</td>
+      <td id="T_d684e_row19_col1" class="data row19 col1" >9</td>
+      <td id="T_d684e_row19_col2" class="data row19 col2" >0</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="mt_moins_0_5">
+                <h2 class="section-title">Record - Mi-Temps -0.5 (0 Buts MT)</h2>
+                <style type="text/css">
+#T_21d6b_row0_col2, #T_21d6b_row1_col2, #T_21d6b_row3_col2, #T_21d6b_row4_col2, #T_21d6b_row5_col2, #T_21d6b_row6_col2, #T_21d6b_row7_col2, #T_21d6b_row8_col2, #T_21d6b_row9_col2, #T_21d6b_row11_col2, #T_21d6b_row12_col2, #T_21d6b_row14_col2, #T_21d6b_row15_col2, #T_21d6b_row18_col2, #T_21d6b_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_21d6b_row2_col2, #T_21d6b_row16_col2, #T_21d6b_row17_col2 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: bold;
+}
+#T_21d6b_row10_col2, #T_21d6b_row13_col2 {
+  background-color: #fff3e0;
+  color: #f57c00;
+  font-weight: bold;
+}
+</style>
+<table id="T_21d6b" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_21d6b_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_21d6b_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_21d6b_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_21d6b_row0_col0" class="data row0 col0" >Bologna</td>
+      <td id="T_21d6b_row0_col1" class="data row0 col1" >6</td>
+      <td id="T_21d6b_row0_col2" class="data row0 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row1_col0" class="data row1 col0" >Milan</td>
+      <td id="T_21d6b_row1_col1" class="data row1 col1" >6</td>
+      <td id="T_21d6b_row1_col2" class="data row1 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row2_col0" class="data row2 col0" >Cagliari</td>
+      <td id="T_21d6b_row2_col1" class="data row2 col1" >5</td>
+      <td id="T_21d6b_row2_col2" class="data row2 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row3_col0" class="data row3 col0" >Atalanta</td>
+      <td id="T_21d6b_row3_col1" class="data row3 col1" >5</td>
+      <td id="T_21d6b_row3_col2" class="data row3 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row4_col0" class="data row4 col0" >Torino</td>
+      <td id="T_21d6b_row4_col1" class="data row4 col1" >5</td>
+      <td id="T_21d6b_row4_col2" class="data row4 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row5_col0" class="data row5 col0" >Cremonese</td>
+      <td id="T_21d6b_row5_col1" class="data row5 col1" >5</td>
+      <td id="T_21d6b_row5_col2" class="data row5 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row6_col0" class="data row6 col0" >Juventus</td>
+      <td id="T_21d6b_row6_col1" class="data row6 col1" >5</td>
+      <td id="T_21d6b_row6_col2" class="data row6 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row7_col0" class="data row7 col0" >Lazio</td>
+      <td id="T_21d6b_row7_col1" class="data row7 col1" >5</td>
+      <td id="T_21d6b_row7_col2" class="data row7 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row8_col0" class="data row8 col0" >Verona</td>
+      <td id="T_21d6b_row8_col1" class="data row8 col1" >4</td>
+      <td id="T_21d6b_row8_col2" class="data row8 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row9_col0" class="data row9 col0" >Genoa</td>
+      <td id="T_21d6b_row9_col1" class="data row9 col1" >4</td>
+      <td id="T_21d6b_row9_col2" class="data row9 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row10_col0" class="data row10 col0" >Napoli</td>
+      <td id="T_21d6b_row10_col1" class="data row10 col1" >4</td>
+      <td id="T_21d6b_row10_col2" class="data row10 col2" >3</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row11_col0" class="data row11 col0" >Roma</td>
+      <td id="T_21d6b_row11_col1" class="data row11 col1" >4</td>
+      <td id="T_21d6b_row11_col2" class="data row11 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row12_col0" class="data row12 col0" >Parma</td>
+      <td id="T_21d6b_row12_col1" class="data row12 col1" >4</td>
+      <td id="T_21d6b_row12_col2" class="data row12 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row13_col0" class="data row13 col0" >Como</td>
+      <td id="T_21d6b_row13_col1" class="data row13 col1" >3</td>
+      <td id="T_21d6b_row13_col2" class="data row13 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row14_col0" class="data row14 col0" >Fiorentina</td>
+      <td id="T_21d6b_row14_col1" class="data row14 col1" >3</td>
+      <td id="T_21d6b_row14_col2" class="data row14 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row15_col0" class="data row15 col0" >Inter</td>
+      <td id="T_21d6b_row15_col1" class="data row15 col1" >3</td>
+      <td id="T_21d6b_row15_col2" class="data row15 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row16_col0" class="data row16 col0" >Lecce</td>
+      <td id="T_21d6b_row16_col1" class="data row16 col1" >3</td>
+      <td id="T_21d6b_row16_col2" class="data row16 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row17_col0" class="data row17 col0" >Pisa</td>
+      <td id="T_21d6b_row17_col1" class="data row17 col1" >3</td>
+      <td id="T_21d6b_row17_col2" class="data row17 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row18_col0" class="data row18 col0" >Sassuolo</td>
+      <td id="T_21d6b_row18_col1" class="data row18 col1" >3</td>
+      <td id="T_21d6b_row18_col2" class="data row18 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_21d6b_row19_col0" class="data row19 col0" >Udinese</td>
+      <td id="T_21d6b_row19_col1" class="data row19 col1" >3</td>
+      <td id="T_21d6b_row19_col2" class="data row19 col2" >0</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="mt_plus_1_5">
+                <h2 class="section-title">Record - Mi-Temps +1.5 (2+ Buts MT)</h2>
+                <style type="text/css">
+#T_fec5b_row0_col2, #T_fec5b_row1_col2, #T_fec5b_row2_col2, #T_fec5b_row3_col2, #T_fec5b_row4_col2, #T_fec5b_row5_col2, #T_fec5b_row6_col2, #T_fec5b_row7_col2, #T_fec5b_row8_col2, #T_fec5b_row9_col2, #T_fec5b_row10_col2, #T_fec5b_row11_col2, #T_fec5b_row12_col2, #T_fec5b_row13_col2, #T_fec5b_row14_col2, #T_fec5b_row15_col2, #T_fec5b_row16_col2, #T_fec5b_row17_col2, #T_fec5b_row18_col2, #T_fec5b_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+</style>
+<table id="T_fec5b" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_fec5b_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_fec5b_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_fec5b_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_fec5b_row0_col0" class="data row0 col0" >Lazio</td>
+      <td id="T_fec5b_row0_col1" class="data row0 col1" >10</td>
+      <td id="T_fec5b_row0_col2" class="data row0 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row1_col0" class="data row1 col0" >Parma</td>
+      <td id="T_fec5b_row1_col1" class="data row1 col1" >8</td>
+      <td id="T_fec5b_row1_col2" class="data row1 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row2_col0" class="data row2 col0" >Atalanta</td>
+      <td id="T_fec5b_row2_col1" class="data row2 col1" >6</td>
+      <td id="T_fec5b_row2_col2" class="data row2 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row3_col0" class="data row3 col0" >Milan</td>
+      <td id="T_fec5b_row3_col1" class="data row3 col1" >5</td>
+      <td id="T_fec5b_row3_col2" class="data row3 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row4_col0" class="data row4 col0" >Sassuolo</td>
+      <td id="T_fec5b_row4_col1" class="data row4 col1" >5</td>
+      <td id="T_fec5b_row4_col2" class="data row4 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row5_col0" class="data row5 col0" >Roma</td>
+      <td id="T_fec5b_row5_col1" class="data row5 col1" >5</td>
+      <td id="T_fec5b_row5_col2" class="data row5 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row6_col0" class="data row6 col0" >Pisa</td>
+      <td id="T_fec5b_row6_col1" class="data row6 col1" >5</td>
+      <td id="T_fec5b_row6_col2" class="data row6 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row7_col0" class="data row7 col0" >Fiorentina</td>
+      <td id="T_fec5b_row7_col1" class="data row7 col1" >5</td>
+      <td id="T_fec5b_row7_col2" class="data row7 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row8_col0" class="data row8 col0" >Inter</td>
+      <td id="T_fec5b_row8_col1" class="data row8 col1" >5</td>
+      <td id="T_fec5b_row8_col2" class="data row8 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row9_col0" class="data row9 col0" >Lecce</td>
+      <td id="T_fec5b_row9_col1" class="data row9 col1" >4</td>
+      <td id="T_fec5b_row9_col2" class="data row9 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row10_col0" class="data row10 col0" >Bologna</td>
+      <td id="T_fec5b_row10_col1" class="data row10 col1" >4</td>
+      <td id="T_fec5b_row10_col2" class="data row10 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row11_col0" class="data row11 col0" >Cagliari</td>
+      <td id="T_fec5b_row11_col1" class="data row11 col1" >4</td>
+      <td id="T_fec5b_row11_col2" class="data row11 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row12_col0" class="data row12 col0" >Napoli</td>
+      <td id="T_fec5b_row12_col1" class="data row12 col1" >4</td>
+      <td id="T_fec5b_row12_col2" class="data row12 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row13_col0" class="data row13 col0" >Juventus</td>
+      <td id="T_fec5b_row13_col1" class="data row13 col1" >4</td>
+      <td id="T_fec5b_row13_col2" class="data row13 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row14_col0" class="data row14 col0" >Cremonese</td>
+      <td id="T_fec5b_row14_col1" class="data row14 col1" >4</td>
+      <td id="T_fec5b_row14_col2" class="data row14 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row15_col0" class="data row15 col0" >Genoa</td>
+      <td id="T_fec5b_row15_col1" class="data row15 col1" >4</td>
+      <td id="T_fec5b_row15_col2" class="data row15 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row16_col0" class="data row16 col0" >Como</td>
+      <td id="T_fec5b_row16_col1" class="data row16 col1" >3</td>
+      <td id="T_fec5b_row16_col2" class="data row16 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row17_col0" class="data row17 col0" >Torino</td>
+      <td id="T_fec5b_row17_col1" class="data row17 col1" >3</td>
+      <td id="T_fec5b_row17_col2" class="data row17 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row18_col0" class="data row18 col0" >Udinese</td>
+      <td id="T_fec5b_row18_col1" class="data row18 col1" >3</td>
+      <td id="T_fec5b_row18_col2" class="data row18 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_fec5b_row19_col0" class="data row19 col0" >Verona</td>
+      <td id="T_fec5b_row19_col1" class="data row19 col1" >3</td>
+      <td id="T_fec5b_row19_col2" class="data row19 col2" >0</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="mt_moins_1_5">
+                <h2 class="section-title">Record - Mi-Temps -1.5 (0-1 Buts MT)</h2>
+                <style type="text/css">
+#T_9a8da_row0_col2, #T_9a8da_row1_col2, #T_9a8da_row2_col2, #T_9a8da_row3_col2, #T_9a8da_row4_col2, #T_9a8da_row5_col2, #T_9a8da_row6_col2, #T_9a8da_row7_col2, #T_9a8da_row8_col2, #T_9a8da_row9_col2, #T_9a8da_row10_col2, #T_9a8da_row11_col2, #T_9a8da_row12_col2, #T_9a8da_row13_col2, #T_9a8da_row14_col2, #T_9a8da_row15_col2, #T_9a8da_row16_col2, #T_9a8da_row17_col2, #T_9a8da_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_9a8da_row18_col2 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: bold;
+}
+</style>
+<table id="T_9a8da" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_9a8da_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_9a8da_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_9a8da_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_9a8da_row0_col0" class="data row0 col0" >Atalanta</td>
+      <td id="T_9a8da_row0_col1" class="data row0 col1" >13</td>
+      <td id="T_9a8da_row0_col2" class="data row0 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row1_col0" class="data row1 col0" >Inter</td>
+      <td id="T_9a8da_row1_col1" class="data row1 col1" >13</td>
+      <td id="T_9a8da_row1_col2" class="data row1 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row2_col0" class="data row2 col0" >Lazio</td>
+      <td id="T_9a8da_row2_col1" class="data row2 col1" >12</td>
+      <td id="T_9a8da_row2_col2" class="data row2 col2" >5</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row3_col0" class="data row3 col0" >Cagliari</td>
+      <td id="T_9a8da_row3_col1" class="data row3 col1" >12</td>
+      <td id="T_9a8da_row3_col2" class="data row3 col2" >7</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row4_col0" class="data row4 col0" >Torino</td>
+      <td id="T_9a8da_row4_col1" class="data row4 col1" >12</td>
+      <td id="T_9a8da_row4_col2" class="data row4 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row5_col0" class="data row5 col0" >Napoli</td>
+      <td id="T_9a8da_row5_col1" class="data row5 col1" >12</td>
+      <td id="T_9a8da_row5_col2" class="data row5 col2" >6</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row6_col0" class="data row6 col0" >Pisa</td>
+      <td id="T_9a8da_row6_col1" class="data row6 col1" >12</td>
+      <td id="T_9a8da_row6_col2" class="data row6 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row7_col0" class="data row7 col0" >Bologna</td>
+      <td id="T_9a8da_row7_col1" class="data row7 col1" >11</td>
+      <td id="T_9a8da_row7_col2" class="data row7 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row8_col0" class="data row8 col0" >Verona</td>
+      <td id="T_9a8da_row8_col1" class="data row8 col1" >11</td>
+      <td id="T_9a8da_row8_col2" class="data row8 col2" >1</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row9_col0" class="data row9 col0" >Parma</td>
+      <td id="T_9a8da_row9_col1" class="data row9 col1" >11</td>
+      <td id="T_9a8da_row9_col2" class="data row9 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row10_col0" class="data row10 col0" >Juventus</td>
+      <td id="T_9a8da_row10_col1" class="data row10 col1" >11</td>
+      <td id="T_9a8da_row10_col2" class="data row10 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row11_col0" class="data row11 col0" >Genoa</td>
+      <td id="T_9a8da_row11_col1" class="data row11 col1" >11</td>
+      <td id="T_9a8da_row11_col2" class="data row11 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row12_col0" class="data row12 col0" >Udinese</td>
+      <td id="T_9a8da_row12_col1" class="data row12 col1" >11</td>
+      <td id="T_9a8da_row12_col2" class="data row12 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row13_col0" class="data row13 col0" >Como</td>
+      <td id="T_9a8da_row13_col1" class="data row13 col1" >10</td>
+      <td id="T_9a8da_row13_col2" class="data row13 col2" >2</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row14_col0" class="data row14 col0" >Fiorentina</td>
+      <td id="T_9a8da_row14_col1" class="data row14 col1" >10</td>
+      <td id="T_9a8da_row14_col2" class="data row14 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row15_col0" class="data row15 col0" >Milan</td>
+      <td id="T_9a8da_row15_col1" class="data row15 col1" >10</td>
+      <td id="T_9a8da_row15_col2" class="data row15 col2" >0</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row16_col0" class="data row16 col0" >Roma</td>
+      <td id="T_9a8da_row16_col1" class="data row16 col1" >10</td>
+      <td id="T_9a8da_row16_col2" class="data row16 col2" >5</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row17_col0" class="data row17 col0" >Cremonese</td>
+      <td id="T_9a8da_row17_col1" class="data row17 col1" >9</td>
+      <td id="T_9a8da_row17_col2" class="data row17 col2" >5</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row18_col0" class="data row18 col0" >Sassuolo</td>
+      <td id="T_9a8da_row18_col1" class="data row18 col1" >8</td>
+      <td id="T_9a8da_row18_col2" class="data row18 col2" >6</td>
+    </tr>
+    <tr>
+      <td id="T_9a8da_row19_col0" class="data row19 col0" >Lecce</td>
+      <td id="T_9a8da_row19_col1" class="data row19 col1" >7</td>
+      <td id="T_9a8da_row19_col2" class="data row19 col2" >3</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            </div>
+            
+        <script>
+            function showSection(sectionId, clickedLink) {
+                var welcomeMsg = document.getElementById('welcome-message');
+                if (welcomeMsg) { welcomeMsg.style.display = 'none'; }
+                
+                var sections = document.getElementsByClassName('tab-content');
+                for (var i = 0; i < sections.length; i++) {
+                    sections[i].classList.remove('active');
+                }
+                
+                var links = document.querySelectorAll('.main-header nav a');
+                for (var i = 0; i < links.length; i++) {
+                    links[i].classList.remove('active');
+                }
+                
+                var activeSection = document.getElementById(sectionId);
+                if (activeSection) { activeSection.classList.add('active'); }
+                if (clickedLink) { clickedLink.classList.add('active'); }
+            }
+        </script>
+        
+        </body>
+        </html>
+        

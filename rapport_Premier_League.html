@@ -1,0 +1,2789 @@
+
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Premier League</title>
+            
+        <style>
+            html { scroll-behavior: smooth; }
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                background-color: #f0f2f5; margin: 0; padding: 0;
+            }
+            .main-header {
+                background-color: #222; color: white; padding: 10px 20px;
+                font-weight: bold; display: flex; justify-content: space-between;
+                align-items: center; position: sticky; top: 0; z-index: 100;
+                flex-wrap: wrap; 
+            }
+            .main-header .logo { font-size: 1.2em; margin-right: 20px; flex-shrink: 0; }
+            .main-header nav { display: flex; flex-wrap: wrap; justify-content: center; }
+            .main-header nav a {
+                color: #ccc; text-decoration: none; margin: 5px; 
+                font-size: 0.8em; font-weight: normal; padding: 8px 10px;
+                border-radius: 5px; transition: background-color 0.3s, color 0.3s;
+            }
+            .main-header nav a:hover { background-color: #555; color: white; }
+            .main-header nav a.active {
+                background-color: #007bff; color: white;
+            }
+            .main-header nav a.alert-button {
+                background-color: #ffc107; color: #333; font-weight: bold;
+            }
+            .main-header nav a.alert-button.active {
+                background-color: #e0a800; color: #000;
+            }
+            .main-header nav a.form-button {
+                background-color: #17a2b8; color: white; font-weight: bold;
+            }
+            .main-header nav a.form-button.active {
+                background-color: #117a8b;
+            }
+            .main-content {
+                display: flex; justify-content: center; align-items: center;
+                flex-direction: column; width: 100%; padding-top: 20px; padding-bottom: 20px;
+            }
+            .section-container.tab-content {
+                display: none; width: 90%; 
+                max-width: 900px; margin-bottom: 20px;
+            }
+            .section-container.tab-content.active { display: block; }
+            #welcome-message {
+                text-align: center; color: #555;
+                font-size: 1.5em; margin-top: 100px;
+            }
+            .no-alerts {
+                text-align: center; color: #555;
+                font-size: 1.2em; margin-top: 50px;
+            }
+            .section-title {
+                color: #333; text-align: center; font-size: 1.5em; margin-bottom: 20px;
+            }
+            .styled-table {
+                border-collapse: collapse; width: 100%; 
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                border-radius: 8px; overflow: hidden;
+            }
+            .styled-table thead tr {
+                background-color: #333; color: #ffffff; font-weight: bold;
+            }
+            .styled-table th, .styled-table td { padding: 12px 15px; }
+            /* Colonne 1 (Équipe) */
+            .styled-table th:nth-child(1), .styled-table td:nth-child(1) { text-align: left; }
+            /* Colonnes 2, 3, 4 */
+            .styled-table th:nth-child(n+2), .styled-table td:nth-child(n+2) {
+                text-align: center; font-weight: bold;
+            }
+            /* Style pour la colonne 4 (5 Derniers) */
+            .styled-table th:nth-child(4), .styled-table td:nth-child(4) {
+                font-weight: normal; color: #777; font-size: 0.9em;
+            }
+            /* Style pour le tableau de forme */
+            .form-table th:nth-child(3), .form-table td:nth-child(3) {
+                font-weight: normal; color: #777; font-size: 0.9em;
+            }
+            .form-table th:nth-child(4), .form-table td:nth-child(4) {
+                font-weight: normal; color: #17a2b8; font-size: 0.9em;
+            }
+            
+            .styled-table tbody tr {
+                border-bottom: 1px solid #dddddd; background-color: #ffffff;
+            }
+            .styled-table tbody tr:nth-of-type(even) { background-color: #f8f8f8; }
+            .alerts-table td { font-weight: bold !important; }
+            .alerts-table td:nth-child(5) { 
+                font-weight: normal !important; 
+                font-size: 0.9em;
+            }
+            .alerts-table td:nth-child(6) { 
+                font-weight: normal !important; 
+                color: #17a2b8;
+                font-size: 0.9em;
+            }
+        </style>
+        
+        </head>
+        <body>
+            <header class="main-header">
+                <div class="logo">ANALYSE DE MATCHS - Premier League</div>
+                <nav><a href="#" onclick="showSection('form-section', this); event.preventDefault();" class="form-button">📈 Forme</a>
+<a href="#" onclick="showSection('alert-section', this); event.preventDefault();" class="alert-button">⚠️ Alertes</a>
+<a href="#" onclick="showSection('ft_marque', this); event.preventDefault();">FT Marque</a>
+<a href="#" onclick="showSection('ft_cs', this); event.preventDefault();">FT CS</a>
+<a href="#" onclick="showSection('ft_no_cs', this); event.preventDefault();">FT No CS</a>
+<a href="#" onclick="showSection('ft_moins_0_5', this); event.preventDefault();">FT -0.5</a>
+<a href="#" onclick="showSection('ft_plus_1_5', this); event.preventDefault();">FT +1.5</a>
+<a href="#" onclick="showSection('ft_moins_1_5', this); event.preventDefault();">FT -1.5</a>
+<a href="#" onclick="showSection('ft_plus_2_5', this); event.preventDefault();">FT +2.5</a>
+<a href="#" onclick="showSection('ft_moins_2_5', this); event.preventDefault();">FT -2.5</a>
+<a href="#" onclick="showSection('ft_plus_3_5', this); event.preventDefault();">FT +3.5</a>
+<a href="#" onclick="showSection('ft_moins_3_5', this); event.preventDefault();">FT -3.5</a>
+<a href="#" onclick="showSection('ft_nuls', this); event.preventDefault();">FT Nuls</a>
+<a href="#" onclick="showSection('mt_plus_0_5', this); event.preventDefault();">MT +0.5</a>
+<a href="#" onclick="showSection('mt_moins_0_5', this); event.preventDefault();">MT -0.5</a>
+<a href="#" onclick="showSection('mt_plus_1_5', this); event.preventDefault();">MT +1.5</a>
+<a href="#" onclick="showSection('mt_moins_1_5', this); event.preventDefault();">MT -1.5</a>
+</nav>
+            </header>
+            
+            <div class="main-content">
+                <div id="welcome-message">
+                    <h2>Veuillez sélectionner une catégorie dans la barre de navigation.</h2>
+                </div>
+                
+                <div class="section-container tab-content" id="form-section">
+                    <h2 class="section-title">ÉTAT DE FORME (Premier League)</h2>
+                    <style type="text/css">
+#T_c13ee_row0_col1, #T_c13ee_row1_col1, #T_c13ee_row2_col1, #T_c13ee_row3_col1, #T_c13ee_row4_col1, #T_c13ee_row5_col1 {
+  color: #2e7d32;
+  font-weight: bold;
+}
+#T_c13ee_row0_col2, #T_c13ee_row1_col2, #T_c13ee_row2_col2, #T_c13ee_row3_col2, #T_c13ee_row4_col2, #T_c13ee_row5_col2, #T_c13ee_row6_col2, #T_c13ee_row7_col2, #T_c13ee_row8_col2, #T_c13ee_row9_col2, #T_c13ee_row10_col2, #T_c13ee_row11_col2, #T_c13ee_row12_col2, #T_c13ee_row13_col2, #T_c13ee_row14_col2, #T_c13ee_row15_col2, #T_c13ee_row16_col2, #T_c13ee_row17_col2, #T_c13ee_row18_col2, #T_c13ee_row19_col2 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+#T_c13ee_row0_col3, #T_c13ee_row1_col3, #T_c13ee_row2_col3, #T_c13ee_row3_col3, #T_c13ee_row4_col3, #T_c13ee_row5_col3, #T_c13ee_row6_col3, #T_c13ee_row7_col3, #T_c13ee_row8_col3, #T_c13ee_row9_col3, #T_c13ee_row10_col3, #T_c13ee_row11_col3, #T_c13ee_row12_col3, #T_c13ee_row13_col3, #T_c13ee_row14_col3, #T_c13ee_row15_col3, #T_c13ee_row16_col3, #T_c13ee_row17_col3, #T_c13ee_row18_col3, #T_c13ee_row19_col3 {
+  font-weight: normal;
+  color: #17a2b8;
+  font-size: 0.9em;
+}
+#T_c13ee_row6_col1, #T_c13ee_row7_col1, #T_c13ee_row8_col1, #T_c13ee_row9_col1, #T_c13ee_row10_col1, #T_c13ee_row11_col1, #T_c13ee_row12_col1, #T_c13ee_row13_col1, #T_c13ee_row14_col1, #T_c13ee_row15_col1 {
+  color: #28a745;
+}
+#T_c13ee_row16_col1, #T_c13ee_row17_col1, #T_c13ee_row18_col1 {
+  color: #dc3545;
+}
+#T_c13ee_row19_col1 {
+  color: #c62828;
+  font-weight: bold;
+}
+</style>
+<table id="T_c13ee" class="styled-table form-table">
+  <thead>
+    <tr>
+      <th id="T_c13ee_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_c13ee_level0_col1" class="col_heading level0 col1" >Score de Forme</th>
+      <th id="T_c13ee_level0_col2" class="col_heading level0 col2" >5 Derniers (Détails)</th>
+      <th id="T_c13ee_level0_col3" class="col_heading level0 col3" >Prochain Match</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_c13ee_row0_col0" class="data row0 col0" >Chelsea</td>
+      <td id="T_c13ee_row0_col1" class="data row0 col1" >+17.4</td>
+      <td id="T_c13ee_row0_col2" class="data row0 col2" >V (3-0), V (1-0), D (1-2), V (3-0), V (2-1)</td>
+      <td id="T_c13ee_row0_col3" class="data row0 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row1_col0" class="data row1 col0" >Man City</td>
+      <td id="T_c13ee_row1_col1" class="data row1 col1" >+17.0</td>
+      <td id="T_c13ee_row1_col2" class="data row1 col2" >V (3-0), V (3-1), D (0-1), V (2-0), V (1-0)</td>
+      <td id="T_c13ee_row1_col3" class="data row1 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row2_col0" class="data row2 col0" >Arsenal</td>
+      <td id="T_c13ee_row2_col1" class="data row2 col1" >+15.0</td>
+      <td id="T_c13ee_row2_col2" class="data row2 col2" >N (2-2), V (2-0), V (1-0), V (1-0), V (2-0)</td>
+      <td id="T_c13ee_row2_col3" class="data row2 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row3_col0" class="data row3 col0" >Aston Villa</td>
+      <td id="T_c13ee_row3_col1" class="data row3 col1" >+13.8</td>
+      <td id="T_c13ee_row3_col2" class="data row3 col2" >V (4-0), D (0-2), V (1-0), V (2-1), V (2-1)</td>
+      <td id="T_c13ee_row3_col3" class="data row3 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row4_col0" class="data row4 col0" >Brentford</td>
+      <td id="T_c13ee_row4_col1" class="data row4 col1" >+11.0</td>
+      <td id="T_c13ee_row4_col2" class="data row4 col2" >V (3-1), D (0-2), V (3-2), V (2-0), D (0-1)</td>
+      <td id="T_c13ee_row4_col3" class="data row4 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row5_col0" class="data row5 col0" >Brighton</td>
+      <td id="T_c13ee_row5_col1" class="data row5 col1" >+10.6</td>
+      <td id="T_c13ee_row5_col2" class="data row5 col2" >N (0-0), V (3-0), D (2-4), V (2-1), N (1-1)</td>
+      <td id="T_c13ee_row5_col3" class="data row5 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row6_col0" class="data row6 col0" >Man United</td>
+      <td id="T_c13ee_row6_col1" class="data row6 col1" >+9.4</td>
+      <td id="T_c13ee_row6_col2" class="data row6 col2" >N (2-2), N (2-2), V (4-2), V (2-1), V (2-0)</td>
+      <td id="T_c13ee_row6_col3" class="data row6 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row7_col0" class="data row7 col0" >West Ham</td>
+      <td id="T_c13ee_row7_col1" class="data row7 col1" >+9.0</td>
+      <td id="T_c13ee_row7_col2" class="data row7 col2" >V (3-2), V (3-1), D (1-2), D (0-2), D (0-2)</td>
+      <td id="T_c13ee_row7_col3" class="data row7 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row8_col0" class="data row8 col0" >Crystal Palace</td>
+      <td id="T_c13ee_row8_col1" class="data row8 col1" >+7.4</td>
+      <td id="T_c13ee_row8_col2" class="data row8 col2" >N (0-0), V (2-0), D (0-1), N (3-3), D (1-2)</td>
+      <td id="T_c13ee_row8_col3" class="data row8 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row9_col0" class="data row9 col0" >Sunderland</td>
+      <td id="T_c13ee_row9_col1" class="data row9 col1" >+7.0</td>
+      <td id="T_c13ee_row9_col2" class="data row9 col2" >N (2-2), N (1-1), V (2-1), V (2-0), D (0-2)</td>
+      <td id="T_c13ee_row9_col3" class="data row9 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row10_col0" class="data row10 col0" >Everton</td>
+      <td id="T_c13ee_row10_col1" class="data row10 col1" >+5.8</td>
+      <td id="T_c13ee_row10_col2" class="data row10 col2" >V (2-0), N (1-1), D (0-3), D (0-2), V (2-1)</td>
+      <td id="T_c13ee_row10_col3" class="data row10 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row11_col0" class="data row11 col0" >Nott'm Forest</td>
+      <td id="T_c13ee_row11_col1" class="data row11 col1" >+4.2</td>
+      <td id="T_c13ee_row11_col2" class="data row11 col2" >V (3-1), N (2-2), D (0-2), D (0-3), D (0-2)</td>
+      <td id="T_c13ee_row11_col3" class="data row11 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row12_col0" class="data row12 col0" >Tottenham</td>
+      <td id="T_c13ee_row12_col1" class="data row12 col1" >+3.8</td>
+      <td id="T_c13ee_row12_col2" class="data row12 col2" >N (2-2), D (0-1), V (3-0), D (1-2), V (2-1)</td>
+      <td id="T_c13ee_row12_col3" class="data row12 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row13_col0" class="data row13 col0" >Bournemouth</td>
+      <td id="T_c13ee_row13_col1" class="data row13 col1" >+1.4</td>
+      <td id="T_c13ee_row13_col2" class="data row13 col2" >D (0-4), D (1-3), V (2-0), N (3-3), V (3-1)</td>
+      <td id="T_c13ee_row13_col3" class="data row13 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row14_col0" class="data row14 col0" >Burnley</td>
+      <td id="T_c13ee_row14_col1" class="data row14 col1" >+1.0</td>
+      <td id="T_c13ee_row14_col2" class="data row14 col2" >D (2-3), D (0-2), V (3-2), V (2-0), D (1-2)</td>
+      <td id="T_c13ee_row14_col3" class="data row14 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row15_col0" class="data row15 col0" >Fulham</td>
+      <td id="T_c13ee_row15_col1" class="data row15 col1" >+0.6</td>
+      <td id="T_c13ee_row15_col2" class="data row15 col2" >D (0-2), V (3-0), D (1-2), D (0-1), D (1-3)</td>
+      <td id="T_c13ee_row15_col3" class="data row15 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row16_col0" class="data row16 col0" >Liverpool</td>
+      <td id="T_c13ee_row16_col1" class="data row16 col1" >-1.0</td>
+      <td id="T_c13ee_row16_col2" class="data row16 col2" >D (0-3), V (2-0), D (2-3), D (1-2), D (1-2)</td>
+      <td id="T_c13ee_row16_col3" class="data row16 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row17_col0" class="data row17 col0" >Newcastle</td>
+      <td id="T_c13ee_row17_col1" class="data row17 col1" >-2.2</td>
+      <td id="T_c13ee_row17_col2" class="data row17 col2" >D (1-3), D (1-3), V (2-1), D (1-2), V (2-0)</td>
+      <td id="T_c13ee_row17_col3" class="data row17 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row18_col0" class="data row18 col0" >Leeds</td>
+      <td id="T_c13ee_row18_col1" class="data row18 col1" >-4.2</td>
+      <td id="T_c13ee_row18_col2" class="data row18 col2" >D (1-3), D (0-3), V (2-1), D (0-2), D (1-2)</td>
+      <td id="T_c13ee_row18_col3" class="data row18 col3" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_c13ee_row19_col0" class="data row19 col0" >Wolves</td>
+      <td id="T_c13ee_row19_col1" class="data row19 col1" >-8.2</td>
+      <td id="T_c13ee_row19_col2" class="data row19 col2" >D (0-3), D (0-3), D (2-3), D (0-2), N (1-1)</td>
+      <td id="T_c13ee_row19_col3" class="data row19 col3" >N/A</td>
+    </tr>
+  </tbody>
+</table>
+
+                </div>
+                
+                <div class="section-container tab-content" id="alert-section">
+                    <h2 class="section-title">TABLEAU DES ALERTES (Premier League)</h2>
+                    <style type="text/css">
+#T_371f3_row0_col0, #T_371f3_row0_col1, #T_371f3_row0_col2, #T_371f3_row0_col3 {
+  background-color: #ffebee;
+  color: #c62828;
+  font-weight: bold;
+}
+#T_371f3_row0_col4 {
+  background-color: #ffebee;
+  color: #c62828;
+  font-weight: bold;
+  font-weight: normal;
+  color: #333;
+  font-size: 0.9em;
+}
+#T_371f3_row0_col5 {
+  background-color: #ffebee;
+  color: #c62828;
+  font-weight: bold;
+  font-weight: normal;
+  color: #17a2b8;
+  font-size: 0.9em;
+}
+#T_371f3_row1_col0, #T_371f3_row1_col1, #T_371f3_row1_col2, #T_371f3_row1_col3, #T_371f3_row2_col0, #T_371f3_row2_col1, #T_371f3_row2_col2, #T_371f3_row2_col3, #T_371f3_row3_col0, #T_371f3_row3_col1, #T_371f3_row3_col2, #T_371f3_row3_col3, #T_371f3_row4_col0, #T_371f3_row4_col1, #T_371f3_row4_col2, #T_371f3_row4_col3 {
+  background-color: #fff3e0;
+  color: #f57c00;
+  font-weight: bold;
+}
+#T_371f3_row1_col4, #T_371f3_row2_col4, #T_371f3_row3_col4, #T_371f3_row4_col4 {
+  background-color: #fff3e0;
+  color: #f57c00;
+  font-weight: bold;
+  font-weight: normal;
+  color: #333;
+  font-size: 0.9em;
+}
+#T_371f3_row1_col5, #T_371f3_row2_col5, #T_371f3_row3_col5, #T_371f3_row4_col5 {
+  background-color: #fff3e0;
+  color: #f57c00;
+  font-weight: bold;
+  font-weight: normal;
+  color: #17a2b8;
+  font-size: 0.9em;
+}
+#T_371f3_row5_col0, #T_371f3_row5_col1, #T_371f3_row5_col2, #T_371f3_row5_col3, #T_371f3_row6_col0, #T_371f3_row6_col1, #T_371f3_row6_col2, #T_371f3_row6_col3, #T_371f3_row7_col0, #T_371f3_row7_col1, #T_371f3_row7_col2, #T_371f3_row7_col3, #T_371f3_row8_col0, #T_371f3_row8_col1, #T_371f3_row8_col2, #T_371f3_row8_col3, #T_371f3_row9_col0, #T_371f3_row9_col1, #T_371f3_row9_col2, #T_371f3_row9_col3, #T_371f3_row10_col0, #T_371f3_row10_col1, #T_371f3_row10_col2, #T_371f3_row10_col3, #T_371f3_row11_col0, #T_371f3_row11_col1, #T_371f3_row11_col2, #T_371f3_row11_col3, #T_371f3_row12_col0, #T_371f3_row12_col1, #T_371f3_row12_col2, #T_371f3_row12_col3, #T_371f3_row13_col0, #T_371f3_row13_col1, #T_371f3_row13_col2, #T_371f3_row13_col3, #T_371f3_row14_col0, #T_371f3_row14_col1, #T_371f3_row14_col2, #T_371f3_row14_col3 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: bold;
+}
+#T_371f3_row5_col4, #T_371f3_row6_col4, #T_371f3_row7_col4, #T_371f3_row8_col4, #T_371f3_row9_col4, #T_371f3_row10_col4, #T_371f3_row11_col4, #T_371f3_row12_col4, #T_371f3_row13_col4, #T_371f3_row14_col4 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: bold;
+  font-weight: normal;
+  color: #333;
+  font-size: 0.9em;
+}
+#T_371f3_row5_col5, #T_371f3_row6_col5, #T_371f3_row7_col5, #T_371f3_row8_col5, #T_371f3_row9_col5, #T_371f3_row10_col5, #T_371f3_row11_col5, #T_371f3_row12_col5, #T_371f3_row13_col5, #T_371f3_row14_col5 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: bold;
+  font-weight: normal;
+  color: #17a2b8;
+  font-size: 0.9em;
+}
+</style>
+<table id="T_371f3" class="styled-table alerts-table">
+  <thead>
+    <tr>
+      <th id="T_371f3_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_371f3_level0_col1" class="col_heading level0 col1" >Statistique</th>
+      <th id="T_371f3_level0_col2" class="col_heading level0 col2" >Record</th>
+      <th id="T_371f3_level0_col3" class="col_heading level0 col3" >Série en Cours</th>
+      <th id="T_371f3_level0_col4" class="col_heading level0 col4" >5 Derniers Buts</th>
+      <th id="T_371f3_level0_col5" class="col_heading level0 col5" >Prochain Match</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_371f3_row0_col0" class="data row0 col0" >Nott'm Forest</td>
+      <td id="T_371f3_row0_col1" class="data row0 col1" >FT No CS</td>
+      <td id="T_371f3_row0_col2" class="data row0 col2" >19</td>
+      <td id="T_371f3_row0_col3" class="data row0 col3" >19</td>
+      <td id="T_371f3_row0_col4" class="data row0 col4" >2, 3, 2, 4, 4</td>
+      <td id="T_371f3_row0_col5" class="data row0 col5" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_371f3_row1_col0" class="data row1 col0" >Brighton</td>
+      <td id="T_371f3_row1_col1" class="data row1 col1" >FT -0.5</td>
+      <td id="T_371f3_row1_col2" class="data row1 col2" >2</td>
+      <td id="T_371f3_row1_col3" class="data row1 col3" >1</td>
+      <td id="T_371f3_row1_col4" class="data row1 col4" >2, 3, 6, 3, 0</td>
+      <td id="T_371f3_row1_col5" class="data row1 col5" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_371f3_row2_col0" class="data row2 col0" >Crystal Palace</td>
+      <td id="T_371f3_row2_col1" class="data row2 col1" >FT -0.5</td>
+      <td id="T_371f3_row2_col2" class="data row2 col2" >2</td>
+      <td id="T_371f3_row2_col3" class="data row2 col3" >1</td>
+      <td id="T_371f3_row2_col4" class="data row2 col4" >3, 6, 1, 2, 0</td>
+      <td id="T_371f3_row2_col5" class="data row2 col5" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_371f3_row3_col0" class="data row3 col0" >Man United</td>
+      <td id="T_371f3_row3_col1" class="data row3 col1" >FT Nuls</td>
+      <td id="T_371f3_row3_col2" class="data row3 col2" >3</td>
+      <td id="T_371f3_row3_col3" class="data row3 col3" >2</td>
+      <td id="T_371f3_row3_col4" class="data row3 col4" >2, 3, 6, 4, 4</td>
+      <td id="T_371f3_row3_col5" class="data row3 col5" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_371f3_row4_col0" class="data row4 col0" >West Ham</td>
+      <td id="T_371f3_row4_col1" class="data row4 col1" >MT +1.5</td>
+      <td id="T_371f3_row4_col2" class="data row4 col2" >4</td>
+      <td id="T_371f3_row4_col3" class="data row4 col3" >3</td>
+      <td id="T_371f3_row4_col4" class="data row4 col4" >1, 1, 2, 3, 2</td>
+      <td id="T_371f3_row4_col5" class="data row4 col5" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_371f3_row5_col0" class="data row5 col0" >Aston Villa</td>
+      <td id="T_371f3_row5_col1" class="data row5 col1" >FT +3.5</td>
+      <td id="T_371f3_row5_col2" class="data row5 col2" >3</td>
+      <td id="T_371f3_row5_col3" class="data row5 col3" >1</td>
+      <td id="T_371f3_row5_col4" class="data row5 col4" >3, 3, 1, 2, 4</td>
+      <td id="T_371f3_row5_col5" class="data row5 col5" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_371f3_row6_col0" class="data row6 col0" >Bournemouth</td>
+      <td id="T_371f3_row6_col1" class="data row6 col1" >MT +1.5</td>
+      <td id="T_371f3_row6_col2" class="data row6 col2" >6</td>
+      <td id="T_371f3_row6_col3" class="data row6 col3" >4</td>
+      <td id="T_371f3_row6_col4" class="data row6 col4" >0, 2, 2, 3, 2</td>
+      <td id="T_371f3_row6_col5" class="data row6 col5" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_371f3_row7_col0" class="data row7 col0" >Brighton</td>
+      <td id="T_371f3_row7_col1" class="data row7 col1" >FT CS</td>
+      <td id="T_371f3_row7_col2" class="data row7 col2" >4</td>
+      <td id="T_371f3_row7_col3" class="data row7 col3" >2</td>
+      <td id="T_371f3_row7_col4" class="data row7 col4" >2, 3, 6, 3, 0</td>
+      <td id="T_371f3_row7_col5" class="data row7 col5" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_371f3_row8_col0" class="data row8 col0" >Burnley</td>
+      <td id="T_371f3_row8_col1" class="data row8 col1" >MT +1.5</td>
+      <td id="T_371f3_row8_col2" class="data row8 col2" >5</td>
+      <td id="T_371f3_row8_col3" class="data row8 col3" >3</td>
+      <td id="T_371f3_row8_col4" class="data row8 col4" >1, 1, 4, 2, 2</td>
+      <td id="T_371f3_row8_col5" class="data row8 col5" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_371f3_row9_col0" class="data row9 col0" >Chelsea</td>
+      <td id="T_371f3_row9_col1" class="data row9 col1" >FT CS</td>
+      <td id="T_371f3_row9_col2" class="data row9 col2" >4</td>
+      <td id="T_371f3_row9_col3" class="data row9 col3" >2</td>
+      <td id="T_371f3_row9_col4" class="data row9 col4" >3, 3, 3, 1, 3</td>
+      <td id="T_371f3_row9_col5" class="data row9 col5" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_371f3_row10_col0" class="data row10 col0" >Crystal Palace</td>
+      <td id="T_371f3_row10_col1" class="data row10 col1" >FT CS</td>
+      <td id="T_371f3_row10_col2" class="data row10 col2" >4</td>
+      <td id="T_371f3_row10_col3" class="data row10 col3" >2</td>
+      <td id="T_371f3_row10_col4" class="data row10 col4" >3, 6, 1, 2, 0</td>
+      <td id="T_371f3_row10_col5" class="data row10 col5" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_371f3_row11_col0" class="data row11 col0" >Nott'm Forest</td>
+      <td id="T_371f3_row11_col1" class="data row11 col1" >FT +3.5</td>
+      <td id="T_371f3_row11_col2" class="data row11 col2" >4</td>
+      <td id="T_371f3_row11_col3" class="data row11 col3" >2</td>
+      <td id="T_371f3_row11_col4" class="data row11 col4" >2, 3, 2, 4, 4</td>
+      <td id="T_371f3_row11_col5" class="data row11 col5" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_371f3_row12_col0" class="data row12 col0" >Nott'm Forest</td>
+      <td id="T_371f3_row12_col1" class="data row12 col1" >MT +1.5</td>
+      <td id="T_371f3_row12_col2" class="data row12 col2" >3</td>
+      <td id="T_371f3_row12_col3" class="data row12 col3" >1</td>
+      <td id="T_371f3_row12_col4" class="data row12 col4" >0, 0, 2, 1, 2</td>
+      <td id="T_371f3_row12_col5" class="data row12 col5" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_371f3_row13_col0" class="data row13 col0" >Sunderland</td>
+      <td id="T_371f3_row13_col1" class="data row13 col1" >FT +3.5</td>
+      <td id="T_371f3_row13_col2" class="data row13 col2" >3</td>
+      <td id="T_371f3_row13_col3" class="data row13 col3" >1</td>
+      <td id="T_371f3_row13_col4" class="data row13 col4" >2, 2, 3, 2, 4</td>
+      <td id="T_371f3_row13_col5" class="data row13 col5" >N/A</td>
+    </tr>
+    <tr>
+      <td id="T_371f3_row14_col0" class="data row14 col0" >Tottenham</td>
+      <td id="T_371f3_row14_col1" class="data row14 col1" >FT Nuls</td>
+      <td id="T_371f3_row14_col2" class="data row14 col2" >3</td>
+      <td id="T_371f3_row14_col3" class="data row14 col3" >1</td>
+      <td id="T_371f3_row14_col4" class="data row14 col4" >3, 3, 3, 1, 4</td>
+      <td id="T_371f3_row14_col5" class="data row14 col5" >N/A</td>
+    </tr>
+  </tbody>
+</table>
+
+                </div>
+                
+                
+            <div class="section-container tab-content" id="ft_marque">
+                <h2 class="section-title">Record - L'équipe Marque (FT)</h2>
+                <style type="text/css">
+#T_6dcfa_row0_col2, #T_6dcfa_row1_col2, #T_6dcfa_row2_col2, #T_6dcfa_row3_col2, #T_6dcfa_row4_col2, #T_6dcfa_row5_col2, #T_6dcfa_row6_col2, #T_6dcfa_row7_col2, #T_6dcfa_row8_col2, #T_6dcfa_row9_col2, #T_6dcfa_row10_col2, #T_6dcfa_row11_col2, #T_6dcfa_row12_col2, #T_6dcfa_row13_col2, #T_6dcfa_row14_col2, #T_6dcfa_row15_col2, #T_6dcfa_row16_col2, #T_6dcfa_row17_col2, #T_6dcfa_row18_col2, #T_6dcfa_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_6dcfa_row0_col3, #T_6dcfa_row1_col3, #T_6dcfa_row2_col3, #T_6dcfa_row3_col3, #T_6dcfa_row4_col3, #T_6dcfa_row5_col3, #T_6dcfa_row6_col3, #T_6dcfa_row7_col3, #T_6dcfa_row8_col3, #T_6dcfa_row9_col3, #T_6dcfa_row10_col3, #T_6dcfa_row11_col3, #T_6dcfa_row12_col3, #T_6dcfa_row13_col3, #T_6dcfa_row14_col3, #T_6dcfa_row15_col3, #T_6dcfa_row16_col3, #T_6dcfa_row17_col3, #T_6dcfa_row18_col3, #T_6dcfa_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+</style>
+<table id="T_6dcfa" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_6dcfa_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_6dcfa_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_6dcfa_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_6dcfa_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_6dcfa_row0_col0" class="data row0 col0" >Liverpool</td>
+      <td id="T_6dcfa_row0_col1" class="data row0 col1" >44</td>
+      <td id="T_6dcfa_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_6dcfa_row0_col3" class="data row0 col3" >3, 3, 5, 2, 3</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row1_col0" class="data row1 col0" >Tottenham</td>
+      <td id="T_6dcfa_row1_col1" class="data row1 col1" >39</td>
+      <td id="T_6dcfa_row1_col2" class="data row1 col2" >1</td>
+      <td id="T_6dcfa_row1_col3" class="data row1 col3" >3, 3, 3, 1, 4</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row2_col0" class="data row2 col0" >Sunderland</td>
+      <td id="T_6dcfa_row2_col1" class="data row2 col1" >39</td>
+      <td id="T_6dcfa_row2_col2" class="data row2 col2" >4</td>
+      <td id="T_6dcfa_row2_col3" class="data row2 col3" >2, 2, 3, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row3_col0" class="data row3 col0" >Brighton</td>
+      <td id="T_6dcfa_row3_col1" class="data row3 col1" >32</td>
+      <td id="T_6dcfa_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_6dcfa_row3_col3" class="data row3 col3" >2, 3, 6, 3, 0</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row4_col0" class="data row4 col0" >Burnley</td>
+      <td id="T_6dcfa_row4_col1" class="data row4 col1" >31</td>
+      <td id="T_6dcfa_row4_col2" class="data row4 col2" >1</td>
+      <td id="T_6dcfa_row4_col3" class="data row4 col3" >3, 2, 5, 2, 5</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row5_col0" class="data row5 col0" >Man City</td>
+      <td id="T_6dcfa_row5_col1" class="data row5 col1" >29</td>
+      <td id="T_6dcfa_row5_col2" class="data row5 col2" >2</td>
+      <td id="T_6dcfa_row5_col3" class="data row5 col3" >1, 2, 1, 4, 3</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row6_col0" class="data row6 col0" >Aston Villa</td>
+      <td id="T_6dcfa_row6_col1" class="data row6 col1" >20</td>
+      <td id="T_6dcfa_row6_col2" class="data row6 col2" >1</td>
+      <td id="T_6dcfa_row6_col3" class="data row6 col3" >3, 3, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row7_col0" class="data row7 col0" >Arsenal</td>
+      <td id="T_6dcfa_row7_col1" class="data row7 col1" >20</td>
+      <td id="T_6dcfa_row7_col2" class="data row7 col2" >8</td>
+      <td id="T_6dcfa_row7_col3" class="data row7 col3" >2, 1, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row8_col0" class="data row8 col0" >Wolves</td>
+      <td id="T_6dcfa_row8_col1" class="data row8 col1" >18</td>
+      <td id="T_6dcfa_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_6dcfa_row8_col3" class="data row8 col3" >2, 2, 5, 3, 3</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row9_col0" class="data row9 col0" >Leeds</td>
+      <td id="T_6dcfa_row9_col1" class="data row9 col1" >18</td>
+      <td id="T_6dcfa_row9_col2" class="data row9 col2" >1</td>
+      <td id="T_6dcfa_row9_col3" class="data row9 col3" >3, 2, 3, 3, 4</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row10_col0" class="data row10 col0" >Man United</td>
+      <td id="T_6dcfa_row10_col1" class="data row10 col1" >17</td>
+      <td id="T_6dcfa_row10_col2" class="data row10 col2" >7</td>
+      <td id="T_6dcfa_row10_col3" class="data row10 col3" >2, 3, 6, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row11_col0" class="data row11 col0" >Brentford</td>
+      <td id="T_6dcfa_row11_col1" class="data row11 col1" >15</td>
+      <td id="T_6dcfa_row11_col2" class="data row11 col2" >1</td>
+      <td id="T_6dcfa_row11_col3" class="data row11 col3" >1, 2, 5, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row12_col0" class="data row12 col0" >Chelsea</td>
+      <td id="T_6dcfa_row12_col1" class="data row12 col1" >15</td>
+      <td id="T_6dcfa_row12_col2" class="data row12 col2" >10</td>
+      <td id="T_6dcfa_row12_col3" class="data row12 col3" >3, 3, 3, 1, 3</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row13_col0" class="data row13 col0" >Fulham</td>
+      <td id="T_6dcfa_row13_col1" class="data row13 col1" >15</td>
+      <td id="T_6dcfa_row13_col2" class="data row13 col2" >0</td>
+      <td id="T_6dcfa_row13_col3" class="data row13 col3" >4, 1, 3, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row14_col0" class="data row14 col0" >Bournemouth</td>
+      <td id="T_6dcfa_row14_col1" class="data row14 col1" >14</td>
+      <td id="T_6dcfa_row14_col2" class="data row14 col2" >0</td>
+      <td id="T_6dcfa_row14_col3" class="data row14 col3" >4, 6, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row15_col0" class="data row15 col0" >Newcastle</td>
+      <td id="T_6dcfa_row15_col1" class="data row15 col1" >14</td>
+      <td id="T_6dcfa_row15_col2" class="data row15 col2" >6</td>
+      <td id="T_6dcfa_row15_col3" class="data row15 col3" >2, 3, 3, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row16_col0" class="data row16 col0" >Nott'm Forest</td>
+      <td id="T_6dcfa_row16_col1" class="data row16 col1" >14</td>
+      <td id="T_6dcfa_row16_col2" class="data row16 col2" >2</td>
+      <td id="T_6dcfa_row16_col3" class="data row16 col3" >2, 3, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row17_col0" class="data row17 col0" >Crystal Palace</td>
+      <td id="T_6dcfa_row17_col1" class="data row17 col1" >13</td>
+      <td id="T_6dcfa_row17_col2" class="data row17 col2" >0</td>
+      <td id="T_6dcfa_row17_col3" class="data row17 col3" >3, 6, 1, 2, 0</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row18_col0" class="data row18 col0" >West Ham</td>
+      <td id="T_6dcfa_row18_col1" class="data row18 col1" >13</td>
+      <td id="T_6dcfa_row18_col2" class="data row18 col2" >3</td>
+      <td id="T_6dcfa_row18_col3" class="data row18 col3" >2, 2, 3, 4, 5</td>
+    </tr>
+    <tr>
+      <td id="T_6dcfa_row19_col0" class="data row19 col0" >Everton</td>
+      <td id="T_6dcfa_row19_col1" class="data row19 col1" >11</td>
+      <td id="T_6dcfa_row19_col2" class="data row19 col2" >2</td>
+      <td id="T_6dcfa_row19_col3" class="data row19 col3" >3, 2, 3, 2, 2</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_cs">
+                <h2 class="section-title">Record - Clean Sheet (FT)</h2>
+                <style type="text/css">
+#T_b0b61_row0_col2, #T_b0b61_row1_col2, #T_b0b61_row2_col2, #T_b0b61_row3_col2, #T_b0b61_row4_col2, #T_b0b61_row5_col2, #T_b0b61_row6_col2, #T_b0b61_row7_col2, #T_b0b61_row8_col2, #T_b0b61_row9_col2, #T_b0b61_row10_col2, #T_b0b61_row12_col2, #T_b0b61_row15_col2, #T_b0b61_row16_col2, #T_b0b61_row17_col2, #T_b0b61_row18_col2, #T_b0b61_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_b0b61_row0_col3, #T_b0b61_row1_col3, #T_b0b61_row2_col3, #T_b0b61_row3_col3, #T_b0b61_row4_col3, #T_b0b61_row5_col3, #T_b0b61_row6_col3, #T_b0b61_row7_col3, #T_b0b61_row8_col3, #T_b0b61_row9_col3, #T_b0b61_row10_col3, #T_b0b61_row11_col3, #T_b0b61_row12_col3, #T_b0b61_row13_col3, #T_b0b61_row14_col3, #T_b0b61_row15_col3, #T_b0b61_row16_col3, #T_b0b61_row17_col3, #T_b0b61_row18_col3, #T_b0b61_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+#T_b0b61_row11_col2, #T_b0b61_row13_col2, #T_b0b61_row14_col2 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: bold;
+}
+</style>
+<table id="T_b0b61" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_b0b61_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_b0b61_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_b0b61_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_b0b61_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_b0b61_row0_col0" class="data row0 col0" >Burnley</td>
+      <td id="T_b0b61_row0_col1" class="data row0 col1" >12</td>
+      <td id="T_b0b61_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_b0b61_row0_col3" class="data row0 col3" >3, 2, 5, 2, 5</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row1_col0" class="data row1 col0" >Liverpool</td>
+      <td id="T_b0b61_row1_col1" class="data row1 col1" >7</td>
+      <td id="T_b0b61_row1_col2" class="data row1 col2" >0</td>
+      <td id="T_b0b61_row1_col3" class="data row1 col3" >3, 3, 5, 2, 3</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row2_col0" class="data row2 col0" >Man City</td>
+      <td id="T_b0b61_row2_col1" class="data row2 col1" >6</td>
+      <td id="T_b0b61_row2_col2" class="data row2 col2" >1</td>
+      <td id="T_b0b61_row2_col3" class="data row2 col3" >1, 2, 1, 4, 3</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row3_col0" class="data row3 col0" >Leeds</td>
+      <td id="T_b0b61_row3_col1" class="data row3 col1" >6</td>
+      <td id="T_b0b61_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_b0b61_row3_col3" class="data row3 col3" >3, 2, 3, 3, 4</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row4_col0" class="data row4 col0" >Newcastle</td>
+      <td id="T_b0b61_row4_col1" class="data row4 col1" >6</td>
+      <td id="T_b0b61_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_b0b61_row4_col3" class="data row4 col3" >2, 3, 3, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row5_col0" class="data row5 col0" >Sunderland</td>
+      <td id="T_b0b61_row5_col1" class="data row5 col1" >5</td>
+      <td id="T_b0b61_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_b0b61_row5_col3" class="data row5 col3" >2, 2, 3, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row6_col0" class="data row6 col0" >Bournemouth</td>
+      <td id="T_b0b61_row6_col1" class="data row6 col1" >5</td>
+      <td id="T_b0b61_row6_col2" class="data row6 col2" >0</td>
+      <td id="T_b0b61_row6_col3" class="data row6 col3" >4, 6, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row7_col0" class="data row7 col0" >Brentford</td>
+      <td id="T_b0b61_row7_col1" class="data row7 col1" >5</td>
+      <td id="T_b0b61_row7_col2" class="data row7 col2" >0</td>
+      <td id="T_b0b61_row7_col3" class="data row7 col3" >1, 2, 5, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row8_col0" class="data row8 col0" >Fulham</td>
+      <td id="T_b0b61_row8_col1" class="data row8 col1" >5</td>
+      <td id="T_b0b61_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_b0b61_row8_col3" class="data row8 col3" >4, 1, 3, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row9_col0" class="data row9 col0" >Aston Villa</td>
+      <td id="T_b0b61_row9_col1" class="data row9 col1" >4</td>
+      <td id="T_b0b61_row9_col2" class="data row9 col2" >1</td>
+      <td id="T_b0b61_row9_col3" class="data row9 col3" >3, 3, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row10_col0" class="data row10 col0" >Arsenal</td>
+      <td id="T_b0b61_row10_col1" class="data row10 col1" >4</td>
+      <td id="T_b0b61_row10_col2" class="data row10 col2" >0</td>
+      <td id="T_b0b61_row10_col3" class="data row10 col3" >2, 1, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row11_col0" class="data row11 col0" >Crystal Palace</td>
+      <td id="T_b0b61_row11_col1" class="data row11 col1" >4</td>
+      <td id="T_b0b61_row11_col2" class="data row11 col2" >2</td>
+      <td id="T_b0b61_row11_col3" class="data row11 col3" >3, 6, 1, 2, 0</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row12_col0" class="data row12 col0" >Everton</td>
+      <td id="T_b0b61_row12_col1" class="data row12 col1" >4</td>
+      <td id="T_b0b61_row12_col2" class="data row12 col2" >1</td>
+      <td id="T_b0b61_row12_col3" class="data row12 col3" >3, 2, 3, 2, 2</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row13_col0" class="data row13 col0" >Brighton</td>
+      <td id="T_b0b61_row13_col1" class="data row13 col1" >4</td>
+      <td id="T_b0b61_row13_col2" class="data row13 col2" >2</td>
+      <td id="T_b0b61_row13_col3" class="data row13 col3" >2, 3, 6, 3, 0</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row14_col0" class="data row14 col0" >Chelsea</td>
+      <td id="T_b0b61_row14_col1" class="data row14 col1" >4</td>
+      <td id="T_b0b61_row14_col2" class="data row14 col2" >2</td>
+      <td id="T_b0b61_row14_col3" class="data row14 col3" >3, 3, 3, 1, 3</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row15_col0" class="data row15 col0" >Man United</td>
+      <td id="T_b0b61_row15_col1" class="data row15 col1" >4</td>
+      <td id="T_b0b61_row15_col2" class="data row15 col2" >0</td>
+      <td id="T_b0b61_row15_col3" class="data row15 col3" >2, 3, 6, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row16_col0" class="data row16 col0" >Nott'm Forest</td>
+      <td id="T_b0b61_row16_col1" class="data row16 col1" >4</td>
+      <td id="T_b0b61_row16_col2" class="data row16 col2" >0</td>
+      <td id="T_b0b61_row16_col3" class="data row16 col3" >2, 3, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row17_col0" class="data row17 col0" >Tottenham</td>
+      <td id="T_b0b61_row17_col1" class="data row17 col1" >4</td>
+      <td id="T_b0b61_row17_col2" class="data row17 col2" >0</td>
+      <td id="T_b0b61_row17_col3" class="data row17 col3" >3, 3, 3, 1, 4</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row18_col0" class="data row18 col0" >West Ham</td>
+      <td id="T_b0b61_row18_col1" class="data row18 col1" >4</td>
+      <td id="T_b0b61_row18_col2" class="data row18 col2" >0</td>
+      <td id="T_b0b61_row18_col3" class="data row18 col3" >2, 2, 3, 4, 5</td>
+    </tr>
+    <tr>
+      <td id="T_b0b61_row19_col0" class="data row19 col0" >Wolves</td>
+      <td id="T_b0b61_row19_col1" class="data row19 col1" >4</td>
+      <td id="T_b0b61_row19_col2" class="data row19 col2" >0</td>
+      <td id="T_b0b61_row19_col3" class="data row19 col3" >2, 2, 5, 3, 3</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_no_cs">
+                <h2 class="section-title">Record - Non Clean Sheet (FT)</h2>
+                <style type="text/css">
+#T_2965c_row0_col2, #T_2965c_row1_col2, #T_2965c_row2_col2, #T_2965c_row4_col2, #T_2965c_row5_col2, #T_2965c_row6_col2, #T_2965c_row7_col2, #T_2965c_row8_col2, #T_2965c_row9_col2, #T_2965c_row10_col2, #T_2965c_row11_col2, #T_2965c_row12_col2, #T_2965c_row13_col2, #T_2965c_row14_col2, #T_2965c_row15_col2, #T_2965c_row16_col2, #T_2965c_row17_col2, #T_2965c_row18_col2, #T_2965c_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_2965c_row0_col3, #T_2965c_row1_col3, #T_2965c_row2_col3, #T_2965c_row3_col3, #T_2965c_row4_col3, #T_2965c_row5_col3, #T_2965c_row6_col3, #T_2965c_row7_col3, #T_2965c_row8_col3, #T_2965c_row9_col3, #T_2965c_row10_col3, #T_2965c_row11_col3, #T_2965c_row12_col3, #T_2965c_row13_col3, #T_2965c_row14_col3, #T_2965c_row15_col3, #T_2965c_row16_col3, #T_2965c_row17_col3, #T_2965c_row18_col3, #T_2965c_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+#T_2965c_row3_col2 {
+  background-color: #ffebee;
+  color: #c62828;
+  font-weight: bold;
+}
+</style>
+<table id="T_2965c" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_2965c_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_2965c_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_2965c_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_2965c_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_2965c_row0_col0" class="data row0 col0" >Brighton</td>
+      <td id="T_2965c_row0_col1" class="data row0 col1" >23</td>
+      <td id="T_2965c_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_2965c_row0_col3" class="data row0 col3" >2, 3, 6, 3, 0</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row1_col0" class="data row1 col0" >Wolves</td>
+      <td id="T_2965c_row1_col1" class="data row1 col1" >22</td>
+      <td id="T_2965c_row1_col2" class="data row1 col2" >15</td>
+      <td id="T_2965c_row1_col3" class="data row1 col3" >2, 2, 5, 3, 3</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row2_col0" class="data row2 col0" >Burnley</td>
+      <td id="T_2965c_row2_col1" class="data row2 col1" >21</td>
+      <td id="T_2965c_row2_col2" class="data row2 col2" >3</td>
+      <td id="T_2965c_row2_col3" class="data row2 col3" >3, 2, 5, 2, 5</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row3_col0" class="data row3 col0" >Nott'm Forest</td>
+      <td id="T_2965c_row3_col1" class="data row3 col1" >19</td>
+      <td id="T_2965c_row3_col2" class="data row3 col2" >19</td>
+      <td id="T_2965c_row3_col3" class="data row3 col3" >2, 3, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row4_col0" class="data row4 col0" >West Ham</td>
+      <td id="T_2965c_row4_col1" class="data row4 col1" >19</td>
+      <td id="T_2965c_row4_col2" class="data row4 col2" >8</td>
+      <td id="T_2965c_row4_col3" class="data row4 col3" >2, 2, 3, 4, 5</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row5_col0" class="data row5 col0" >Crystal Palace</td>
+      <td id="T_2965c_row5_col1" class="data row5 col1" >18</td>
+      <td id="T_2965c_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_2965c_row5_col3" class="data row5 col3" >3, 6, 1, 2, 0</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row6_col0" class="data row6 col0" >Leeds</td>
+      <td id="T_2965c_row6_col1" class="data row6 col1" >18</td>
+      <td id="T_2965c_row6_col2" class="data row6 col2" >8</td>
+      <td id="T_2965c_row6_col3" class="data row6 col3" >3, 2, 3, 3, 4</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row7_col0" class="data row7 col0" >Fulham</td>
+      <td id="T_2965c_row7_col1" class="data row7 col1" >17</td>
+      <td id="T_2965c_row7_col2" class="data row7 col2" >1</td>
+      <td id="T_2965c_row7_col3" class="data row7 col3" >4, 1, 3, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row8_col0" class="data row8 col0" >Sunderland</td>
+      <td id="T_2965c_row8_col1" class="data row8 col1" >16</td>
+      <td id="T_2965c_row8_col2" class="data row8 col2" >3</td>
+      <td id="T_2965c_row8_col3" class="data row8 col3" >2, 2, 3, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row9_col0" class="data row9 col0" >Bournemouth</td>
+      <td id="T_2965c_row9_col1" class="data row9 col1" >16</td>
+      <td id="T_2965c_row9_col2" class="data row9 col2" >2</td>
+      <td id="T_2965c_row9_col3" class="data row9 col3" >4, 6, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row10_col0" class="data row10 col0" >Newcastle</td>
+      <td id="T_2965c_row10_col1" class="data row10 col1" >14</td>
+      <td id="T_2965c_row10_col2" class="data row10 col2" >4</td>
+      <td id="T_2965c_row10_col3" class="data row10 col3" >2, 3, 3, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row11_col0" class="data row11 col0" >Man United</td>
+      <td id="T_2965c_row11_col1" class="data row11 col1" >14</td>
+      <td id="T_2965c_row11_col2" class="data row11 col2" >4</td>
+      <td id="T_2965c_row11_col3" class="data row11 col3" >2, 3, 6, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row12_col0" class="data row12 col0" >Brentford</td>
+      <td id="T_2965c_row12_col1" class="data row12 col1" >13</td>
+      <td id="T_2965c_row12_col2" class="data row12 col2" >3</td>
+      <td id="T_2965c_row12_col3" class="data row12 col3" >1, 2, 5, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row13_col0" class="data row13 col0" >Tottenham</td>
+      <td id="T_2965c_row13_col1" class="data row13 col1" >13</td>
+      <td id="T_2965c_row13_col2" class="data row13 col2" >2</td>
+      <td id="T_2965c_row13_col3" class="data row13 col3" >3, 3, 3, 1, 4</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row14_col0" class="data row14 col0" >Everton</td>
+      <td id="T_2965c_row14_col1" class="data row14 col1" >12</td>
+      <td id="T_2965c_row14_col2" class="data row14 col2" >0</td>
+      <td id="T_2965c_row14_col3" class="data row14 col3" >3, 2, 3, 2, 2</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row15_col0" class="data row15 col0" >Aston Villa</td>
+      <td id="T_2965c_row15_col1" class="data row15 col1" >11</td>
+      <td id="T_2965c_row15_col2" class="data row15 col2" >0</td>
+      <td id="T_2965c_row15_col3" class="data row15 col3" >3, 3, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row16_col0" class="data row16 col0" >Arsenal</td>
+      <td id="T_2965c_row16_col1" class="data row16 col1" >11</td>
+      <td id="T_2965c_row16_col2" class="data row16 col2" >1</td>
+      <td id="T_2965c_row16_col3" class="data row16 col3" >2, 1, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row17_col0" class="data row17 col0" >Chelsea</td>
+      <td id="T_2965c_row17_col1" class="data row17 col1" >11</td>
+      <td id="T_2965c_row17_col2" class="data row17 col2" >0</td>
+      <td id="T_2965c_row17_col3" class="data row17 col3" >3, 3, 3, 1, 3</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row18_col0" class="data row18 col0" >Liverpool</td>
+      <td id="T_2965c_row18_col1" class="data row18 col1" >10</td>
+      <td id="T_2965c_row18_col2" class="data row18 col2" >1</td>
+      <td id="T_2965c_row18_col3" class="data row18 col3" >3, 3, 5, 2, 3</td>
+    </tr>
+    <tr>
+      <td id="T_2965c_row19_col0" class="data row19 col0" >Man City</td>
+      <td id="T_2965c_row19_col1" class="data row19 col1" >8</td>
+      <td id="T_2965c_row19_col2" class="data row19 col2" >0</td>
+      <td id="T_2965c_row19_col3" class="data row19 col3" >1, 2, 1, 4, 3</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_moins_0_5">
+                <h2 class="section-title">Record - Fin de Match -0.5 (0 Buts)</h2>
+                <style type="text/css">
+#T_0fe78_row0_col2, #T_0fe78_row1_col2, #T_0fe78_row3_col2, #T_0fe78_row4_col2, #T_0fe78_row5_col2, #T_0fe78_row6_col2, #T_0fe78_row7_col2, #T_0fe78_row8_col2, #T_0fe78_row9_col2, #T_0fe78_row10_col2, #T_0fe78_row12_col2, #T_0fe78_row13_col2, #T_0fe78_row14_col2, #T_0fe78_row15_col2, #T_0fe78_row16_col2, #T_0fe78_row17_col2, #T_0fe78_row18_col2, #T_0fe78_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_0fe78_row0_col3, #T_0fe78_row1_col3, #T_0fe78_row2_col3, #T_0fe78_row3_col3, #T_0fe78_row4_col3, #T_0fe78_row5_col3, #T_0fe78_row6_col3, #T_0fe78_row7_col3, #T_0fe78_row8_col3, #T_0fe78_row9_col3, #T_0fe78_row10_col3, #T_0fe78_row11_col3, #T_0fe78_row12_col3, #T_0fe78_row13_col3, #T_0fe78_row14_col3, #T_0fe78_row15_col3, #T_0fe78_row16_col3, #T_0fe78_row17_col3, #T_0fe78_row18_col3, #T_0fe78_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+#T_0fe78_row2_col2, #T_0fe78_row11_col2 {
+  background-color: #fff3e0;
+  color: #f57c00;
+  font-weight: bold;
+}
+</style>
+<table id="T_0fe78" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_0fe78_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_0fe78_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_0fe78_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_0fe78_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_0fe78_row0_col0" class="data row0 col0" >West Ham</td>
+      <td id="T_0fe78_row0_col1" class="data row0 col1" >3</td>
+      <td id="T_0fe78_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_0fe78_row0_col3" class="data row0 col3" >2, 2, 3, 4, 5</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row1_col0" class="data row1 col0" >Brentford</td>
+      <td id="T_0fe78_row1_col1" class="data row1 col1" >2</td>
+      <td id="T_0fe78_row1_col2" class="data row1 col2" >0</td>
+      <td id="T_0fe78_row1_col3" class="data row1 col3" >1, 2, 5, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row2_col0" class="data row2 col0" >Brighton</td>
+      <td id="T_0fe78_row2_col1" class="data row2 col1" >2</td>
+      <td id="T_0fe78_row2_col2" class="data row2 col2" >1</td>
+      <td id="T_0fe78_row2_col3" class="data row2 col3" >2, 3, 6, 3, 0</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row3_col0" class="data row3 col0" >Bournemouth</td>
+      <td id="T_0fe78_row3_col1" class="data row3 col1" >2</td>
+      <td id="T_0fe78_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_0fe78_row3_col3" class="data row3 col3" >4, 6, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row4_col0" class="data row4 col0" >Wolves</td>
+      <td id="T_0fe78_row4_col1" class="data row4 col1" >2</td>
+      <td id="T_0fe78_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_0fe78_row4_col3" class="data row4 col3" >2, 2, 5, 3, 3</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row5_col0" class="data row5 col0" >Sunderland</td>
+      <td id="T_0fe78_row5_col1" class="data row5 col1" >2</td>
+      <td id="T_0fe78_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_0fe78_row5_col3" class="data row5 col3" >2, 2, 3, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row6_col0" class="data row6 col0" >Chelsea</td>
+      <td id="T_0fe78_row6_col1" class="data row6 col1" >2</td>
+      <td id="T_0fe78_row6_col2" class="data row6 col2" >0</td>
+      <td id="T_0fe78_row6_col3" class="data row6 col3" >3, 3, 3, 1, 3</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row7_col0" class="data row7 col0" >Burnley</td>
+      <td id="T_0fe78_row7_col1" class="data row7 col1" >2</td>
+      <td id="T_0fe78_row7_col2" class="data row7 col2" >0</td>
+      <td id="T_0fe78_row7_col3" class="data row7 col3" >3, 2, 5, 2, 5</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row8_col0" class="data row8 col0" >Everton</td>
+      <td id="T_0fe78_row8_col1" class="data row8 col1" >2</td>
+      <td id="T_0fe78_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_0fe78_row8_col3" class="data row8 col3" >3, 2, 3, 2, 2</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row9_col0" class="data row9 col0" >Nott'm Forest</td>
+      <td id="T_0fe78_row9_col1" class="data row9 col1" >2</td>
+      <td id="T_0fe78_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_0fe78_row9_col3" class="data row9 col3" >2, 3, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row10_col0" class="data row10 col0" >Man United</td>
+      <td id="T_0fe78_row10_col1" class="data row10 col1" >2</td>
+      <td id="T_0fe78_row10_col2" class="data row10 col2" >0</td>
+      <td id="T_0fe78_row10_col3" class="data row10 col3" >2, 3, 6, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row11_col0" class="data row11 col0" >Crystal Palace</td>
+      <td id="T_0fe78_row11_col1" class="data row11 col1" >2</td>
+      <td id="T_0fe78_row11_col2" class="data row11 col2" >1</td>
+      <td id="T_0fe78_row11_col3" class="data row11 col3" >3, 6, 1, 2, 0</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row12_col0" class="data row12 col0" >Newcastle</td>
+      <td id="T_0fe78_row12_col1" class="data row12 col1" >2</td>
+      <td id="T_0fe78_row12_col2" class="data row12 col2" >0</td>
+      <td id="T_0fe78_row12_col3" class="data row12 col3" >2, 3, 3, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row13_col0" class="data row13 col0" >Aston Villa</td>
+      <td id="T_0fe78_row13_col1" class="data row13 col1" >1</td>
+      <td id="T_0fe78_row13_col2" class="data row13 col2" >0</td>
+      <td id="T_0fe78_row13_col3" class="data row13 col3" >3, 3, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row14_col0" class="data row14 col0" >Arsenal</td>
+      <td id="T_0fe78_row14_col1" class="data row14 col1" >1</td>
+      <td id="T_0fe78_row14_col2" class="data row14 col2" >0</td>
+      <td id="T_0fe78_row14_col3" class="data row14 col3" >2, 1, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row15_col0" class="data row15 col0" >Fulham</td>
+      <td id="T_0fe78_row15_col1" class="data row15 col1" >1</td>
+      <td id="T_0fe78_row15_col2" class="data row15 col2" >0</td>
+      <td id="T_0fe78_row15_col3" class="data row15 col3" >4, 1, 3, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row16_col0" class="data row16 col0" >Liverpool</td>
+      <td id="T_0fe78_row16_col1" class="data row16 col1" >1</td>
+      <td id="T_0fe78_row16_col2" class="data row16 col2" >0</td>
+      <td id="T_0fe78_row16_col3" class="data row16 col3" >3, 3, 5, 2, 3</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row17_col0" class="data row17 col0" >Leeds</td>
+      <td id="T_0fe78_row17_col1" class="data row17 col1" >1</td>
+      <td id="T_0fe78_row17_col2" class="data row17 col2" >0</td>
+      <td id="T_0fe78_row17_col3" class="data row17 col3" >3, 2, 3, 3, 4</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row18_col0" class="data row18 col0" >Man City</td>
+      <td id="T_0fe78_row18_col1" class="data row18 col1" >1</td>
+      <td id="T_0fe78_row18_col2" class="data row18 col2" >0</td>
+      <td id="T_0fe78_row18_col3" class="data row18 col3" >1, 2, 1, 4, 3</td>
+    </tr>
+    <tr>
+      <td id="T_0fe78_row19_col0" class="data row19 col0" >Tottenham</td>
+      <td id="T_0fe78_row19_col1" class="data row19 col1" >1</td>
+      <td id="T_0fe78_row19_col2" class="data row19 col2" >0</td>
+      <td id="T_0fe78_row19_col3" class="data row19 col3" >3, 3, 3, 1, 4</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_plus_1_5">
+                <h2 class="section-title">Record - Fin de Match +1.5 (2+ Buts)</h2>
+                <style type="text/css">
+#T_32697_row0_col2, #T_32697_row1_col2, #T_32697_row2_col2, #T_32697_row3_col2, #T_32697_row4_col2, #T_32697_row5_col2, #T_32697_row6_col2, #T_32697_row7_col2, #T_32697_row8_col2, #T_32697_row9_col2, #T_32697_row10_col2, #T_32697_row11_col2, #T_32697_row12_col2, #T_32697_row13_col2, #T_32697_row14_col2, #T_32697_row15_col2, #T_32697_row16_col2, #T_32697_row17_col2, #T_32697_row18_col2, #T_32697_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_32697_row0_col3, #T_32697_row1_col3, #T_32697_row2_col3, #T_32697_row3_col3, #T_32697_row4_col3, #T_32697_row5_col3, #T_32697_row6_col3, #T_32697_row7_col3, #T_32697_row8_col3, #T_32697_row9_col3, #T_32697_row10_col3, #T_32697_row11_col3, #T_32697_row12_col3, #T_32697_row13_col3, #T_32697_row14_col3, #T_32697_row15_col3, #T_32697_row16_col3, #T_32697_row17_col3, #T_32697_row18_col3, #T_32697_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+</style>
+<table id="T_32697" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_32697_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_32697_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_32697_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_32697_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_32697_row0_col0" class="data row0 col0" >Tottenham</td>
+      <td id="T_32697_row0_col1" class="data row0 col1" >33</td>
+      <td id="T_32697_row0_col2" class="data row0 col2" >1</td>
+      <td id="T_32697_row0_col3" class="data row0 col3" >3, 3, 3, 1, 4</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row1_col0" class="data row1 col0" >West Ham</td>
+      <td id="T_32697_row1_col1" class="data row1 col1" >28</td>
+      <td id="T_32697_row1_col2" class="data row1 col2" >19</td>
+      <td id="T_32697_row1_col3" class="data row1 col3" >2, 2, 3, 4, 5</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row2_col0" class="data row2 col0" >Wolves</td>
+      <td id="T_32697_row2_col1" class="data row2 col1" >26</td>
+      <td id="T_32697_row2_col2" class="data row2 col2" >7</td>
+      <td id="T_32697_row2_col3" class="data row2 col3" >2, 2, 5, 3, 3</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row3_col0" class="data row3 col0" >Brighton</td>
+      <td id="T_32697_row3_col1" class="data row3 col1" >25</td>
+      <td id="T_32697_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_32697_row3_col3" class="data row3 col3" >2, 3, 6, 3, 0</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row4_col0" class="data row4 col0" >Man City</td>
+      <td id="T_32697_row4_col1" class="data row4 col1" >24</td>
+      <td id="T_32697_row4_col2" class="data row4 col2" >2</td>
+      <td id="T_32697_row4_col3" class="data row4 col3" >1, 2, 1, 4, 3</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row5_col0" class="data row5 col0" >Liverpool</td>
+      <td id="T_32697_row5_col1" class="data row5 col1" >23</td>
+      <td id="T_32697_row5_col2" class="data row5 col2" >7</td>
+      <td id="T_32697_row5_col3" class="data row5 col3" >3, 3, 5, 2, 3</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row6_col0" class="data row6 col0" >Crystal Palace</td>
+      <td id="T_32697_row6_col1" class="data row6 col1" >21</td>
+      <td id="T_32697_row6_col2" class="data row6 col2" >0</td>
+      <td id="T_32697_row6_col3" class="data row6 col3" >3, 6, 1, 2, 0</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row7_col0" class="data row7 col0" >Sunderland</td>
+      <td id="T_32697_row7_col1" class="data row7 col1" >21</td>
+      <td id="T_32697_row7_col2" class="data row7 col2" >5</td>
+      <td id="T_32697_row7_col3" class="data row7 col3" >2, 2, 3, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row8_col0" class="data row8 col0" >Chelsea</td>
+      <td id="T_32697_row8_col1" class="data row8 col1" >20</td>
+      <td id="T_32697_row8_col2" class="data row8 col2" >1</td>
+      <td id="T_32697_row8_col3" class="data row8 col3" >3, 3, 3, 1, 3</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row9_col0" class="data row9 col0" >Bournemouth</td>
+      <td id="T_32697_row9_col1" class="data row9 col1" >19</td>
+      <td id="T_32697_row9_col2" class="data row9 col2" >6</td>
+      <td id="T_32697_row9_col3" class="data row9 col3" >4, 6, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row10_col0" class="data row10 col0" >Man United</td>
+      <td id="T_32697_row10_col1" class="data row10 col1" >18</td>
+      <td id="T_32697_row10_col2" class="data row10 col2" >10</td>
+      <td id="T_32697_row10_col3" class="data row10 col3" >2, 3, 6, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row11_col0" class="data row11 col0" >Newcastle</td>
+      <td id="T_32697_row11_col1" class="data row11 col1" >17</td>
+      <td id="T_32697_row11_col2" class="data row11 col2" >6</td>
+      <td id="T_32697_row11_col3" class="data row11 col3" >2, 3, 3, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row12_col0" class="data row12 col0" >Arsenal</td>
+      <td id="T_32697_row12_col1" class="data row12 col1" >16</td>
+      <td id="T_32697_row12_col2" class="data row12 col2" >2</td>
+      <td id="T_32697_row12_col3" class="data row12 col3" >2, 1, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row13_col0" class="data row13 col0" >Burnley</td>
+      <td id="T_32697_row13_col1" class="data row13 col1" >16</td>
+      <td id="T_32697_row13_col2" class="data row13 col2" >7</td>
+      <td id="T_32697_row13_col3" class="data row13 col3" >3, 2, 5, 2, 5</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row14_col0" class="data row14 col0" >Nott'm Forest</td>
+      <td id="T_32697_row14_col1" class="data row14 col1" >15</td>
+      <td id="T_32697_row14_col2" class="data row14 col2" >5</td>
+      <td id="T_32697_row14_col3" class="data row14 col3" >2, 3, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row15_col0" class="data row15 col0" >Aston Villa</td>
+      <td id="T_32697_row15_col1" class="data row15 col1" >14</td>
+      <td id="T_32697_row15_col2" class="data row15 col2" >2</td>
+      <td id="T_32697_row15_col3" class="data row15 col3" >3, 3, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row16_col0" class="data row16 col0" >Everton</td>
+      <td id="T_32697_row16_col1" class="data row16 col1" >14</td>
+      <td id="T_32697_row16_col2" class="data row16 col2" >7</td>
+      <td id="T_32697_row16_col3" class="data row16 col3" >3, 2, 3, 2, 2</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row17_col0" class="data row17 col0" >Leeds</td>
+      <td id="T_32697_row17_col1" class="data row17 col1" >14</td>
+      <td id="T_32697_row17_col2" class="data row17 col2" >7</td>
+      <td id="T_32697_row17_col3" class="data row17 col3" >3, 2, 3, 3, 4</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row18_col0" class="data row18 col0" >Fulham</td>
+      <td id="T_32697_row18_col1" class="data row18 col1" >14</td>
+      <td id="T_32697_row18_col2" class="data row18 col2" >3</td>
+      <td id="T_32697_row18_col3" class="data row18 col3" >4, 1, 3, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_32697_row19_col0" class="data row19 col0" >Brentford</td>
+      <td id="T_32697_row19_col1" class="data row19 col1" >13</td>
+      <td id="T_32697_row19_col2" class="data row19 col2" >4</td>
+      <td id="T_32697_row19_col3" class="data row19 col3" >1, 2, 5, 2, 4</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_moins_1_5">
+                <h2 class="section-title">Record - Fin de Match -1.5 (0-1 Buts)</h2>
+                <style type="text/css">
+#T_5a0de_row0_col2, #T_5a0de_row1_col2, #T_5a0de_row2_col2, #T_5a0de_row3_col2, #T_5a0de_row4_col2, #T_5a0de_row5_col2, #T_5a0de_row6_col2, #T_5a0de_row7_col2, #T_5a0de_row8_col2, #T_5a0de_row9_col2, #T_5a0de_row10_col2, #T_5a0de_row11_col2, #T_5a0de_row12_col2, #T_5a0de_row13_col2, #T_5a0de_row14_col2, #T_5a0de_row15_col2, #T_5a0de_row16_col2, #T_5a0de_row17_col2, #T_5a0de_row18_col2, #T_5a0de_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_5a0de_row0_col3, #T_5a0de_row1_col3, #T_5a0de_row2_col3, #T_5a0de_row3_col3, #T_5a0de_row4_col3, #T_5a0de_row5_col3, #T_5a0de_row6_col3, #T_5a0de_row7_col3, #T_5a0de_row8_col3, #T_5a0de_row9_col3, #T_5a0de_row10_col3, #T_5a0de_row11_col3, #T_5a0de_row12_col3, #T_5a0de_row13_col3, #T_5a0de_row14_col3, #T_5a0de_row15_col3, #T_5a0de_row16_col3, #T_5a0de_row17_col3, #T_5a0de_row18_col3, #T_5a0de_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+</style>
+<table id="T_5a0de" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_5a0de_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_5a0de_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_5a0de_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_5a0de_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_5a0de_row0_col0" class="data row0 col0" >Wolves</td>
+      <td id="T_5a0de_row0_col1" class="data row0 col1" >8</td>
+      <td id="T_5a0de_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_5a0de_row0_col3" class="data row0 col3" >2, 2, 5, 3, 3</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row1_col0" class="data row1 col0" >Burnley</td>
+      <td id="T_5a0de_row1_col1" class="data row1 col1" >5</td>
+      <td id="T_5a0de_row1_col2" class="data row1 col2" >0</td>
+      <td id="T_5a0de_row1_col3" class="data row1 col3" >3, 2, 5, 2, 5</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row2_col0" class="data row2 col0" >Brighton</td>
+      <td id="T_5a0de_row2_col1" class="data row2 col1" >5</td>
+      <td id="T_5a0de_row2_col2" class="data row2 col2" >1</td>
+      <td id="T_5a0de_row2_col3" class="data row2 col3" >2, 3, 6, 3, 0</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row3_col0" class="data row3 col0" >Sunderland</td>
+      <td id="T_5a0de_row3_col1" class="data row3 col1" >5</td>
+      <td id="T_5a0de_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_5a0de_row3_col3" class="data row3 col3" >2, 2, 3, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row4_col0" class="data row4 col0" >Tottenham</td>
+      <td id="T_5a0de_row4_col1" class="data row4 col1" >4</td>
+      <td id="T_5a0de_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_5a0de_row4_col3" class="data row4 col3" >3, 3, 3, 1, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row5_col0" class="data row5 col0" >Liverpool</td>
+      <td id="T_5a0de_row5_col1" class="data row5 col1" >4</td>
+      <td id="T_5a0de_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_5a0de_row5_col3" class="data row5 col3" >3, 3, 5, 2, 3</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row6_col0" class="data row6 col0" >Man United</td>
+      <td id="T_5a0de_row6_col1" class="data row6 col1" >4</td>
+      <td id="T_5a0de_row6_col2" class="data row6 col2" >0</td>
+      <td id="T_5a0de_row6_col3" class="data row6 col3" >2, 3, 6, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row7_col0" class="data row7 col0" >Bournemouth</td>
+      <td id="T_5a0de_row7_col1" class="data row7 col1" >4</td>
+      <td id="T_5a0de_row7_col2" class="data row7 col2" >0</td>
+      <td id="T_5a0de_row7_col3" class="data row7 col3" >4, 6, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row8_col0" class="data row8 col0" >Everton</td>
+      <td id="T_5a0de_row8_col1" class="data row8 col1" >4</td>
+      <td id="T_5a0de_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_5a0de_row8_col3" class="data row8 col3" >3, 2, 3, 2, 2</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row9_col0" class="data row9 col0" >Fulham</td>
+      <td id="T_5a0de_row9_col1" class="data row9 col1" >4</td>
+      <td id="T_5a0de_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_5a0de_row9_col3" class="data row9 col3" >4, 1, 3, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row10_col0" class="data row10 col0" >Chelsea</td>
+      <td id="T_5a0de_row10_col1" class="data row10 col1" >4</td>
+      <td id="T_5a0de_row10_col2" class="data row10 col2" >0</td>
+      <td id="T_5a0de_row10_col3" class="data row10 col3" >3, 3, 3, 1, 3</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row11_col0" class="data row11 col0" >Crystal Palace</td>
+      <td id="T_5a0de_row11_col1" class="data row11 col1" >4</td>
+      <td id="T_5a0de_row11_col2" class="data row11 col2" >1</td>
+      <td id="T_5a0de_row11_col3" class="data row11 col3" >3, 6, 1, 2, 0</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row12_col0" class="data row12 col0" >Nott'm Forest</td>
+      <td id="T_5a0de_row12_col1" class="data row12 col1" >4</td>
+      <td id="T_5a0de_row12_col2" class="data row12 col2" >0</td>
+      <td id="T_5a0de_row12_col3" class="data row12 col3" >2, 3, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row13_col0" class="data row13 col0" >Newcastle</td>
+      <td id="T_5a0de_row13_col1" class="data row13 col1" >4</td>
+      <td id="T_5a0de_row13_col2" class="data row13 col2" >0</td>
+      <td id="T_5a0de_row13_col3" class="data row13 col3" >2, 3, 3, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row14_col0" class="data row14 col0" >Arsenal</td>
+      <td id="T_5a0de_row14_col1" class="data row14 col1" >3</td>
+      <td id="T_5a0de_row14_col2" class="data row14 col2" >0</td>
+      <td id="T_5a0de_row14_col3" class="data row14 col3" >2, 1, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row15_col0" class="data row15 col0" >Aston Villa</td>
+      <td id="T_5a0de_row15_col1" class="data row15 col1" >3</td>
+      <td id="T_5a0de_row15_col2" class="data row15 col2" >0</td>
+      <td id="T_5a0de_row15_col3" class="data row15 col3" >3, 3, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row16_col0" class="data row16 col0" >Brentford</td>
+      <td id="T_5a0de_row16_col1" class="data row16 col1" >3</td>
+      <td id="T_5a0de_row16_col2" class="data row16 col2" >0</td>
+      <td id="T_5a0de_row16_col3" class="data row16 col3" >1, 2, 5, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row17_col0" class="data row17 col0" >Leeds</td>
+      <td id="T_5a0de_row17_col1" class="data row17 col1" >3</td>
+      <td id="T_5a0de_row17_col2" class="data row17 col2" >0</td>
+      <td id="T_5a0de_row17_col3" class="data row17 col3" >3, 2, 3, 3, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row18_col0" class="data row18 col0" >Man City</td>
+      <td id="T_5a0de_row18_col1" class="data row18 col1" >3</td>
+      <td id="T_5a0de_row18_col2" class="data row18 col2" >0</td>
+      <td id="T_5a0de_row18_col3" class="data row18 col3" >1, 2, 1, 4, 3</td>
+    </tr>
+    <tr>
+      <td id="T_5a0de_row19_col0" class="data row19 col0" >West Ham</td>
+      <td id="T_5a0de_row19_col1" class="data row19 col1" >3</td>
+      <td id="T_5a0de_row19_col2" class="data row19 col2" >0</td>
+      <td id="T_5a0de_row19_col3" class="data row19 col3" >2, 2, 3, 4, 5</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_plus_2_5">
+                <h2 class="section-title">Record - Fin de Match +2.5 (3+ Buts)</h2>
+                <style type="text/css">
+#T_7560a_row0_col2, #T_7560a_row1_col2, #T_7560a_row2_col2, #T_7560a_row3_col2, #T_7560a_row4_col2, #T_7560a_row5_col2, #T_7560a_row6_col2, #T_7560a_row7_col2, #T_7560a_row8_col2, #T_7560a_row9_col2, #T_7560a_row10_col2, #T_7560a_row11_col2, #T_7560a_row12_col2, #T_7560a_row13_col2, #T_7560a_row14_col2, #T_7560a_row15_col2, #T_7560a_row16_col2, #T_7560a_row17_col2, #T_7560a_row18_col2, #T_7560a_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_7560a_row0_col3, #T_7560a_row1_col3, #T_7560a_row2_col3, #T_7560a_row3_col3, #T_7560a_row4_col3, #T_7560a_row5_col3, #T_7560a_row6_col3, #T_7560a_row7_col3, #T_7560a_row8_col3, #T_7560a_row9_col3, #T_7560a_row10_col3, #T_7560a_row11_col3, #T_7560a_row12_col3, #T_7560a_row13_col3, #T_7560a_row14_col3, #T_7560a_row15_col3, #T_7560a_row16_col3, #T_7560a_row17_col3, #T_7560a_row18_col3, #T_7560a_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+</style>
+<table id="T_7560a" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_7560a_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_7560a_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_7560a_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_7560a_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_7560a_row0_col0" class="data row0 col0" >West Ham</td>
+      <td id="T_7560a_row0_col1" class="data row0 col1" >13</td>
+      <td id="T_7560a_row0_col2" class="data row0 col2" >3</td>
+      <td id="T_7560a_row0_col3" class="data row0 col3" >2, 2, 3, 4, 5</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row1_col0" class="data row1 col0" >Tottenham</td>
+      <td id="T_7560a_row1_col1" class="data row1 col1" >12</td>
+      <td id="T_7560a_row1_col2" class="data row1 col2" >1</td>
+      <td id="T_7560a_row1_col3" class="data row1 col3" >3, 3, 3, 1, 4</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row2_col0" class="data row2 col0" >Liverpool</td>
+      <td id="T_7560a_row2_col1" class="data row2 col1" >11</td>
+      <td id="T_7560a_row2_col2" class="data row2 col2" >1</td>
+      <td id="T_7560a_row2_col3" class="data row2 col3" >3, 3, 5, 2, 3</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row3_col0" class="data row3 col0" >Brighton</td>
+      <td id="T_7560a_row3_col1" class="data row3 col1" >11</td>
+      <td id="T_7560a_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_7560a_row3_col3" class="data row3 col3" >2, 3, 6, 3, 0</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row4_col0" class="data row4 col0" >Newcastle</td>
+      <td id="T_7560a_row4_col1" class="data row4 col1" >11</td>
+      <td id="T_7560a_row4_col2" class="data row4 col2" >4</td>
+      <td id="T_7560a_row4_col3" class="data row4 col3" >2, 3, 3, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row5_col0" class="data row5 col0" >Man City</td>
+      <td id="T_7560a_row5_col1" class="data row5 col1" >10</td>
+      <td id="T_7560a_row5_col2" class="data row5 col2" >2</td>
+      <td id="T_7560a_row5_col3" class="data row5 col3" >1, 2, 1, 4, 3</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row6_col0" class="data row6 col0" >Fulham</td>
+      <td id="T_7560a_row6_col1" class="data row6 col1" >10</td>
+      <td id="T_7560a_row6_col2" class="data row6 col2" >0</td>
+      <td id="T_7560a_row6_col3" class="data row6 col3" >4, 1, 3, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row7_col0" class="data row7 col0" >Arsenal</td>
+      <td id="T_7560a_row7_col1" class="data row7 col1" >10</td>
+      <td id="T_7560a_row7_col2" class="data row7 col2" >1</td>
+      <td id="T_7560a_row7_col3" class="data row7 col3" >2, 1, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row8_col0" class="data row8 col0" >Man United</td>
+      <td id="T_7560a_row8_col1" class="data row8 col1" >9</td>
+      <td id="T_7560a_row8_col2" class="data row8 col2" >4</td>
+      <td id="T_7560a_row8_col3" class="data row8 col3" >2, 3, 6, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row9_col0" class="data row9 col0" >Chelsea</td>
+      <td id="T_7560a_row9_col1" class="data row9 col1" >9</td>
+      <td id="T_7560a_row9_col2" class="data row9 col2" >1</td>
+      <td id="T_7560a_row9_col3" class="data row9 col3" >3, 3, 3, 1, 3</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row10_col0" class="data row10 col0" >Bournemouth</td>
+      <td id="T_7560a_row10_col1" class="data row10 col1" >8</td>
+      <td id="T_7560a_row10_col2" class="data row10 col2" >2</td>
+      <td id="T_7560a_row10_col3" class="data row10 col3" >4, 6, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row11_col0" class="data row11 col0" >Aston Villa</td>
+      <td id="T_7560a_row11_col1" class="data row11 col1" >7</td>
+      <td id="T_7560a_row11_col2" class="data row11 col2" >1</td>
+      <td id="T_7560a_row11_col3" class="data row11 col3" >3, 3, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row12_col0" class="data row12 col0" >Brentford</td>
+      <td id="T_7560a_row12_col1" class="data row12 col1" >7</td>
+      <td id="T_7560a_row12_col2" class="data row12 col2" >1</td>
+      <td id="T_7560a_row12_col3" class="data row12 col3" >1, 2, 5, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row13_col0" class="data row13 col0" >Wolves</td>
+      <td id="T_7560a_row13_col1" class="data row13 col1" >7</td>
+      <td id="T_7560a_row13_col2" class="data row13 col2" >3</td>
+      <td id="T_7560a_row13_col3" class="data row13 col3" >2, 2, 5, 3, 3</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row14_col0" class="data row14 col0" >Burnley</td>
+      <td id="T_7560a_row14_col1" class="data row14 col1" >7</td>
+      <td id="T_7560a_row14_col2" class="data row14 col2" >1</td>
+      <td id="T_7560a_row14_col3" class="data row14 col3" >3, 2, 5, 2, 5</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row15_col0" class="data row15 col0" >Leeds</td>
+      <td id="T_7560a_row15_col1" class="data row15 col1" >7</td>
+      <td id="T_7560a_row15_col2" class="data row15 col2" >3</td>
+      <td id="T_7560a_row15_col3" class="data row15 col3" >3, 2, 3, 3, 4</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row16_col0" class="data row16 col0" >Sunderland</td>
+      <td id="T_7560a_row16_col1" class="data row16 col1" >6</td>
+      <td id="T_7560a_row16_col2" class="data row16 col2" >1</td>
+      <td id="T_7560a_row16_col3" class="data row16 col3" >2, 2, 3, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row17_col0" class="data row17 col0" >Crystal Palace</td>
+      <td id="T_7560a_row17_col1" class="data row17 col1" >6</td>
+      <td id="T_7560a_row17_col2" class="data row17 col2" >0</td>
+      <td id="T_7560a_row17_col3" class="data row17 col3" >3, 6, 1, 2, 0</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row18_col0" class="data row18 col0" >Everton</td>
+      <td id="T_7560a_row18_col1" class="data row18 col1" >5</td>
+      <td id="T_7560a_row18_col2" class="data row18 col2" >0</td>
+      <td id="T_7560a_row18_col3" class="data row18 col3" >3, 2, 3, 2, 2</td>
+    </tr>
+    <tr>
+      <td id="T_7560a_row19_col0" class="data row19 col0" >Nott'm Forest</td>
+      <td id="T_7560a_row19_col1" class="data row19 col1" >5</td>
+      <td id="T_7560a_row19_col2" class="data row19 col2" >2</td>
+      <td id="T_7560a_row19_col3" class="data row19 col3" >2, 3, 2, 4, 4</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_moins_2_5">
+                <h2 class="section-title">Record - Fin de Match -2.5 (0-2 Buts)</h2>
+                <style type="text/css">
+#T_efb77_row0_col2, #T_efb77_row1_col2, #T_efb77_row2_col2, #T_efb77_row3_col2, #T_efb77_row4_col2, #T_efb77_row5_col2, #T_efb77_row6_col2, #T_efb77_row7_col2, #T_efb77_row8_col2, #T_efb77_row9_col2, #T_efb77_row10_col2, #T_efb77_row11_col2, #T_efb77_row12_col2, #T_efb77_row13_col2, #T_efb77_row14_col2, #T_efb77_row15_col2, #T_efb77_row16_col2, #T_efb77_row17_col2, #T_efb77_row18_col2, #T_efb77_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_efb77_row0_col3, #T_efb77_row1_col3, #T_efb77_row2_col3, #T_efb77_row3_col3, #T_efb77_row4_col3, #T_efb77_row5_col3, #T_efb77_row6_col3, #T_efb77_row7_col3, #T_efb77_row8_col3, #T_efb77_row9_col3, #T_efb77_row10_col3, #T_efb77_row11_col3, #T_efb77_row12_col3, #T_efb77_row13_col3, #T_efb77_row14_col3, #T_efb77_row15_col3, #T_efb77_row16_col3, #T_efb77_row17_col3, #T_efb77_row18_col3, #T_efb77_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+</style>
+<table id="T_efb77" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_efb77_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_efb77_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_efb77_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_efb77_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_efb77_row0_col0" class="data row0 col0" >Burnley</td>
+      <td id="T_efb77_row0_col1" class="data row0 col1" >14</td>
+      <td id="T_efb77_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_efb77_row0_col3" class="data row0 col3" >3, 2, 5, 2, 5</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row1_col0" class="data row1 col0" >Nott'm Forest</td>
+      <td id="T_efb77_row1_col1" class="data row1 col1" >11</td>
+      <td id="T_efb77_row1_col2" class="data row1 col2" >0</td>
+      <td id="T_efb77_row1_col3" class="data row1 col3" >2, 3, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row2_col0" class="data row2 col0" >Wolves</td>
+      <td id="T_efb77_row2_col1" class="data row2 col1" >9</td>
+      <td id="T_efb77_row2_col2" class="data row2 col2" >0</td>
+      <td id="T_efb77_row2_col3" class="data row2 col3" >2, 2, 5, 3, 3</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row3_col0" class="data row3 col0" >Sunderland</td>
+      <td id="T_efb77_row3_col1" class="data row3 col1" >9</td>
+      <td id="T_efb77_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_efb77_row3_col3" class="data row3 col3" >2, 2, 3, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row4_col0" class="data row4 col0" >Newcastle</td>
+      <td id="T_efb77_row4_col1" class="data row4 col1" >8</td>
+      <td id="T_efb77_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_efb77_row4_col3" class="data row4 col3" >2, 3, 3, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row5_col0" class="data row5 col0" >Brighton</td>
+      <td id="T_efb77_row5_col1" class="data row5 col1" >8</td>
+      <td id="T_efb77_row5_col2" class="data row5 col2" >1</td>
+      <td id="T_efb77_row5_col3" class="data row5 col3" >2, 3, 6, 3, 0</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row6_col0" class="data row6 col0" >Fulham</td>
+      <td id="T_efb77_row6_col1" class="data row6 col1" >8</td>
+      <td id="T_efb77_row6_col2" class="data row6 col2" >1</td>
+      <td id="T_efb77_row6_col3" class="data row6 col3" >4, 1, 3, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row7_col0" class="data row7 col0" >Everton</td>
+      <td id="T_efb77_row7_col1" class="data row7 col1" >8</td>
+      <td id="T_efb77_row7_col2" class="data row7 col2" >2</td>
+      <td id="T_efb77_row7_col3" class="data row7 col3" >3, 2, 3, 2, 2</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row8_col0" class="data row8 col0" >Chelsea</td>
+      <td id="T_efb77_row8_col1" class="data row8 col1" >7</td>
+      <td id="T_efb77_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_efb77_row8_col3" class="data row8 col3" >3, 3, 3, 1, 3</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row9_col0" class="data row9 col0" >Man City</td>
+      <td id="T_efb77_row9_col1" class="data row9 col1" >6</td>
+      <td id="T_efb77_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_efb77_row9_col3" class="data row9 col3" >1, 2, 1, 4, 3</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row10_col0" class="data row10 col0" >Bournemouth</td>
+      <td id="T_efb77_row10_col1" class="data row10 col1" >6</td>
+      <td id="T_efb77_row10_col2" class="data row10 col2" >0</td>
+      <td id="T_efb77_row10_col3" class="data row10 col3" >4, 6, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row11_col0" class="data row11 col0" >Aston Villa</td>
+      <td id="T_efb77_row11_col1" class="data row11 col1" >6</td>
+      <td id="T_efb77_row11_col2" class="data row11 col2" >0</td>
+      <td id="T_efb77_row11_col3" class="data row11 col3" >3, 3, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row12_col0" class="data row12 col0" >West Ham</td>
+      <td id="T_efb77_row12_col1" class="data row12 col1" >6</td>
+      <td id="T_efb77_row12_col2" class="data row12 col2" >0</td>
+      <td id="T_efb77_row12_col3" class="data row12 col3" >2, 2, 3, 4, 5</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row13_col0" class="data row13 col0" >Man United</td>
+      <td id="T_efb77_row13_col1" class="data row13 col1" >6</td>
+      <td id="T_efb77_row13_col2" class="data row13 col2" >0</td>
+      <td id="T_efb77_row13_col3" class="data row13 col3" >2, 3, 6, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row14_col0" class="data row14 col0" >Crystal Palace</td>
+      <td id="T_efb77_row14_col1" class="data row14 col1" >6</td>
+      <td id="T_efb77_row14_col2" class="data row14 col2" >3</td>
+      <td id="T_efb77_row14_col3" class="data row14 col3" >3, 6, 1, 2, 0</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row15_col0" class="data row15 col0" >Leeds</td>
+      <td id="T_efb77_row15_col1" class="data row15 col1" >6</td>
+      <td id="T_efb77_row15_col2" class="data row15 col2" >0</td>
+      <td id="T_efb77_row15_col3" class="data row15 col3" >3, 2, 3, 3, 4</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row16_col0" class="data row16 col0" >Brentford</td>
+      <td id="T_efb77_row16_col1" class="data row16 col1" >5</td>
+      <td id="T_efb77_row16_col2" class="data row16 col2" >0</td>
+      <td id="T_efb77_row16_col3" class="data row16 col3" >1, 2, 5, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row17_col0" class="data row17 col0" >Arsenal</td>
+      <td id="T_efb77_row17_col1" class="data row17 col1" >5</td>
+      <td id="T_efb77_row17_col2" class="data row17 col2" >0</td>
+      <td id="T_efb77_row17_col3" class="data row17 col3" >2, 1, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row18_col0" class="data row18 col0" >Liverpool</td>
+      <td id="T_efb77_row18_col1" class="data row18 col1" >5</td>
+      <td id="T_efb77_row18_col2" class="data row18 col2" >0</td>
+      <td id="T_efb77_row18_col3" class="data row18 col3" >3, 3, 5, 2, 3</td>
+    </tr>
+    <tr>
+      <td id="T_efb77_row19_col0" class="data row19 col0" >Tottenham</td>
+      <td id="T_efb77_row19_col1" class="data row19 col1" >5</td>
+      <td id="T_efb77_row19_col2" class="data row19 col2" >0</td>
+      <td id="T_efb77_row19_col3" class="data row19 col3" >3, 3, 3, 1, 4</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_plus_3_5">
+                <h2 class="section-title">Record - Fin de Match +3.5 (4+ Buts)</h2>
+                <style type="text/css">
+#T_ff5b3_row0_col2, #T_ff5b3_row1_col2, #T_ff5b3_row2_col2, #T_ff5b3_row3_col2, #T_ff5b3_row4_col2, #T_ff5b3_row5_col2, #T_ff5b3_row6_col2, #T_ff5b3_row7_col2, #T_ff5b3_row8_col2, #T_ff5b3_row9_col2, #T_ff5b3_row10_col2, #T_ff5b3_row11_col2, #T_ff5b3_row12_col2, #T_ff5b3_row13_col2, #T_ff5b3_row14_col2, #T_ff5b3_row15_col2, #T_ff5b3_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_ff5b3_row0_col3, #T_ff5b3_row1_col3, #T_ff5b3_row2_col3, #T_ff5b3_row3_col3, #T_ff5b3_row4_col3, #T_ff5b3_row5_col3, #T_ff5b3_row6_col3, #T_ff5b3_row7_col3, #T_ff5b3_row8_col3, #T_ff5b3_row9_col3, #T_ff5b3_row10_col3, #T_ff5b3_row11_col3, #T_ff5b3_row12_col3, #T_ff5b3_row13_col3, #T_ff5b3_row14_col3, #T_ff5b3_row15_col3, #T_ff5b3_row16_col3, #T_ff5b3_row17_col3, #T_ff5b3_row18_col3, #T_ff5b3_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+#T_ff5b3_row16_col2, #T_ff5b3_row17_col2, #T_ff5b3_row18_col2 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: bold;
+}
+</style>
+<table id="T_ff5b3" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_ff5b3_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_ff5b3_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_ff5b3_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_ff5b3_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_ff5b3_row0_col0" class="data row0 col0" >Liverpool</td>
+      <td id="T_ff5b3_row0_col1" class="data row0 col1" >9</td>
+      <td id="T_ff5b3_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_ff5b3_row0_col3" class="data row0 col3" >3, 3, 5, 2, 3</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row1_col0" class="data row1 col0" >Man City</td>
+      <td id="T_ff5b3_row1_col1" class="data row1 col1" >8</td>
+      <td id="T_ff5b3_row1_col2" class="data row1 col2" >0</td>
+      <td id="T_ff5b3_row1_col3" class="data row1 col3" >1, 2, 1, 4, 3</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row2_col0" class="data row2 col0" >Brighton</td>
+      <td id="T_ff5b3_row2_col1" class="data row2 col1" >8</td>
+      <td id="T_ff5b3_row2_col2" class="data row2 col2" >0</td>
+      <td id="T_ff5b3_row2_col3" class="data row2 col3" >2, 3, 6, 3, 0</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row3_col0" class="data row3 col0" >Chelsea</td>
+      <td id="T_ff5b3_row3_col1" class="data row3 col1" >8</td>
+      <td id="T_ff5b3_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_ff5b3_row3_col3" class="data row3 col3" >3, 3, 3, 1, 3</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row4_col0" class="data row4 col0" >Newcastle</td>
+      <td id="T_ff5b3_row4_col1" class="data row4 col1" >8</td>
+      <td id="T_ff5b3_row4_col2" class="data row4 col2" >2</td>
+      <td id="T_ff5b3_row4_col3" class="data row4 col3" >2, 3, 3, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row5_col0" class="data row5 col0" >Man United</td>
+      <td id="T_ff5b3_row5_col1" class="data row5 col1" >7</td>
+      <td id="T_ff5b3_row5_col2" class="data row5 col2" >3</td>
+      <td id="T_ff5b3_row5_col3" class="data row5 col3" >2, 3, 6, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row6_col0" class="data row6 col0" >Arsenal</td>
+      <td id="T_ff5b3_row6_col1" class="data row6 col1" >7</td>
+      <td id="T_ff5b3_row6_col2" class="data row6 col2" >1</td>
+      <td id="T_ff5b3_row6_col3" class="data row6 col3" >2, 1, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row7_col0" class="data row7 col0" >West Ham</td>
+      <td id="T_ff5b3_row7_col1" class="data row7 col1" >6</td>
+      <td id="T_ff5b3_row7_col2" class="data row7 col2" >2</td>
+      <td id="T_ff5b3_row7_col3" class="data row7 col3" >2, 2, 3, 4, 5</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row8_col0" class="data row8 col0" >Leeds</td>
+      <td id="T_ff5b3_row8_col1" class="data row8 col1" >6</td>
+      <td id="T_ff5b3_row8_col2" class="data row8 col2" >1</td>
+      <td id="T_ff5b3_row8_col3" class="data row8 col3" >3, 2, 3, 3, 4</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row9_col0" class="data row9 col0" >Tottenham</td>
+      <td id="T_ff5b3_row9_col1" class="data row9 col1" >5</td>
+      <td id="T_ff5b3_row9_col2" class="data row9 col2" >1</td>
+      <td id="T_ff5b3_row9_col3" class="data row9 col3" >3, 3, 3, 1, 4</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row10_col0" class="data row10 col0" >Bournemouth</td>
+      <td id="T_ff5b3_row10_col1" class="data row10 col1" >5</td>
+      <td id="T_ff5b3_row10_col2" class="data row10 col2" >2</td>
+      <td id="T_ff5b3_row10_col3" class="data row10 col3" >4, 6, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row11_col0" class="data row11 col0" >Brentford</td>
+      <td id="T_ff5b3_row11_col1" class="data row11 col1" >5</td>
+      <td id="T_ff5b3_row11_col2" class="data row11 col2" >1</td>
+      <td id="T_ff5b3_row11_col3" class="data row11 col3" >1, 2, 5, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row12_col0" class="data row12 col0" >Crystal Palace</td>
+      <td id="T_ff5b3_row12_col1" class="data row12 col1" >5</td>
+      <td id="T_ff5b3_row12_col2" class="data row12 col2" >0</td>
+      <td id="T_ff5b3_row12_col3" class="data row12 col3" >3, 6, 1, 2, 0</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row13_col0" class="data row13 col0" >Fulham</td>
+      <td id="T_ff5b3_row13_col1" class="data row13 col1" >5</td>
+      <td id="T_ff5b3_row13_col2" class="data row13 col2" >0</td>
+      <td id="T_ff5b3_row13_col3" class="data row13 col3" >4, 1, 3, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row14_col0" class="data row14 col0" >Everton</td>
+      <td id="T_ff5b3_row14_col1" class="data row14 col1" >4</td>
+      <td id="T_ff5b3_row14_col2" class="data row14 col2" >0</td>
+      <td id="T_ff5b3_row14_col3" class="data row14 col3" >3, 2, 3, 2, 2</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row15_col0" class="data row15 col0" >Burnley</td>
+      <td id="T_ff5b3_row15_col1" class="data row15 col1" >4</td>
+      <td id="T_ff5b3_row15_col2" class="data row15 col2" >1</td>
+      <td id="T_ff5b3_row15_col3" class="data row15 col3" >3, 2, 5, 2, 5</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row16_col0" class="data row16 col0" >Nott'm Forest</td>
+      <td id="T_ff5b3_row16_col1" class="data row16 col1" >4</td>
+      <td id="T_ff5b3_row16_col2" class="data row16 col2" >2</td>
+      <td id="T_ff5b3_row16_col3" class="data row16 col3" >2, 3, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row17_col0" class="data row17 col0" >Aston Villa</td>
+      <td id="T_ff5b3_row17_col1" class="data row17 col1" >3</td>
+      <td id="T_ff5b3_row17_col2" class="data row17 col2" >1</td>
+      <td id="T_ff5b3_row17_col3" class="data row17 col3" >3, 3, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row18_col0" class="data row18 col0" >Sunderland</td>
+      <td id="T_ff5b3_row18_col1" class="data row18 col1" >3</td>
+      <td id="T_ff5b3_row18_col2" class="data row18 col2" >1</td>
+      <td id="T_ff5b3_row18_col3" class="data row18 col3" >2, 2, 3, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_ff5b3_row19_col0" class="data row19 col0" >Wolves</td>
+      <td id="T_ff5b3_row19_col1" class="data row19 col1" >3</td>
+      <td id="T_ff5b3_row19_col2" class="data row19 col2" >0</td>
+      <td id="T_ff5b3_row19_col3" class="data row19 col3" >2, 2, 5, 3, 3</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_moins_3_5">
+                <h2 class="section-title">Record - Fin de Match -3.5 (0-3 Buts)</h2>
+                <style type="text/css">
+#T_f23a9_row0_col2, #T_f23a9_row1_col2, #T_f23a9_row2_col2, #T_f23a9_row3_col2, #T_f23a9_row4_col2, #T_f23a9_row5_col2, #T_f23a9_row6_col2, #T_f23a9_row7_col2, #T_f23a9_row8_col2, #T_f23a9_row9_col2, #T_f23a9_row10_col2, #T_f23a9_row11_col2, #T_f23a9_row12_col2, #T_f23a9_row13_col2, #T_f23a9_row14_col2, #T_f23a9_row15_col2, #T_f23a9_row16_col2, #T_f23a9_row17_col2, #T_f23a9_row18_col2, #T_f23a9_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_f23a9_row0_col3, #T_f23a9_row1_col3, #T_f23a9_row2_col3, #T_f23a9_row3_col3, #T_f23a9_row4_col3, #T_f23a9_row5_col3, #T_f23a9_row6_col3, #T_f23a9_row7_col3, #T_f23a9_row8_col3, #T_f23a9_row9_col3, #T_f23a9_row10_col3, #T_f23a9_row11_col3, #T_f23a9_row12_col3, #T_f23a9_row13_col3, #T_f23a9_row14_col3, #T_f23a9_row15_col3, #T_f23a9_row16_col3, #T_f23a9_row17_col3, #T_f23a9_row18_col3, #T_f23a9_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+</style>
+<table id="T_f23a9" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_f23a9_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_f23a9_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_f23a9_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_f23a9_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_f23a9_row0_col0" class="data row0 col0" >Sunderland</td>
+      <td id="T_f23a9_row0_col1" class="data row0 col1" >25</td>
+      <td id="T_f23a9_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_f23a9_row0_col3" class="data row0 col3" >2, 2, 3, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row1_col0" class="data row1 col0" >Burnley</td>
+      <td id="T_f23a9_row1_col1" class="data row1 col1" >25</td>
+      <td id="T_f23a9_row1_col2" class="data row1 col2" >0</td>
+      <td id="T_f23a9_row1_col3" class="data row1 col3" >3, 2, 5, 2, 5</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row2_col0" class="data row2 col0" >Brighton</td>
+      <td id="T_f23a9_row2_col1" class="data row2 col1" >19</td>
+      <td id="T_f23a9_row2_col2" class="data row2 col2" >2</td>
+      <td id="T_f23a9_row2_col3" class="data row2 col3" >2, 3, 6, 3, 0</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row3_col0" class="data row3 col0" >Leeds</td>
+      <td id="T_f23a9_row3_col1" class="data row3 col1" >17</td>
+      <td id="T_f23a9_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_f23a9_row3_col3" class="data row3 col3" >3, 2, 3, 3, 4</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row4_col0" class="data row4 col0" >Nott'm Forest</td>
+      <td id="T_f23a9_row4_col1" class="data row4 col1" >17</td>
+      <td id="T_f23a9_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_f23a9_row4_col3" class="data row4 col3" >2, 3, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row5_col0" class="data row5 col0" >Newcastle</td>
+      <td id="T_f23a9_row5_col1" class="data row5 col1" >17</td>
+      <td id="T_f23a9_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_f23a9_row5_col3" class="data row5 col3" >2, 3, 3, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row6_col0" class="data row6 col0" >Everton</td>
+      <td id="T_f23a9_row6_col1" class="data row6 col1" >17</td>
+      <td id="T_f23a9_row6_col2" class="data row6 col2" >8</td>
+      <td id="T_f23a9_row6_col3" class="data row6 col3" >3, 2, 3, 2, 2</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row7_col0" class="data row7 col0" >Aston Villa</td>
+      <td id="T_f23a9_row7_col1" class="data row7 col1" >15</td>
+      <td id="T_f23a9_row7_col2" class="data row7 col2" >0</td>
+      <td id="T_f23a9_row7_col3" class="data row7 col3" >3, 3, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row8_col0" class="data row8 col0" >Man United</td>
+      <td id="T_f23a9_row8_col1" class="data row8 col1" >14</td>
+      <td id="T_f23a9_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_f23a9_row8_col3" class="data row8 col3" >2, 3, 6, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row9_col0" class="data row9 col0" >Fulham</td>
+      <td id="T_f23a9_row9_col1" class="data row9 col1" >14</td>
+      <td id="T_f23a9_row9_col2" class="data row9 col2" >4</td>
+      <td id="T_f23a9_row9_col3" class="data row9 col3" >4, 1, 3, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row10_col0" class="data row10 col0" >Brentford</td>
+      <td id="T_f23a9_row10_col1" class="data row10 col1" >13</td>
+      <td id="T_f23a9_row10_col2" class="data row10 col2" >0</td>
+      <td id="T_f23a9_row10_col3" class="data row10 col3" >1, 2, 5, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row11_col0" class="data row11 col0" >Wolves</td>
+      <td id="T_f23a9_row11_col1" class="data row11 col1" >13</td>
+      <td id="T_f23a9_row11_col2" class="data row11 col2" >2</td>
+      <td id="T_f23a9_row11_col3" class="data row11 col3" >2, 2, 5, 3, 3</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row12_col0" class="data row12 col0" >Chelsea</td>
+      <td id="T_f23a9_row12_col1" class="data row12 col1" >13</td>
+      <td id="T_f23a9_row12_col2" class="data row12 col2" >5</td>
+      <td id="T_f23a9_row12_col3" class="data row12 col3" >3, 3, 3, 1, 3</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row13_col0" class="data row13 col0" >Bournemouth</td>
+      <td id="T_f23a9_row13_col1" class="data row13 col1" >12</td>
+      <td id="T_f23a9_row13_col2" class="data row13 col2" >0</td>
+      <td id="T_f23a9_row13_col3" class="data row13 col3" >4, 6, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row14_col0" class="data row14 col0" >Tottenham</td>
+      <td id="T_f23a9_row14_col1" class="data row14 col1" >12</td>
+      <td id="T_f23a9_row14_col2" class="data row14 col2" >0</td>
+      <td id="T_f23a9_row14_col3" class="data row14 col3" >3, 3, 3, 1, 4</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row15_col0" class="data row15 col0" >Crystal Palace</td>
+      <td id="T_f23a9_row15_col1" class="data row15 col1" >12</td>
+      <td id="T_f23a9_row15_col2" class="data row15 col2" >3</td>
+      <td id="T_f23a9_row15_col3" class="data row15 col3" >3, 6, 1, 2, 0</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row16_col0" class="data row16 col0" >Arsenal</td>
+      <td id="T_f23a9_row16_col1" class="data row16 col1" >11</td>
+      <td id="T_f23a9_row16_col2" class="data row16 col2" >0</td>
+      <td id="T_f23a9_row16_col3" class="data row16 col3" >2, 1, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row17_col0" class="data row17 col0" >Liverpool</td>
+      <td id="T_f23a9_row17_col1" class="data row17 col1" >10</td>
+      <td id="T_f23a9_row17_col2" class="data row17 col2" >2</td>
+      <td id="T_f23a9_row17_col3" class="data row17 col3" >3, 3, 5, 2, 3</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row18_col0" class="data row18 col0" >Man City</td>
+      <td id="T_f23a9_row18_col1" class="data row18 col1" >10</td>
+      <td id="T_f23a9_row18_col2" class="data row18 col2" >1</td>
+      <td id="T_f23a9_row18_col3" class="data row18 col3" >1, 2, 1, 4, 3</td>
+    </tr>
+    <tr>
+      <td id="T_f23a9_row19_col0" class="data row19 col0" >West Ham</td>
+      <td id="T_f23a9_row19_col1" class="data row19 col1" >9</td>
+      <td id="T_f23a9_row19_col2" class="data row19 col2" >0</td>
+      <td id="T_f23a9_row19_col3" class="data row19 col3" >2, 2, 3, 4, 5</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="ft_nuls">
+                <h2 class="section-title">Record - Fin de Match (Nuls)</h2>
+                <style type="text/css">
+#T_5fd28_row0_col2, #T_5fd28_row1_col2, #T_5fd28_row2_col2, #T_5fd28_row3_col2, #T_5fd28_row4_col2, #T_5fd28_row5_col2, #T_5fd28_row6_col2, #T_5fd28_row7_col2, #T_5fd28_row8_col2, #T_5fd28_row9_col2, #T_5fd28_row10_col2, #T_5fd28_row11_col2, #T_5fd28_row12_col2, #T_5fd28_row13_col2, #T_5fd28_row14_col2, #T_5fd28_row16_col2, #T_5fd28_row17_col2, #T_5fd28_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_5fd28_row0_col3, #T_5fd28_row1_col3, #T_5fd28_row2_col3, #T_5fd28_row3_col3, #T_5fd28_row4_col3, #T_5fd28_row5_col3, #T_5fd28_row6_col3, #T_5fd28_row7_col3, #T_5fd28_row8_col3, #T_5fd28_row9_col3, #T_5fd28_row10_col3, #T_5fd28_row11_col3, #T_5fd28_row12_col3, #T_5fd28_row13_col3, #T_5fd28_row14_col3, #T_5fd28_row15_col3, #T_5fd28_row16_col3, #T_5fd28_row17_col3, #T_5fd28_row18_col3, #T_5fd28_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+#T_5fd28_row15_col2 {
+  background-color: #fff3e0;
+  color: #f57c00;
+  font-weight: bold;
+}
+#T_5fd28_row18_col2 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: bold;
+}
+</style>
+<table id="T_5fd28" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_5fd28_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_5fd28_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_5fd28_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_5fd28_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_5fd28_row0_col0" class="data row0 col0" >West Ham</td>
+      <td id="T_5fd28_row0_col1" class="data row0 col1" >5</td>
+      <td id="T_5fd28_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_5fd28_row0_col3" class="data row0 col3" >2, 2, 3, 4, 5</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row1_col0" class="data row1 col0" >Sunderland</td>
+      <td id="T_5fd28_row1_col1" class="data row1 col1" >5</td>
+      <td id="T_5fd28_row1_col2" class="data row1 col2" >2</td>
+      <td id="T_5fd28_row1_col3" class="data row1 col3" >2, 2, 3, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row2_col0" class="data row2 col0" >Fulham</td>
+      <td id="T_5fd28_row2_col1" class="data row2 col1" >5</td>
+      <td id="T_5fd28_row2_col2" class="data row2 col2" >0</td>
+      <td id="T_5fd28_row2_col3" class="data row2 col3" >4, 1, 3, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row3_col0" class="data row3 col0" >Arsenal</td>
+      <td id="T_5fd28_row3_col1" class="data row3 col1" >4</td>
+      <td id="T_5fd28_row3_col2" class="data row3 col2" >1</td>
+      <td id="T_5fd28_row3_col3" class="data row3 col3" >2, 1, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row4_col0" class="data row4 col0" >Everton</td>
+      <td id="T_5fd28_row4_col1" class="data row4 col1" >4</td>
+      <td id="T_5fd28_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_5fd28_row4_col3" class="data row4 col3" >3, 2, 3, 2, 2</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row5_col0" class="data row5 col0" >Crystal Palace</td>
+      <td id="T_5fd28_row5_col1" class="data row5 col1" >4</td>
+      <td id="T_5fd28_row5_col2" class="data row5 col2" >1</td>
+      <td id="T_5fd28_row5_col3" class="data row5 col3" >3, 6, 1, 2, 0</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row6_col0" class="data row6 col0" >Brentford</td>
+      <td id="T_5fd28_row6_col1" class="data row6 col1" >4</td>
+      <td id="T_5fd28_row6_col2" class="data row6 col2" >0</td>
+      <td id="T_5fd28_row6_col3" class="data row6 col3" >1, 2, 5, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row7_col0" class="data row7 col0" >Brighton</td>
+      <td id="T_5fd28_row7_col1" class="data row7 col1" >4</td>
+      <td id="T_5fd28_row7_col2" class="data row7 col2" >1</td>
+      <td id="T_5fd28_row7_col3" class="data row7 col3" >2, 3, 6, 3, 0</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row8_col0" class="data row8 col0" >Bournemouth</td>
+      <td id="T_5fd28_row8_col1" class="data row8 col1" >3</td>
+      <td id="T_5fd28_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_5fd28_row8_col3" class="data row8 col3" >4, 6, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row9_col0" class="data row9 col0" >Aston Villa</td>
+      <td id="T_5fd28_row9_col1" class="data row9 col1" >3</td>
+      <td id="T_5fd28_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_5fd28_row9_col3" class="data row9 col3" >3, 3, 1, 2, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row10_col0" class="data row10 col0" >Chelsea</td>
+      <td id="T_5fd28_row10_col1" class="data row10 col1" >3</td>
+      <td id="T_5fd28_row10_col2" class="data row10 col2" >0</td>
+      <td id="T_5fd28_row10_col3" class="data row10 col3" >3, 3, 3, 1, 3</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row11_col0" class="data row11 col0" >Burnley</td>
+      <td id="T_5fd28_row11_col1" class="data row11 col1" >3</td>
+      <td id="T_5fd28_row11_col2" class="data row11 col2" >0</td>
+      <td id="T_5fd28_row11_col3" class="data row11 col3" >3, 2, 5, 2, 5</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row12_col0" class="data row12 col0" >Liverpool</td>
+      <td id="T_5fd28_row12_col1" class="data row12 col1" >3</td>
+      <td id="T_5fd28_row12_col2" class="data row12 col2" >0</td>
+      <td id="T_5fd28_row12_col3" class="data row12 col3" >3, 3, 5, 2, 3</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row13_col0" class="data row13 col0" >Leeds</td>
+      <td id="T_5fd28_row13_col1" class="data row13 col1" >3</td>
+      <td id="T_5fd28_row13_col2" class="data row13 col2" >0</td>
+      <td id="T_5fd28_row13_col3" class="data row13 col3" >3, 2, 3, 3, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row14_col0" class="data row14 col0" >Man City</td>
+      <td id="T_5fd28_row14_col1" class="data row14 col1" >3</td>
+      <td id="T_5fd28_row14_col2" class="data row14 col2" >0</td>
+      <td id="T_5fd28_row14_col3" class="data row14 col3" >1, 2, 1, 4, 3</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row15_col0" class="data row15 col0" >Man United</td>
+      <td id="T_5fd28_row15_col1" class="data row15 col1" >3</td>
+      <td id="T_5fd28_row15_col2" class="data row15 col2" >2</td>
+      <td id="T_5fd28_row15_col3" class="data row15 col3" >2, 3, 6, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row16_col0" class="data row16 col0" >Nott'm Forest</td>
+      <td id="T_5fd28_row16_col1" class="data row16 col1" >3</td>
+      <td id="T_5fd28_row16_col2" class="data row16 col2" >0</td>
+      <td id="T_5fd28_row16_col3" class="data row16 col3" >2, 3, 2, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row17_col0" class="data row17 col0" >Newcastle</td>
+      <td id="T_5fd28_row17_col1" class="data row17 col1" >3</td>
+      <td id="T_5fd28_row17_col2" class="data row17 col2" >0</td>
+      <td id="T_5fd28_row17_col3" class="data row17 col3" >2, 3, 3, 4, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row18_col0" class="data row18 col0" >Tottenham</td>
+      <td id="T_5fd28_row18_col1" class="data row18 col1" >3</td>
+      <td id="T_5fd28_row18_col2" class="data row18 col2" >1</td>
+      <td id="T_5fd28_row18_col3" class="data row18 col3" >3, 3, 3, 1, 4</td>
+    </tr>
+    <tr>
+      <td id="T_5fd28_row19_col0" class="data row19 col0" >Wolves</td>
+      <td id="T_5fd28_row19_col1" class="data row19 col1" >3</td>
+      <td id="T_5fd28_row19_col2" class="data row19 col2" >0</td>
+      <td id="T_5fd28_row19_col3" class="data row19 col3" >2, 2, 5, 3, 3</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="mt_plus_0_5">
+                <h2 class="section-title">Record - Mi-Temps +0.5 (1+ Buts MT)</h2>
+                <style type="text/css">
+#T_70cf7_row0_col2, #T_70cf7_row1_col2, #T_70cf7_row2_col2, #T_70cf7_row3_col2, #T_70cf7_row4_col2, #T_70cf7_row5_col2, #T_70cf7_row6_col2, #T_70cf7_row7_col2, #T_70cf7_row8_col2, #T_70cf7_row9_col2, #T_70cf7_row10_col2, #T_70cf7_row11_col2, #T_70cf7_row12_col2, #T_70cf7_row13_col2, #T_70cf7_row14_col2, #T_70cf7_row15_col2, #T_70cf7_row16_col2, #T_70cf7_row17_col2, #T_70cf7_row18_col2, #T_70cf7_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_70cf7_row0_col3, #T_70cf7_row1_col3, #T_70cf7_row2_col3, #T_70cf7_row3_col3, #T_70cf7_row4_col3, #T_70cf7_row5_col3, #T_70cf7_row6_col3, #T_70cf7_row7_col3, #T_70cf7_row8_col3, #T_70cf7_row9_col3, #T_70cf7_row10_col3, #T_70cf7_row11_col3, #T_70cf7_row12_col3, #T_70cf7_row13_col3, #T_70cf7_row14_col3, #T_70cf7_row15_col3, #T_70cf7_row16_col3, #T_70cf7_row17_col3, #T_70cf7_row18_col3, #T_70cf7_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+</style>
+<table id="T_70cf7" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_70cf7_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_70cf7_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_70cf7_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_70cf7_level0_col3" class="col_heading level0 col3" >5 Derniers (MT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_70cf7_row0_col0" class="data row0 col0" >Chelsea</td>
+      <td id="T_70cf7_row0_col1" class="data row0 col1" >23</td>
+      <td id="T_70cf7_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_70cf7_row0_col3" class="data row0 col3" >1, 0, 2, 1, 0</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row1_col0" class="data row1 col0" >Man City</td>
+      <td id="T_70cf7_row1_col1" class="data row1 col1" >21</td>
+      <td id="T_70cf7_row1_col2" class="data row1 col2" >3</td>
+      <td id="T_70cf7_row1_col3" class="data row1 col3" >1, 0, 1, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row2_col0" class="data row2 col0" >Brighton</td>
+      <td id="T_70cf7_row2_col1" class="data row2 col1" >20</td>
+      <td id="T_70cf7_row2_col2" class="data row2 col2" >0</td>
+      <td id="T_70cf7_row2_col3" class="data row2 col3" >1, 1, 2, 1, 0</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row3_col0" class="data row3 col0" >Wolves</td>
+      <td id="T_70cf7_row3_col1" class="data row3 col1" >19</td>
+      <td id="T_70cf7_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_70cf7_row3_col3" class="data row3 col3" >1, 1, 4, 1, 0</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row4_col0" class="data row4 col0" >Brentford</td>
+      <td id="T_70cf7_row4_col1" class="data row4 col1" >17</td>
+      <td id="T_70cf7_row4_col2" class="data row4 col2" >8</td>
+      <td id="T_70cf7_row4_col3" class="data row4 col3" >1, 1, 3, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row5_col0" class="data row5 col0" >Tottenham</td>
+      <td id="T_70cf7_row5_col1" class="data row5 col1" >16</td>
+      <td id="T_70cf7_row5_col2" class="data row5 col2" >5</td>
+      <td id="T_70cf7_row5_col3" class="data row5 col3" >2, 2, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row6_col0" class="data row6 col0" >Liverpool</td>
+      <td id="T_70cf7_row6_col1" class="data row6 col1" >15</td>
+      <td id="T_70cf7_row6_col2" class="data row6 col2" >7</td>
+      <td id="T_70cf7_row6_col3" class="data row6 col3" >1, 1, 3, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row7_col0" class="data row7 col0" >West Ham</td>
+      <td id="T_70cf7_row7_col1" class="data row7 col1" >15</td>
+      <td id="T_70cf7_row7_col2" class="data row7 col2" >7</td>
+      <td id="T_70cf7_row7_col3" class="data row7 col3" >1, 1, 2, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row8_col0" class="data row8 col0" >Newcastle</td>
+      <td id="T_70cf7_row8_col1" class="data row8 col1" >14</td>
+      <td id="T_70cf7_row8_col2" class="data row8 col2" >4</td>
+      <td id="T_70cf7_row8_col3" class="data row8 col3" >0, 1, 1, 3, 1</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row9_col0" class="data row9 col0" >Burnley</td>
+      <td id="T_70cf7_row9_col1" class="data row9 col1" >14</td>
+      <td id="T_70cf7_row9_col2" class="data row9 col2" >7</td>
+      <td id="T_70cf7_row9_col3" class="data row9 col3" >1, 1, 4, 2, 2</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row10_col0" class="data row10 col0" >Bournemouth</td>
+      <td id="T_70cf7_row10_col1" class="data row10 col1" >13</td>
+      <td id="T_70cf7_row10_col2" class="data row10 col2" >4</td>
+      <td id="T_70cf7_row10_col3" class="data row10 col3" >0, 2, 2, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row11_col0" class="data row11 col0" >Leeds</td>
+      <td id="T_70cf7_row11_col1" class="data row11 col1" >13</td>
+      <td id="T_70cf7_row11_col2" class="data row11 col2" >7</td>
+      <td id="T_70cf7_row11_col3" class="data row11 col3" >2, 1, 2, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row12_col0" class="data row12 col0" >Fulham</td>
+      <td id="T_70cf7_row12_col1" class="data row12 col1" >13</td>
+      <td id="T_70cf7_row12_col2" class="data row12 col2" >3</td>
+      <td id="T_70cf7_row12_col3" class="data row12 col3" >0, 0, 1, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row13_col0" class="data row13 col0" >Sunderland</td>
+      <td id="T_70cf7_row13_col1" class="data row13 col1" >12</td>
+      <td id="T_70cf7_row13_col2" class="data row13 col2" >6</td>
+      <td id="T_70cf7_row13_col3" class="data row13 col3" >2, 1, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row14_col0" class="data row14 col0" >Nott'm Forest</td>
+      <td id="T_70cf7_row14_col1" class="data row14 col1" >12</td>
+      <td id="T_70cf7_row14_col2" class="data row14 col2" >3</td>
+      <td id="T_70cf7_row14_col3" class="data row14 col3" >0, 0, 2, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row15_col0" class="data row15 col0" >Man United</td>
+      <td id="T_70cf7_row15_col1" class="data row15 col1" >12</td>
+      <td id="T_70cf7_row15_col2" class="data row15 col2" >9</td>
+      <td id="T_70cf7_row15_col3" class="data row15 col3" >2, 1, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row16_col0" class="data row16 col0" >Arsenal</td>
+      <td id="T_70cf7_row16_col1" class="data row16 col1" >11</td>
+      <td id="T_70cf7_row16_col2" class="data row16 col2" >3</td>
+      <td id="T_70cf7_row16_col3" class="data row16 col3" >1, 0, 1, 2, 1</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row17_col0" class="data row17 col0" >Aston Villa</td>
+      <td id="T_70cf7_row17_col1" class="data row17 col1" >10</td>
+      <td id="T_70cf7_row17_col2" class="data row17 col2" >6</td>
+      <td id="T_70cf7_row17_col3" class="data row17 col3" >1, 2, 1, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row18_col0" class="data row18 col0" >Everton</td>
+      <td id="T_70cf7_row18_col1" class="data row18 col1" >10</td>
+      <td id="T_70cf7_row18_col2" class="data row18 col2" >3</td>
+      <td id="T_70cf7_row18_col3" class="data row18 col3" >1, 0, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_70cf7_row19_col0" class="data row19 col0" >Crystal Palace</td>
+      <td id="T_70cf7_row19_col1" class="data row19 col1" >9</td>
+      <td id="T_70cf7_row19_col2" class="data row19 col2" >0</td>
+      <td id="T_70cf7_row19_col3" class="data row19 col3" >1, 2, 1, 1, 0</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="mt_moins_0_5">
+                <h2 class="section-title">Record - Mi-Temps -0.5 (0 Buts MT)</h2>
+                <style type="text/css">
+#T_42699_row0_col2, #T_42699_row1_col2, #T_42699_row2_col2, #T_42699_row3_col2, #T_42699_row4_col2, #T_42699_row5_col2, #T_42699_row6_col2, #T_42699_row7_col2, #T_42699_row8_col2, #T_42699_row9_col2, #T_42699_row10_col2, #T_42699_row11_col2, #T_42699_row12_col2, #T_42699_row13_col2, #T_42699_row14_col2, #T_42699_row15_col2, #T_42699_row16_col2, #T_42699_row17_col2, #T_42699_row18_col2, #T_42699_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_42699_row0_col3, #T_42699_row1_col3, #T_42699_row2_col3, #T_42699_row3_col3, #T_42699_row4_col3, #T_42699_row5_col3, #T_42699_row6_col3, #T_42699_row7_col3, #T_42699_row8_col3, #T_42699_row9_col3, #T_42699_row10_col3, #T_42699_row11_col3, #T_42699_row12_col3, #T_42699_row13_col3, #T_42699_row14_col3, #T_42699_row15_col3, #T_42699_row16_col3, #T_42699_row17_col3, #T_42699_row18_col3, #T_42699_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+</style>
+<table id="T_42699" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_42699_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_42699_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_42699_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_42699_level0_col3" class="col_heading level0 col3" >5 Derniers (MT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_42699_row0_col0" class="data row0 col0" >Wolves</td>
+      <td id="T_42699_row0_col1" class="data row0 col1" >6</td>
+      <td id="T_42699_row0_col2" class="data row0 col2" >1</td>
+      <td id="T_42699_row0_col3" class="data row0 col3" >1, 1, 4, 1, 0</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row1_col0" class="data row1 col0" >Crystal Palace</td>
+      <td id="T_42699_row1_col1" class="data row1 col1" >6</td>
+      <td id="T_42699_row1_col2" class="data row1 col2" >1</td>
+      <td id="T_42699_row1_col3" class="data row1 col3" >1, 2, 1, 1, 0</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row2_col0" class="data row2 col0" >Fulham</td>
+      <td id="T_42699_row2_col1" class="data row2 col1" >5</td>
+      <td id="T_42699_row2_col2" class="data row2 col2" >0</td>
+      <td id="T_42699_row2_col3" class="data row2 col3" >0, 0, 1, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row3_col0" class="data row3 col0" >Sunderland</td>
+      <td id="T_42699_row3_col1" class="data row3 col1" >5</td>
+      <td id="T_42699_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_42699_row3_col3" class="data row3 col3" >2, 1, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row4_col0" class="data row4 col0" >Liverpool</td>
+      <td id="T_42699_row4_col1" class="data row4 col1" >4</td>
+      <td id="T_42699_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_42699_row4_col3" class="data row4 col3" >1, 1, 3, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row5_col0" class="data row5 col0" >Leeds</td>
+      <td id="T_42699_row5_col1" class="data row5 col1" >4</td>
+      <td id="T_42699_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_42699_row5_col3" class="data row5 col3" >2, 1, 2, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row6_col0" class="data row6 col0" >Man City</td>
+      <td id="T_42699_row6_col1" class="data row6 col1" >4</td>
+      <td id="T_42699_row6_col2" class="data row6 col2" >0</td>
+      <td id="T_42699_row6_col3" class="data row6 col3" >1, 0, 1, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row7_col0" class="data row7 col0" >Bournemouth</td>
+      <td id="T_42699_row7_col1" class="data row7 col1" >4</td>
+      <td id="T_42699_row7_col2" class="data row7 col2" >0</td>
+      <td id="T_42699_row7_col3" class="data row7 col3" >0, 2, 2, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row8_col0" class="data row8 col0" >Chelsea</td>
+      <td id="T_42699_row8_col1" class="data row8 col1" >4</td>
+      <td id="T_42699_row8_col2" class="data row8 col2" >1</td>
+      <td id="T_42699_row8_col3" class="data row8 col3" >1, 0, 2, 1, 0</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row9_col0" class="data row9 col0" >Everton</td>
+      <td id="T_42699_row9_col1" class="data row9 col1" >4</td>
+      <td id="T_42699_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_42699_row9_col3" class="data row9 col3" >1, 0, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row10_col0" class="data row10 col0" >Burnley</td>
+      <td id="T_42699_row10_col1" class="data row10 col1" >4</td>
+      <td id="T_42699_row10_col2" class="data row10 col2" >0</td>
+      <td id="T_42699_row10_col3" class="data row10 col3" >1, 1, 4, 2, 2</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row11_col0" class="data row11 col0" >Brighton</td>
+      <td id="T_42699_row11_col1" class="data row11 col1" >4</td>
+      <td id="T_42699_row11_col2" class="data row11 col2" >1</td>
+      <td id="T_42699_row11_col3" class="data row11 col3" >1, 1, 2, 1, 0</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row12_col0" class="data row12 col0" >Tottenham</td>
+      <td id="T_42699_row12_col1" class="data row12 col1" >4</td>
+      <td id="T_42699_row12_col2" class="data row12 col2" >0</td>
+      <td id="T_42699_row12_col3" class="data row12 col3" >2, 2, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row13_col0" class="data row13 col0" >Nott'm Forest</td>
+      <td id="T_42699_row13_col1" class="data row13 col1" >4</td>
+      <td id="T_42699_row13_col2" class="data row13 col2" >0</td>
+      <td id="T_42699_row13_col3" class="data row13 col3" >0, 0, 2, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row14_col0" class="data row14 col0" >West Ham</td>
+      <td id="T_42699_row14_col1" class="data row14 col1" >4</td>
+      <td id="T_42699_row14_col2" class="data row14 col2" >0</td>
+      <td id="T_42699_row14_col3" class="data row14 col3" >1, 1, 2, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row15_col0" class="data row15 col0" >Newcastle</td>
+      <td id="T_42699_row15_col1" class="data row15 col1" >4</td>
+      <td id="T_42699_row15_col2" class="data row15 col2" >0</td>
+      <td id="T_42699_row15_col3" class="data row15 col3" >0, 1, 1, 3, 1</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row16_col0" class="data row16 col0" >Brentford</td>
+      <td id="T_42699_row16_col1" class="data row16 col1" >3</td>
+      <td id="T_42699_row16_col2" class="data row16 col2" >0</td>
+      <td id="T_42699_row16_col3" class="data row16 col3" >1, 1, 3, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row17_col0" class="data row17 col0" >Aston Villa</td>
+      <td id="T_42699_row17_col1" class="data row17 col1" >3</td>
+      <td id="T_42699_row17_col2" class="data row17 col2" >0</td>
+      <td id="T_42699_row17_col3" class="data row17 col3" >1, 2, 1, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row18_col0" class="data row18 col0" >Arsenal</td>
+      <td id="T_42699_row18_col1" class="data row18 col1" >3</td>
+      <td id="T_42699_row18_col2" class="data row18 col2" >0</td>
+      <td id="T_42699_row18_col3" class="data row18 col3" >1, 0, 1, 2, 1</td>
+    </tr>
+    <tr>
+      <td id="T_42699_row19_col0" class="data row19 col0" >Man United</td>
+      <td id="T_42699_row19_col1" class="data row19 col1" >3</td>
+      <td id="T_42699_row19_col2" class="data row19 col2" >0</td>
+      <td id="T_42699_row19_col3" class="data row19 col3" >2, 1, 2, 1, 1</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="mt_plus_1_5">
+                <h2 class="section-title">Record - Mi-Temps +1.5 (2+ Buts MT)</h2>
+                <style type="text/css">
+#T_56720_row0_col2, #T_56720_row1_col2, #T_56720_row2_col2, #T_56720_row3_col2, #T_56720_row5_col2, #T_56720_row6_col2, #T_56720_row7_col2, #T_56720_row8_col2, #T_56720_row9_col2, #T_56720_row10_col2, #T_56720_row12_col2, #T_56720_row13_col2, #T_56720_row14_col2, #T_56720_row15_col2, #T_56720_row17_col2, #T_56720_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_56720_row0_col3, #T_56720_row1_col3, #T_56720_row2_col3, #T_56720_row3_col3, #T_56720_row4_col3, #T_56720_row5_col3, #T_56720_row6_col3, #T_56720_row7_col3, #T_56720_row8_col3, #T_56720_row9_col3, #T_56720_row10_col3, #T_56720_row11_col3, #T_56720_row12_col3, #T_56720_row13_col3, #T_56720_row14_col3, #T_56720_row15_col3, #T_56720_row16_col3, #T_56720_row17_col3, #T_56720_row18_col3, #T_56720_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+#T_56720_row4_col2, #T_56720_row11_col2, #T_56720_row18_col2 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: bold;
+}
+#T_56720_row16_col2 {
+  background-color: #fff3e0;
+  color: #f57c00;
+  font-weight: bold;
+}
+</style>
+<table id="T_56720" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_56720_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_56720_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_56720_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_56720_level0_col3" class="col_heading level0 col3" >5 Derniers (MT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_56720_row0_col0" class="data row0 col0" >Everton</td>
+      <td id="T_56720_row0_col1" class="data row0 col1" >7</td>
+      <td id="T_56720_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_56720_row0_col3" class="data row0 col3" >1, 0, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row1_col0" class="data row1 col0" >Man City</td>
+      <td id="T_56720_row1_col1" class="data row1 col1" >7</td>
+      <td id="T_56720_row1_col2" class="data row1 col2" >2</td>
+      <td id="T_56720_row1_col3" class="data row1 col3" >1, 0, 1, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row2_col0" class="data row2 col0" >Liverpool</td>
+      <td id="T_56720_row2_col1" class="data row2 col1" >7</td>
+      <td id="T_56720_row2_col2" class="data row2 col2" >1</td>
+      <td id="T_56720_row2_col3" class="data row2 col3" >1, 1, 3, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row3_col0" class="data row3 col0" >Arsenal</td>
+      <td id="T_56720_row3_col1" class="data row3 col1" >6</td>
+      <td id="T_56720_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_56720_row3_col3" class="data row3 col3" >1, 0, 1, 2, 1</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row4_col0" class="data row4 col0" >Bournemouth</td>
+      <td id="T_56720_row4_col1" class="data row4 col1" >6</td>
+      <td id="T_56720_row4_col2" class="data row4 col2" >4</td>
+      <td id="T_56720_row4_col3" class="data row4 col3" >0, 2, 2, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row5_col0" class="data row5 col0" >Brighton</td>
+      <td id="T_56720_row5_col1" class="data row5 col1" >6</td>
+      <td id="T_56720_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_56720_row5_col3" class="data row5 col3" >1, 1, 2, 1, 0</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row6_col0" class="data row6 col0" >Brentford</td>
+      <td id="T_56720_row6_col1" class="data row6 col1" >5</td>
+      <td id="T_56720_row6_col2" class="data row6 col2" >0</td>
+      <td id="T_56720_row6_col3" class="data row6 col3" >1, 1, 3, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row7_col0" class="data row7 col0" >Aston Villa</td>
+      <td id="T_56720_row7_col1" class="data row7 col1" >5</td>
+      <td id="T_56720_row7_col2" class="data row7 col2" >1</td>
+      <td id="T_56720_row7_col3" class="data row7 col3" >1, 2, 1, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row8_col0" class="data row8 col0" >Crystal Palace</td>
+      <td id="T_56720_row8_col1" class="data row8 col1" >5</td>
+      <td id="T_56720_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_56720_row8_col3" class="data row8 col3" >1, 2, 1, 1, 0</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row9_col0" class="data row9 col0" >Chelsea</td>
+      <td id="T_56720_row9_col1" class="data row9 col1" >5</td>
+      <td id="T_56720_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_56720_row9_col3" class="data row9 col3" >1, 0, 2, 1, 0</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row10_col0" class="data row10 col0" >Fulham</td>
+      <td id="T_56720_row10_col1" class="data row10 col1" >5</td>
+      <td id="T_56720_row10_col2" class="data row10 col2" >0</td>
+      <td id="T_56720_row10_col3" class="data row10 col3" >0, 0, 1, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row11_col0" class="data row11 col0" >Burnley</td>
+      <td id="T_56720_row11_col1" class="data row11 col1" >5</td>
+      <td id="T_56720_row11_col2" class="data row11 col2" >3</td>
+      <td id="T_56720_row11_col3" class="data row11 col3" >1, 1, 4, 2, 2</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row12_col0" class="data row12 col0" >Leeds</td>
+      <td id="T_56720_row12_col1" class="data row12 col1" >5</td>
+      <td id="T_56720_row12_col2" class="data row12 col2" >1</td>
+      <td id="T_56720_row12_col3" class="data row12 col3" >2, 1, 2, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row13_col0" class="data row13 col0" >Man United</td>
+      <td id="T_56720_row13_col1" class="data row13 col1" >5</td>
+      <td id="T_56720_row13_col2" class="data row13 col2" >0</td>
+      <td id="T_56720_row13_col3" class="data row13 col3" >2, 1, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row14_col0" class="data row14 col0" >Tottenham</td>
+      <td id="T_56720_row14_col1" class="data row14 col1" >5</td>
+      <td id="T_56720_row14_col2" class="data row14 col2" >0</td>
+      <td id="T_56720_row14_col3" class="data row14 col3" >2, 2, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row15_col0" class="data row15 col0" >Newcastle</td>
+      <td id="T_56720_row15_col1" class="data row15 col1" >4</td>
+      <td id="T_56720_row15_col2" class="data row15 col2" >0</td>
+      <td id="T_56720_row15_col3" class="data row15 col3" >0, 1, 1, 3, 1</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row16_col0" class="data row16 col0" >West Ham</td>
+      <td id="T_56720_row16_col1" class="data row16 col1" >4</td>
+      <td id="T_56720_row16_col2" class="data row16 col2" >3</td>
+      <td id="T_56720_row16_col3" class="data row16 col3" >1, 1, 2, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row17_col0" class="data row17 col0" >Sunderland</td>
+      <td id="T_56720_row17_col1" class="data row17 col1" >4</td>
+      <td id="T_56720_row17_col2" class="data row17 col2" >0</td>
+      <td id="T_56720_row17_col3" class="data row17 col3" >2, 1, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row18_col0" class="data row18 col0" >Nott'm Forest</td>
+      <td id="T_56720_row18_col1" class="data row18 col1" >3</td>
+      <td id="T_56720_row18_col2" class="data row18 col2" >1</td>
+      <td id="T_56720_row18_col3" class="data row18 col3" >0, 0, 2, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_56720_row19_col0" class="data row19 col0" >Wolves</td>
+      <td id="T_56720_row19_col1" class="data row19 col1" >3</td>
+      <td id="T_56720_row19_col2" class="data row19 col2" >0</td>
+      <td id="T_56720_row19_col3" class="data row19 col3" >1, 1, 4, 1, 0</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            <div class="section-container tab-content" id="mt_moins_1_5">
+                <h2 class="section-title">Record - Mi-Temps -1.5 (0-1 Buts MT)</h2>
+                <style type="text/css">
+#T_0e09e_row0_col2, #T_0e09e_row1_col2, #T_0e09e_row2_col2, #T_0e09e_row3_col2, #T_0e09e_row4_col2, #T_0e09e_row5_col2, #T_0e09e_row6_col2, #T_0e09e_row7_col2, #T_0e09e_row8_col2, #T_0e09e_row9_col2, #T_0e09e_row10_col2, #T_0e09e_row11_col2, #T_0e09e_row12_col2, #T_0e09e_row13_col2, #T_0e09e_row14_col2, #T_0e09e_row15_col2, #T_0e09e_row16_col2, #T_0e09e_row17_col2, #T_0e09e_row18_col2, #T_0e09e_row19_col2 {
+  font-weight: normal;
+  color: #555;
+}
+#T_0e09e_row0_col3, #T_0e09e_row1_col3, #T_0e09e_row2_col3, #T_0e09e_row3_col3, #T_0e09e_row4_col3, #T_0e09e_row5_col3, #T_0e09e_row6_col3, #T_0e09e_row7_col3, #T_0e09e_row8_col3, #T_0e09e_row9_col3, #T_0e09e_row10_col3, #T_0e09e_row11_col3, #T_0e09e_row12_col3, #T_0e09e_row13_col3, #T_0e09e_row14_col3, #T_0e09e_row15_col3, #T_0e09e_row16_col3, #T_0e09e_row17_col3, #T_0e09e_row18_col3, #T_0e09e_row19_col3 {
+  font-weight: normal;
+  color: #777;
+  font-size: 0.9em;
+}
+</style>
+<table id="T_0e09e" class="styled-table">
+  <thead>
+    <tr>
+      <th id="T_0e09e_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_0e09e_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_0e09e_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_0e09e_level0_col3" class="col_heading level0 col3" >5 Derniers (MT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_0e09e_row0_col0" class="data row0 col0" >Nott'm Forest</td>
+      <td id="T_0e09e_row0_col1" class="data row0 col1" >22</td>
+      <td id="T_0e09e_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_0e09e_row0_col3" class="data row0 col3" >0, 0, 2, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row1_col0" class="data row1 col0" >Liverpool</td>
+      <td id="T_0e09e_row1_col1" class="data row1 col1" >20</td>
+      <td id="T_0e09e_row1_col2" class="data row1 col2" >0</td>
+      <td id="T_0e09e_row1_col3" class="data row1 col3" >1, 1, 3, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row2_col0" class="data row2 col0" >Crystal Palace</td>
+      <td id="T_0e09e_row2_col1" class="data row2 col1" >19</td>
+      <td id="T_0e09e_row2_col2" class="data row2 col2" >3</td>
+      <td id="T_0e09e_row2_col3" class="data row2 col3" >1, 2, 1, 1, 0</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row3_col0" class="data row3 col0" >Burnley</td>
+      <td id="T_0e09e_row3_col1" class="data row3 col1" >14</td>
+      <td id="T_0e09e_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_0e09e_row3_col3" class="data row3 col3" >1, 1, 4, 2, 2</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row4_col0" class="data row4 col0" >Newcastle</td>
+      <td id="T_0e09e_row4_col1" class="data row4 col1" >14</td>
+      <td id="T_0e09e_row4_col2" class="data row4 col2" >1</td>
+      <td id="T_0e09e_row4_col3" class="data row4 col3" >0, 1, 1, 3, 1</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row5_col0" class="data row5 col0" >Sunderland</td>
+      <td id="T_0e09e_row5_col1" class="data row5 col1" >14</td>
+      <td id="T_0e09e_row5_col2" class="data row5 col2" >2</td>
+      <td id="T_0e09e_row5_col3" class="data row5 col3" >2, 1, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row6_col0" class="data row6 col0" >Brighton</td>
+      <td id="T_0e09e_row6_col1" class="data row6 col1" >13</td>
+      <td id="T_0e09e_row6_col2" class="data row6 col2" >2</td>
+      <td id="T_0e09e_row6_col3" class="data row6 col3" >1, 1, 2, 1, 0</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row7_col0" class="data row7 col0" >Wolves</td>
+      <td id="T_0e09e_row7_col1" class="data row7 col1" >12</td>
+      <td id="T_0e09e_row7_col2" class="data row7 col2" >2</td>
+      <td id="T_0e09e_row7_col3" class="data row7 col3" >1, 1, 4, 1, 0</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row8_col0" class="data row8 col0" >Tottenham</td>
+      <td id="T_0e09e_row8_col1" class="data row8 col1" >11</td>
+      <td id="T_0e09e_row8_col2" class="data row8 col2" >2</td>
+      <td id="T_0e09e_row8_col3" class="data row8 col3" >2, 2, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row9_col0" class="data row9 col0" >Man United</td>
+      <td id="T_0e09e_row9_col1" class="data row9 col1" >11</td>
+      <td id="T_0e09e_row9_col2" class="data row9 col2" >2</td>
+      <td id="T_0e09e_row9_col3" class="data row9 col3" >2, 1, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row10_col0" class="data row10 col0" >Fulham</td>
+      <td id="T_0e09e_row10_col1" class="data row10 col1" >11</td>
+      <td id="T_0e09e_row10_col2" class="data row10 col2" >5</td>
+      <td id="T_0e09e_row10_col3" class="data row10 col3" >0, 0, 1, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row11_col0" class="data row11 col0" >Arsenal</td>
+      <td id="T_0e09e_row11_col1" class="data row11 col1" >11</td>
+      <td id="T_0e09e_row11_col2" class="data row11 col2" >1</td>
+      <td id="T_0e09e_row11_col3" class="data row11 col3" >1, 0, 1, 2, 1</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row12_col0" class="data row12 col0" >Leeds</td>
+      <td id="T_0e09e_row12_col1" class="data row12 col1" >10</td>
+      <td id="T_0e09e_row12_col2" class="data row12 col2" >0</td>
+      <td id="T_0e09e_row12_col3" class="data row12 col3" >2, 1, 2, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row13_col0" class="data row13 col0" >West Ham</td>
+      <td id="T_0e09e_row13_col1" class="data row13 col1" >9</td>
+      <td id="T_0e09e_row13_col2" class="data row13 col2" >0</td>
+      <td id="T_0e09e_row13_col3" class="data row13 col3" >1, 1, 2, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row14_col0" class="data row14 col0" >Aston Villa</td>
+      <td id="T_0e09e_row14_col1" class="data row14 col1" >9</td>
+      <td id="T_0e09e_row14_col2" class="data row14 col2" >0</td>
+      <td id="T_0e09e_row14_col3" class="data row14 col3" >1, 2, 1, 1, 2</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row15_col0" class="data row15 col0" >Bournemouth</td>
+      <td id="T_0e09e_row15_col1" class="data row15 col1" >9</td>
+      <td id="T_0e09e_row15_col2" class="data row15 col2" >0</td>
+      <td id="T_0e09e_row15_col3" class="data row15 col3" >0, 2, 2, 3, 2</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row16_col0" class="data row16 col0" >Brentford</td>
+      <td id="T_0e09e_row16_col1" class="data row16 col1" >8</td>
+      <td id="T_0e09e_row16_col2" class="data row16 col2" >2</td>
+      <td id="T_0e09e_row16_col3" class="data row16 col3" >1, 1, 3, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row17_col0" class="data row17 col0" >Everton</td>
+      <td id="T_0e09e_row17_col1" class="data row17 col1" >8</td>
+      <td id="T_0e09e_row17_col2" class="data row17 col2" >2</td>
+      <td id="T_0e09e_row17_col3" class="data row17 col3" >1, 0, 2, 1, 1</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row18_col0" class="data row18 col0" >Chelsea</td>
+      <td id="T_0e09e_row18_col1" class="data row18 col1" >7</td>
+      <td id="T_0e09e_row18_col2" class="data row18 col2" >2</td>
+      <td id="T_0e09e_row18_col3" class="data row18 col3" >1, 0, 2, 1, 0</td>
+    </tr>
+    <tr>
+      <td id="T_0e09e_row19_col0" class="data row19 col0" >Man City</td>
+      <td id="T_0e09e_row19_col1" class="data row19 col1" >7</td>
+      <td id="T_0e09e_row19_col2" class="data row19 col2" >0</td>
+      <td id="T_0e09e_row19_col3" class="data row19 col3" >1, 0, 1, 3, 2</td>
+    </tr>
+  </tbody>
+</table>
+
+            </div>
+            
+            </div>
+            
+        <script>
+            function showSection(sectionId, clickedLink) {
+                var welcomeMsg = document.getElementById('welcome-message');
+                if (welcomeMsg) { welcomeMsg.style.display = 'none'; }
+                
+                var sections = document.getElementsByClassName('tab-content');
+                for (var i = 0; i < sections.length; i++) {
+                    sections[i].classList.remove('active');
+                }
+                
+                var links = document.querySelectorAll('.main-header nav a');
+                for (var i = 0; i < links.length; i++) {
+                    links[i].classList.remove('active');
+                }
+                
+                var activeSection = document.getElementById(sectionId);
+                if (activeSection) { activeSection.classList.add('active'); }
+                if (clickedLink) { clickedLink.classList.add('active'); }
+            }
+        </script>
+        
+        </body>
+        </html>
+        
