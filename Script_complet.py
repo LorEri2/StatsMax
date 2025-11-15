@@ -34,8 +34,6 @@ LEAGUE_NAME_MAPPING = {
 # ##########################################################################
 # --- Dictionnaire de Mapping API (V25 - API-FOOTBALL) ---
 # ##########################################################################
-# C'est le mapping entre VOS codes CSV (E0) et 
-# les IDs de l'API "api-football.com"
 LEAGUE_API_MAPPING = {
     'E0': 39,    # Premier League
     'E1': 40,    # Championship
@@ -51,15 +49,40 @@ LEAGUE_API_MAPPING = {
     'P1': 94,    # Liga (Portugal)
     'SC0': 179,  # Scottish Premiership
     'B1': 144,   # Jupiler Pro League (Belgique)
-    'T1': 203,   # Süper Lig (Turquie) <-- NOUVEAU
-    'G1': 197    # Super League (Grèce) <-- NOUVEAU
+    'T1': 203,   # Süper Lig (Turquie) 
+    'G1': 197    # Super League (Grèce) 
+}
+
+# ##########################################################################
+# --- (V26) Dictionnaire de Mapping Cotes/Alertes ---
+# ##########################################################################
+# Lie la STATISTIQUE DE L'ALERTE (ex: 'FT -2.5')
+# à la COLONNE DE COTE OPPOSÉE (ex: 'B365>2.5')
+#
+# !! ATTENTION !!
+# Adaptez les noms de colonnes (ex: 'B365>3.5') pour qu'ils 
+# correspondent EXACTEMENT à votre fichier 'fixtures.csv'
+# (ex: 'P>3.5', 'Max>3.5', etc.)
+# ##########################################################################
+STAT_TO_ODD_COLUMN_MAP = {
+    # Alerte sur "Plus de..." -> Parier sur "Moins de..."
+    'FT +1.5': 'B365<1.5', # Vérifiez si cette colonne existe
+    'FT +2.5': 'B365<2.5', # (ou 'P<2.5', 'Max<2.5')
+    'FT +3.5': 'B365<3.5', # Vérifiez si cette colonne existe
+
+    # Alerte sur "Moins de..." -> Parier sur "Plus de..."
+    'FT -0.5': 'B365>0.5', # Vérifiez si cette colonne existe
+    'FT -1.5': 'B365>1.5', # Vérifiez si cette colonne existe
+    'FT -2.5': 'B365>2.5', # (ou 'P>2.5', 'Max>2.5')
+    'FT -3.5': 'B365>3.5', # Vérifiez si cette colonne existe
+    
+    # Vous pouvez ajouter vos propres mappings ici
+    # 'FT CS': 'B365_BTTS_Yes', # Si vous avez les cotes BTTS
 }
 # ##########################################################################
 
 
-# --- (Les 4 fonctions Helper restent les mêmes) ---
-
-# Helper 1: Style pour les 13 tableaux de séries (4 colonnes)
+# --- Helper 1: Style pour les 13 tableaux de séries (4 colonnes) ---
 def colorier_series_v19(row):
     """
     Applique un style aux 4 colonnes (Équipe, Record, Série, 5 Derniers).
@@ -81,10 +104,11 @@ def colorier_series_v19(row):
     
     return [style_equipe, style_record, style_en_cours, style_5_derniers] 
 
-# Helper 2: Style pour le tableau d'alertes (7 colonnes)
+# --- Helper 2: Style pour le tableau d'alertes (MODIFIÉ V26 pour 8 colonnes) ---
 def colorier_tableau_alertes_v22(row):
     """
     Applique un style à la ligne du tableau d'alertes (V22).
+    MODIFIÉ V26 : Gère 8 colonnes (avec 'Cote')
     """
     alerte_type = row['Alerte']
     style_base = ''
@@ -99,10 +123,10 @@ def colorier_tableau_alertes_v22(row):
     style_5_derniers = style_base + 'font-weight: normal; color: #333; font-size: 0.9em;'
     style_prochain_match = style_base + 'font-weight: normal; color: #17a2b8; font-size: 0.9em;'
     
-    # Le tableau a 7 colonnes (Équipe, Stat, Record, Série, 5 Derniers, Prochain Match, Alerte)
-    return [style_base, style_base, style_base, style_base, style_5_derniers, style_prochain_match, style_base]
+    # Le tableau a 8 colonnes (Équipe, Stat, Record, Série, 5 Derniers, Prochain Match, COTE, Alerte)
+    return [style_base, style_base, style_base, style_base, style_5_derniers, style_prochain_match, style_base, style_base]
 
-# Helper 3: Style pour le tableau de Forme (4 colonnes)
+# --- Helper 3: Style pour le tableau de Forme (4 colonnes) ---
 def colorier_forme_v22(row):
     """
     Colore le Score de Forme en fonction de sa valeur (positif/négatif).
@@ -126,17 +150,17 @@ def colorier_forme_v22(row):
     return [style_equipe, style_score, style_details, style_prochain_match]
 
 
-# Helper 4: Génération de la page HTML (V22)
-def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport):
+# --- Helper 4: Génération de la page HTML (MODIFIÉ V26) ---
+def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport, fixtures_dict):
     """
     Sauvegarde le DataFrame en 14 onglets + 1 onglet "Alertes" + 1 onglet "Forme".
-    (Aucun changement ici, cette fonction reste identique)
+    MODIFIÉ V26: Accepte 'fixtures_dict' pour rechercher les cotes.
     """
     
     # 1. Définir les 14 statistiques de SÉRIE
     stats_a_afficher = {
         'FT Marque': ['ft_marque', 'Record - L\'équipe Marque (FT)'],      
-        'FT CS': ['ft_cs', 'Record - Clean Sheet (FT)'],                
+        'FT CS': ['ft_cs', 'Record - Clean Sheet (FT)'],            
         'FT No CS': ['ft_no_cs', 'Record - Non Clean Sheet (FT)'],      
         'FT -0.5': ['ft_moins_0_5', 'Record - Fin de Match -0.5 (0 Buts)'],
         'FT +1.5': ['ft_plus_1_5', 'Record - Fin de Match +1.5 (2+ Buts)'],
@@ -161,7 +185,7 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport)
             id_html = config[0]
             nav_links += f'<a href="#" onclick="showSection(\'{id_html}\', this); event.preventDefault();">{nom_base}</a>\n'
 
-        # --- 3. Générer le tableau d'alertes ---
+        # --- 3. Générer le tableau d'alertes (MODIFIÉ V26) ---
         alertes_collectees = []
         for nom_base, config in stats_a_afficher.items():
             col_record = f'{nom_base}_Record'
@@ -185,14 +209,44 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport)
                 elif en_cours > 0 and en_cours == record - 2: alerte_type = 'Vert'
                 
                 if alerte_type:
+                    
+                    # --- NOUVEAU V26 : LOGIQUE DE RECHERCHE DE COTE ---
+                    cote_pari = "N/A"
+                    # 1. Trouver la colonne de cote opposée (ex: 'FT -3.5' -> 'B365>3.5')
+                    nom_col_cote = STAT_TO_ODD_COLUMN_MAP.get(nom_base)
+                    
+                    if nom_col_cote:
+                        # 2. Trouver le match de l'équipe dans le dict fixtures
+                        match_info = fixtures_dict.get(equipe)
+                        
+                        if match_info:
+                            # 3. Trouver la cote spécifique pour ce match
+                            cote = match_info['odds'].get(nom_col_cote)
+                            if cote:
+                                cote_pari = f"{cote:.2f}" # Formaté en 2 décimales
+                            else:
+                                # La cote n'existe pas dans le CSV (ex: 'B365>3.5' manque)
+                                cote_pari = f"({nom_col_cote}?)" 
+                        else:
+                             # L'équipe n'a pas de match dans fixtures.csv
+                            cote_pari = "(Match?)"
+                    else:
+                        # La stat (ex: 'FT Nuls') n'est pas dans le MAP
+                        cote_pari = "(Stat?)"
+                    # --- FIN NOUVEAU V26 ---
+                    
                     alertes_collectees.append({
-                        'Équipe': equipe, 'Statistique': nom_base, 'Record': record,
-                        'Série en Cours': en_cours, '5 Derniers Buts': cinq_derniers_str, 
-                        'Prochain Match': prochain_match_str, # NOUVEAU
+                        'Équipe': equipe, 
+                        'Statistique': nom_base, 
+                        'Record': record,
+                        'Série en Cours': en_cours, 
+                        '5 Derniers Buts': cinq_derniers_str, 
+                        'Prochain Match': prochain_match_str, 
+                        'Cote (Pari Inverse)': cote_pari, # <-- NOUVELLE COLONNE
                         'Alerte': alerte_type 
                     })
 
-        # Créer le HTML du tableau d'alertes
+        # Créer le HTML du tableau d'alertes (MODIFIÉ V26)
         if not alertes_collectees:
             alert_table_html = "<h3 class='no-alerts'>Aucune alerte active pour le moment.</h3>"
         else:
@@ -200,10 +254,18 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport)
             df_alertes['Alerte'] = pd.Categorical(df_alertes['Alerte'], categories=["Rouge", "Orange", "Vert"], ordered=True)
             df_alertes = df_alertes.sort_values(by=['Alerte', 'Équipe']).reset_index(drop=True)
             
+            # --- MODIFIÉ V26 : S'assurer que la nouvelle colonne est dans le bon ordre
+            colonnes_ordre = [
+                'Équipe', 'Statistique', 'Record', 'Série en Cours', 
+                '5 Derniers Buts', 'Prochain Match', 'Cote (Pari Inverse)', 'Alerte'
+            ]
+            df_alertes = df_alertes.reindex(columns=colonnes_ordre)
+            
             styler_alertes = df_alertes.style.apply(colorier_tableau_alertes_v22, axis=1) \
-                                             .set_table_attributes('class="styled-table alerts-table"') \
-                                             .hide(axis="index") \
-                                             .hide(['Alerte'], axis=1) 
+                                        .set_table_attributes('class="styled-table alerts-table"') \
+                                        .format({'Cote (Pari Inverse)': '{}'}) \
+                                        .hide(axis="index") \
+                                        .hide(['Alerte'], axis=1) 
             
             alert_table_html = styler_alertes.to_html()
 
@@ -219,9 +281,9 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport)
             df_forme = df_forme.sort_values(by='Score de Forme', ascending=False).reset_index(drop=True)
             
             styler_forme = df_forme.style.apply(colorier_forme_v22, axis=1) \
-                                         .set_table_attributes('class="styled-table form-table"') \
-                                         .format({'Score de Forme': '{:+.1f}'}) \
-                                         .hide(axis="index")
+                                        .set_table_attributes('class="styled-table form-table"') \
+                                        .format({'Score de Forme': '{:+.1f}'}) \
+                                        .hide(axis="index")
             form_table_html = styler_forme.to_html()
         else:
             form_table_html = "<h3 class='no-alerts'>Données 'FTR' non trouvées pour calculer la forme.</h3>"
@@ -242,7 +304,7 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport)
                 continue 
 
             if col_5_derniers not in df_rapport_complet.columns:
-                 df_rapport_complet[col_5_derniers] = "N/A"
+                    df_rapport_complet[col_5_derniers] = "N/A"
             
             df_stat = df_rapport_complet[['Équipe', col_record, col_en_cours, col_5_derniers]].copy()
             df_stat = df_stat.rename(columns={
@@ -253,8 +315,8 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport)
             df_stat = df_stat.sort_values(by='Record', ascending=False).reset_index(drop=True)
             
             styler = df_stat.style.apply(colorier_series_v19, axis=1) \
-                                 .set_table_attributes('class="styled-table"') \
-                                 .hide(axis="index") 
+                                .set_table_attributes('class="styled-table"') \
+                                .hide(axis="index") 
             table_html = styler.to_html()
             
             corps_html += f"""
@@ -264,7 +326,7 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport)
             </div>
             """
 
-        # --- 6. Définir le Style CSS ---
+        # --- 6. Définir le Style CSS (MODIFIÉ V26) ---
         html_style = """
         <style>
             html { scroll-behavior: smooth; }
@@ -307,7 +369,8 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport)
             }
             .section-container.tab-content {
                 display: none; width: 90%; 
-                max-width: 900px; margin-bottom: 20px;
+                max-width: 1000px; /* Augmenté pour la nouvelle colonne */
+                margin-bottom: 20px;
             }
             .section-container.tab-content.active { display: block; }
             #welcome-message {
@@ -352,16 +415,26 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport)
                 border-bottom: 1px solid #dddddd; background-color: #ffffff;
             }
             .styled-table tbody tr:nth-of-type(even) { background-color: #f8f8f8; }
+            
+            /* --- MODIFIÉ V26 : Règles pour le tableau d'alertes --- */
             .alerts-table td { font-weight: bold !important; }
-            .alerts-table td:nth-child(5) { 
+            .alerts-table td:nth-child(5) { /* 5 Derniers Buts */
                 font-weight: normal !important; 
                 font-size: 0.9em;
             }
-            .alerts-table td:nth-child(6) { 
+            .alerts-table td:nth-child(6) { /* Prochain Match */
                 font-weight: normal !important; 
                 color: #17a2b8;
                 font-size: 0.9em;
             }
+            /* --- NOUVEAU V26 : Style pour la colonne COTE --- */
+            .alerts-table td:nth-child(7) { /* Cote (Pari Inverse) */
+                font-weight: bold !important; 
+                color: #0056b3; /* Bleu foncé */
+                font-size: 1.05em;
+                text-align: center;
+            }
+            /* --- FIN MODIFICATION V26 --- */
         </style>
         """
 
@@ -430,16 +503,82 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport)
         with open(nom_fichier_html, "w", encoding="utf-8") as f:
             f.write(html_content)
         
-        print(f"\nSuccès ! Le rapport V25 pour {titre_rapport} a été généré ici : {os.path.abspath(nom_fichier_html)}")
+        print(f"\nSuccès ! Le rapport V27 pour {titre_rapport} a été généré ici : {os.path.abspath(nom_fichier_html)}")
 
     except Exception as e:
         print(f"\nErreur lors de la génération du fichier HTML : {e}")
+
+
+# --- (V26) NOUVELLE FONCTION : CHARGER FIXTURES.CSV ---
+def charger_fixtures_csv(chemin_fichier_fixtures):
+    """
+    Charge le fichier fixtures.csv et le transforme en un dictionnaire
+    pour une recherche rapide des cotes par équipe.
+    """
+    print(f"Chargement du fichier de fixtures et cotes : {chemin_fichier_fixtures}")
+    if not os.path.exists(chemin_fichier_fixtures):
+        print(f"  Avertissement: Fichier '{chemin_fichier_fixtures}' non trouvé.")
+        print("  Les cotes et prochains matchs CSV ne seront pas disponibles.")
+        return {}
+        
+    try:
+        # Essayer avec latin1 car les CSV de football ont souvent des encodages étranges
+        df_fixtures = pd.read_csv(chemin_fichier_fixtures, encoding='latin1')
+    except Exception as e:
+        print(f"  ERREUR: Impossible de charger {chemin_fichier_fixtures}. {e}")
+        print("  Les cotes et prochains matchs CSV ne seront pas disponibles.")
+        return {}
+
+    fixtures_dict = {}
+    # Identifier toutes les colonnes de cotes présentes dans le CSV
+    toutes_colonnes_csv = set(df_fixtures.columns)
+    
+    # Colonnes de cotes pertinentes (celles de notre MAP + 1X2)
+    colonnes_cotes_requises = set(STAT_TO_ODD_COLUMN_MAP.values()) | {'B365H', 'B365D', 'B365A'}
+    
+    print("  Vérification des colonnes de cotes dans fixtures.csv...")
+    colonnes_manquantes = [col for col in STAT_TO_ODD_COLUMN_MAP.values() if col not in toutes_colonnes_csv]
+    if colonnes_manquantes:
+        print(f"  Avertissement: Les colonnes de cotes suivantes manquent dans fixtures.csv : {colonnes_manquantes}")
+        print("  Les cotes correspondantes ne s'afficheront pas.")
+
+    for index, row in df_fixtures.iterrows():
+        try:
+            home = row['HomeTeam']
+            away = row['AwayTeam']
+            
+            if pd.isna(home) or pd.isna(away):
+                continue
+            
+            # Extraire toutes les cotes disponibles pour ce match
+            odds_data = {}
+            for col_cote in colonnes_cotes_requises:
+                if col_cote in toutes_colonnes_csv and pd.notna(row[col_cote]):
+                    try:
+                        odds_data[col_cote] = float(row[col_cote])
+                    except ValueError:
+                        pass # Ignorer si la cote n'est pas un nombre
+
+            # Stocker pour les deux équipes
+            # On stocke les cotes même si elles sont vides, 
+            # pour la recherche de "Prochain Match"
+            fixtures_dict[home] = {'opponent': away, 'loc': 'Home', 'odds': odds_data}
+            fixtures_dict[away] = {'opponent': home, 'loc': 'Away', 'odds': odds_data}
+        
+        except KeyError as ke:
+            # Gérer le cas où HomeTeam ou AwayTeam n'existent pas
+            print(f"  ERREUR: 'fixtures.csv' doit contenir 'HomeTeam' et 'AwayTeam'.")
+            return {} # Arrêter si le format est mauvais
+        except Exception as ex:
+            print(f"  Avertissement: Erreur lecture ligne fixture: {ex}. Ligne sautée.")
+
+    print(f"  {len(fixtures_dict)} équipes trouvées dans le fichier fixtures.")
+    return fixtures_dict
 
 # --- FONCTION DE CHARGEMENT V21 (ROBUSTE + LOGIQUE DE LIGUE) ---
 def charger_donnees(fichiers_csv):
     """
     Charge et combine tous les fichiers CSV.
-    (Aucun changement ici, cette fonction reste identique)
     """
     all_dfs = []
     print(f"Chargement de {len(fichiers_csv)} fichiers...")
@@ -468,8 +607,6 @@ def charger_donnees(fichiers_csv):
     df = pd.concat(all_dfs, ignore_index=True)
     print("Données combinées avec succès.")
     
-    # --- MODIFIÉ V21 ---
-    # Définir les colonnes "essentielles" vs "optionnelles"
     colonnes_base = ['Date', 'HomeTeam', 'AwayTeam', 'LeagueCode']
     
     for col in colonnes_base:
@@ -513,7 +650,6 @@ def charger_donnees(fichiers_csv):
     df = df.sort_values(by='Date')
     
     # --- PRÉ-CALCUL DE TOUTES LES CONDITIONS (V21) ---
-    
     if 'FTHG' in df.columns and 'FTAG' in df.columns:
         df['FTHG'] = pd.to_numeric(df['FTHG'], errors='coerce')
         df['FTAG'] = pd.to_numeric(df['FTAG'], errors='coerce')
@@ -546,10 +682,10 @@ def charger_donnees(fichiers_csv):
     print("Toutes les données ont été préparées et les conditions pré-calculées.")
     return df
 
+# --- Fonction Helper ---
 def trouver_max_serie_pour_colonne(df_equipe, nom_colonne_condition):
     """
     Helper: Calcule la série max pour une colonne de condition.
-    (Aucun changement ici, cette fonction reste identique)
     """
     if nom_colonne_condition not in df_equipe.columns:
         return 0 
@@ -565,11 +701,11 @@ def trouver_max_serie_pour_colonne(df_equipe, nom_colonne_condition):
         max_streak = int(streak_lengths.max())
     return max_streak
 
+# --- Fonction Helper ---
 def trouver_serie_en_cours_pour_colonne(df_equipe, nom_colonne_condition):
     """
     Helper: Calcule la série en cours (en comptant à rebours) 
     pour une colonne de condition.
-    (Aucun changement ici, cette fonction reste identique)
     """
     if nom_colonne_condition not in df_equipe.columns:
         return 0 
@@ -590,7 +726,6 @@ def trouver_serie_en_cours_pour_colonne(df_equipe, nom_colonne_condition):
 def calculer_score_de_forme(df_equipe, equipe):
     """
     Calcule le score de forme pondéré sur les 5 derniers matchs.
-    (Aucun changement ici, cette fonction reste identique)
     """
     if 'FTR' not in df_equipe.columns or 'FTHG' not in df_equipe.columns:
         return 0, "N/A" # Impossible de calculer
@@ -652,13 +787,14 @@ def calculer_score_de_forme(df_equipe, equipe):
     return total_score, details_complets
 
 
-# --- FONCTION DE CALCUL V25 (MISE À JOUR) ---
-def calculer_tous_les_records_et_series(df, equipes, prochains_matchs_dict):
+# --- FONCTION DE CALCUL V27 (MISE À JOUR) ---
+def calculer_tous_les_records_et_series(df, equipes, prochains_matchs_dict_api, fixtures_odds_dict_csv):
     """
     Calcule le RECORD, la SÉRIE EN COURS, les 5 DERNIERS BUTS,
     le SCORE DE FORME, et le PROCHAIN MATCH.
     
-    MISE À JOUR V25: Logique de matching des noms d'équipes améliorée.
+    MISE À JOUR V27: Utilise fixtures_odds_dict_csv comme fallback
+                     pour le "Prochain Match" si l'API échoue.
     """
     resultats = []
     
@@ -721,23 +857,35 @@ def calculer_tous_les_records_et_series(df, equipes, prochains_matchs_dict):
             df_equipe['Cond_FT_CS'] = df_equipe['ButsEncaisses'] == 0
             df_equipe['Cond_FT_No_CS'] = df_equipe['ButsEncaisses'] > 0
             
-        # --- (V25) Récupérer le prochain match (logique de matching flou) ---
-        prochain = prochains_matchs_dict.get(equipe, "N/A") # 1. Essai de match exact
+        # --- (MODIFIÉ V27) Récupérer le prochain match (API d'abord, puis CSV) ---
+        
+        # 1. Essai de match exact (API)
+        prochain = prochains_matchs_dict_api.get(equipe, "N/A") 
         
         if prochain == "N/A":
             # 2. Essai "NomCSV" est dans "NomAPI" (ex: "Man United" in "Manchester United")
-            for api_nom, api_match in prochains_matchs_dict.items():
+            for api_nom, api_match in prochains_matchs_dict_api.items():
                 if equipe in api_nom:
                     prochain = api_match
                     break
                     
         if prochain == "N/A":
             # 3. Essai "NomAPI" est dans "NomCSV" (ex: "Wolves" in "Wolverhampton")
-            # Moins fréquent, mais utile.
-            for api_nom, api_match in prochains_matchs_dict.items():
+            for api_nom, api_match in prochains_matchs_dict_api.items():
                 if api_nom in equipe:
                     prochain = api_match
                     break
+        
+        # --- NOUVEAU V27 : Fallback sur fixtures.csv ---
+        if prochain == "N/A":
+            match_info_csv = fixtures_odds_dict_csv.get(equipe)
+            if match_info_csv:
+                opponent = match_info_csv.get('opponent', '?')
+                loc = match_info_csv.get('loc', '?')
+                loc_str = "Dom" if loc == "Home" else "Ext"
+                # On ajoute [CSV] pour savoir d'où vient l'info
+                prochain = f"-> {opponent} ({loc_str})"
+        # --- FIN NOUVEAU V27 ---
                     
         record_equipe['Prochain_Match'] = prochain
             
@@ -763,7 +911,6 @@ def decouvrir_ligues_et_equipes(dossier_csv_principal):
     le plus récent, puis lit les ligues (D1.csv...)
     et leurs équipes.
     Retourne: {'D1': ['Bayern', ...], 'E0': ['Arsenal', ...]}
-    (Aucun changement ici, cette fonction reste identique)
     """
     ligues_a_analyser = {} # Dictionnaire final
     
@@ -822,9 +969,7 @@ def decouvrir_ligues_et_equipes(dossier_csv_principal):
             
     return ligues_a_analyser
 
-# ##########################################################################
 # --- FONCTION API V26 (MISE À JOUR) : CHARGEMENT AVEC PLAGE DE DATES ---
-# ##########################################################################
 def charger_prochains_matchs_api(api_key, codes_ligues_utilisateur, saison_api):
     """
     Charge les prochains matchs (status=NS) depuis l'API v3.api-football.com
@@ -836,14 +981,11 @@ def charger_prochains_matchs_api(api_key, codes_ligues_utilisateur, saison_api):
     headers = { 'x-apisports-key': api_key }
     base_url = "https://v3.api-football.com/fixtures"
     
-    # --- DÉBUT DE LA MODIFICATION V26 ---
-    # On définit une plage de dates pour forcer l'API à chercher dans le futur
     date_debut = datetime.date.today().strftime('%Y-%m-%d')
     date_fin = f"{saison_api + 1}-06-15" # Assez large pour couvrir la fin de saison
     
     print(f"\nChargement des prochains matchs via l'API (api-football.com) pour {len(codes_ligues_utilisateur)} (Saison {saison_api})...")
     print(f"Recherche des matchs entre {date_debut} et {date_fin}.")
-    # --- FIN DE LA MODIFICATION V26 ---
 
     for user_code in codes_ligues_utilisateur:
         league_id = LEAGUE_API_MAPPING.get(user_code)
@@ -852,7 +994,6 @@ def charger_prochains_matchs_api(api_key, codes_ligues_utilisateur, saison_api):
             print(f"  - Avertissement: Pas de mapping API-Football pour la ligue '{user_code}'. Elle sera sautée.")
             continue
 
-        # --- MODIFICATION V26 : Ajout de "from" et "to" ---
         params = {
             "league": str(league_id),
             "season": str(saison_api),
@@ -860,7 +1001,6 @@ def charger_prochains_matchs_api(api_key, codes_ligues_utilisateur, saison_api):
             "from": date_debut,
             "to": date_fin
         }
-        # --- FIN DE LA MODIFICATION V26 ---
         
         try:
             response = requests.get(base_url, headers=headers, params=params)
@@ -877,12 +1017,9 @@ def charger_prochains_matchs_api(api_key, codes_ligues_utilisateur, saison_api):
             matches = data.get('response', [])
             
             if not matches:
-                # C'est normal si la saison est vraiment terminée, sinon c'est un problème
                 print(f"  - Info: Aucun match programmé ('NS') trouvé pour {user_code} (ID: {league_id}) dans la plage de dates.")
                 continue
 
-            # Trier les matchs par date pour trouver le plus proche
-            # (L'API devrait déjà le faire avec 'from', mais double sécurité)
             matches_tries = sorted(matches, key=lambda x: x['fixture']['date'])
             
             matchs_ajoutes = 0
@@ -891,20 +1028,16 @@ def charger_prochains_matchs_api(api_key, codes_ligues_utilisateur, saison_api):
                     home_team_name = match['teams']['home']['name']
                     away_team_name = match['teams']['away']['name']
                     
-                    # Formater la date (convertir de UTC)
                     utc_date = pd.to_datetime(match['fixture']['date'])
                     match_date_str = utc_date.strftime('%d/%m %H:%M') # (Reste en UTC mais formaté)
                     
-                    # Définir la description du match (Format demandé)
                     desc_match_domicile = f"{match_date_str} -> {away_team_name} (Dom)"
                     desc_match_exterieur = f"{match_date_str} -> {home_team_name} (Ext)"
 
-                    # Ajouter le match pour l'équipe à domicile (si pas déjà fait)
                     if home_team_name not in prochains_matchs_dict:
                         prochains_matchs_dict[home_team_name] = desc_match_domicile
                         matchs_ajoutes += 1
                             
-                    # Ajouter le match pour l'équipe à l'extérieur (si pas déjà fait)
                     if away_team_name not in prochains_matchs_dict:
                         prochains_matchs_dict[away_team_name] = desc_match_exterieur
                         
@@ -931,7 +1064,6 @@ def creer_page_hub(rapports):
     """
     Crée une page 'index.html' qui sert de portail
     vers tous les rapports de ligue générés.
-    (Aucun changement ici, cette fonction reste identique)
     """
     nom_fichier = "index.html"
     titre_page = "Hub d'Analyse des Ligues"
@@ -1023,18 +1155,22 @@ def creer_page_hub(rapports):
         print(f"\nErreur lors de la création de la page d'accueil '{nom_fichier}': {e}")
 
 
-# --- POINT D'ENTRÉE DU SCRIPT (MODIFIÉ V25) ---
+# --- POINT D'ENTRÉE DU SCRIPT (MODIFIÉ V27) ---
 if __name__ == "__main__":
     
     # !! IMPORTANT !! 
     # Définissez l'année de début de la saison en cours (ex: 2025 pour la saison 2025-2026)
-    # Vous devrez mettre à jour ce chiffre manuellement chaque année en juillet/août.
     SAISON_API = 2025 
     
     dossier_csv_principal = "CSV_Data" 
     
     # 1. Trouver TOUS les fichiers CSV dans TOUS les sous-dossiers
-    tous_les_fichiers_csv = sorted(glob.glob(f"{dossier_csv_principal}/**/*.csv", recursive=True))
+    # (On exclut fixtures.csv)
+    tous_les_fichiers_csv = []
+    for f in glob.glob(f"{dossier_csv_principal}/**/*.csv", recursive=True):
+        if os.path.basename(f).lower() != "fixtures.csv":
+            tous_les_fichiers_csv.append(f)
+    tous_les_fichiers_csv = sorted(tous_les_fichiers_csv)
     
     if not tous_les_fichiers_csv:
         print(f"Erreur : Aucun fichier .csv n'a été trouvé dans les sous-dossiers de '{dossier_csv_principal}'")
@@ -1051,14 +1187,15 @@ if __name__ == "__main__":
     # 3. Étape 1 : Chargement (tous les fichiers en une fois)
     donnees_completes = charger_donnees(tous_les_fichiers_csv)
     
-    # 4. (NOUVEAU V25) Charger les prochains matchs via l'API (api-football.com)
+    # 4. (V26) CHARGER LES FIXTURES ET COTES LOCALES
+    chemin_fixtures = os.path.join(dossier_csv_principal, "fixtures.csv")
+    fixtures_odds_dict = charger_fixtures_csv(chemin_fixtures)
     
-    # Vérifier si le fichier config.py et la clé API sont corrects
+    # 5. (V25) Charger les prochains matchs via l'API (api-football.com)
     if not hasattr(config, 'API_KEY') or "VOTRE_NOUVELLE_CLÉ" in config.API_KEY or config.API_KEY == '':
         print("\n" + "="*50)
-        print("  ERREUR : Clé API non configurée dans le fichier config.py")
-        print("  Veuillez vous inscrire sur https://api-football.com/")
-        print("  pour obtenir une clé gratuite et l'ajouter à config.py.")
+        print("  AVERTISSEMENT : Clé API non configurée dans config.py")
+        print("  Utilisation de 'fixtures.csv' comme source principale pour les prochains matchs.")
         print("="*50 + "\n")
         prochains_matchs_hub = {}
     else:
@@ -1073,38 +1210,48 @@ if __name__ == "__main__":
     
     if donnees_completes is not None:
         
-        # 5. Boucle pour traiter CHAQUE ligue
+        # 6. Boucle pour traiter CHAQUE ligue
         for code_ligue, equipes_a_analyser in ligues_a_analyser.items():
             
-            # Traduire le code (D1) en nom lisible (Bundesliga)
             nom_ligue_lisible = LEAGUE_NAME_MAPPING.get(code_ligue, code_ligue)
             
             print(f"\n--- DÉBUT DU TRAITEMENT : {nom_ligue_lisible} ({code_ligue}) ---")
             print(f"Analyse de {len(equipes_a_analyser)} équipes...")
 
-            # 6. Étape 3 : Calculer tous les records ET séries en cours
-            # On passe le dictionnaire des prochains matchs
-            df_rapport_ligue = calculer_tous_les_records_et_series(donnees_completes, equipes_a_analyser, prochains_matchs_hub)
+            # 7. Étape 3 : Calculer tous les records ET séries en cours
+            # --- MODIFIÉ V27 : On passe les DEUX dictionnaires de matchs ---
+            df_rapport_ligue = calculer_tous_les_records_et_series(
+                donnees_completes, 
+                equipes_a_analyser, 
+                prochains_matchs_hub,   # Dico API
+                fixtures_odds_dict      # Dico CSV
+            )
+            # --- FIN MODIFICATION V27 ---
 
-            # 7. Étape 4 (Affichage console)
+            # 8. Étape 4 (Affichage console)
             print(f"\n--- RÉSULTAT ({nom_ligue_lisible}) ---")
             pd.set_option('display.max_rows', 5) # Afficher un aperçu
             print(df_rapport_ligue)
             pd.reset_option('display.max_rows')
             
-            # 8. ÉTAPE 5 : SAUVEGARDE EN HTML
+            # 9. ÉTAPE 5 : SAUVEGARDE EN HTML
             nom_fichier_propre = nom_ligue_lisible.replace(' ', '_').replace('(', '').replace(')', '').replace('/', '')
             nom_du_fichier_html = f"rapport_{nom_fichier_propre}.html"
             titre_rapport = f"{nom_ligue_lisible}"
             
-            sauvegarder_en_html_v22(df_rapport_ligue, nom_du_fichier_html, titre_rapport)
+            sauvegarder_en_html_v22(
+                df_rapport_ligue, 
+                nom_du_fichier_html, 
+                titre_rapport,
+                fixtures_odds_dict 
+            )
             
             rapports_generes_pour_hub.append({
                 'nom_ligue': nom_ligue_lisible,
                 'nom_fichier': nom_du_fichier_html
             })
         
-        # 9. Créer la page d'accueil (index.html)
+        # 10. Créer la page d'accueil (index.html)
         creer_page_hub(rapports_generes_pour_hub)
         
         print("\n--- TRAITEMENT TERMINÉ ---")
