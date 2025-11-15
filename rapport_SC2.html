@@ -41,13 +41,20 @@
             .main-header nav a.form-button.active {
                 background-color: #117a8b;
             }
+            .main-header nav a.team-button {
+                background-color: #6f42c1; color: white; font-weight: bold;
+            }
+            .main-header nav a.team-button.active {
+                background-color: #5a37a0;
+            }
+            
             .main-content {
                 display: flex; justify-content: center; align-items: center;
                 flex-direction: column; width: 100%; padding-top: 20px; padding-bottom: 20px;
             }
             .section-container.tab-content {
                 display: none; width: 90%; 
-                max-width: 1000px; /* Augmenté pour la nouvelle colonne */
+                max-width: 1000px;
                 margin-bottom: 20px;
             }
             .section-container.tab-content.active { display: block; }
@@ -70,56 +77,106 @@
             .styled-table thead tr {
                 background-color: #333; color: #ffffff; font-weight: bold;
             }
+            .styled-table thead th {
+                cursor: pointer;
+                user-select: none;
+            }
+            .styled-table thead th:hover {
+                background-color: #555;
+            }
+            .styled-table thead th.sort-asc::after {
+                content: " ▲";
+                font-size: 0.8em;
+            }
+            .styled-table thead th.sort-desc::after {
+                content: " ▼";
+                font-size: 0.8em;
+            }
+            
             .styled-table th, .styled-table td { padding: 12px 15px; }
-            /* Colonne 1 (Équipe) */
             .styled-table th:nth-child(1), .styled-table td:nth-child(1) { text-align: left; }
-            /* Colonnes 2, 3, 4 */
             .styled-table th:nth-child(n+2), .styled-table td:nth-child(n+2) {
                 text-align: center; font-weight: bold;
             }
-            /* Style pour la colonne 4 (5 Derniers) */
             .styled-table th:nth-child(4), .styled-table td:nth-child(4) {
                 font-weight: normal; color: #777; font-size: 0.9em;
             }
-            /* Style pour le tableau de forme */
-            .form-table th:nth-child(3), .form-table td:nth-child(3) {
+            .styled-table.form-table th:nth-child(3), .styled-table.form-table td:nth-child(3) {
                 font-weight: normal; color: #777; font-size: 0.9em;
             }
-            .form-table th:nth-child(4), .form-table td:nth-child(4) {
+            .styled-table.form-table th:nth-child(4), .styled-table.form-table td:nth-child(4) {
                 font-weight: normal; color: #17a2b8; font-size: 0.9em;
             }
-            
             .styled-table tbody tr {
                 border-bottom: 1px solid #dddddd; background-color: #ffffff;
             }
             .styled-table tbody tr:nth-of-type(even) { background-color: #f8f8f8; }
-            
-            /* --- MODIFIÉ V26 : Règles pour le tableau d'alertes --- */
             .alerts-table td { font-weight: bold !important; }
-            .alerts-table td:nth-child(5) { /* 5 Derniers Buts */
-                font-weight: normal !important; 
-                font-size: 0.9em;
+            .alerts-table td:nth-child(5) { font-weight: normal !important; font-size: 0.9em; }
+            .alerts-table td:nth-child(6) { font-weight: normal !important; color: #17a2b8; font-size: 0.9em; }
+            .alerts-table td:nth-child(7) { font-weight: bold !important; color: #0056b3; font-size: 1.05em; text-align: center; }
+            
+            #team-selector {
+                width: 100%;
+                padding: 12px;
+                font-size: 1.1em;
+                border-radius: 8px;
+                border: 1px solid #ddd;
+                margin-bottom: 25px;
+                background-color: white;
             }
-            .alerts-table td:nth-child(6) { /* Prochain Match */
-                font-weight: normal !important; 
-                color: #17a2b8;
-                font-size: 0.9em;
+            #team-alerts-output h3, #team-stats-output h3 {
+                color: #333;
+                border-bottom: 2px solid #eee;
+                padding-bottom: 10px;
+                margin-top: 20px;
             }
-            /* --- NOUVEAU V26 : Style pour la colonne COTE --- */
-            .alerts-table td:nth-child(7) { /* Cote (Pari Inverse) */
-                font-weight: bold !important; 
-                color: #0056b3; /* Bleu foncé */
+            .team-alert-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+            .team-alert-table th, .team-alert-table td {
+                padding: 12px 15px;
+                border-bottom: 1px solid #dddddd;
+            }
+            .team-alert-table th {
+                background-color: #333;
+                color: white;
+                text-align: left;
+            }
+            .team-alert-table td { font-weight: bold; }
+            .team-alert-table tr.Rouge { background-color: #ffebee; color: #c62828; }
+            .team-alert-table tr.Orange { background-color: #fff3e0; color: #f57c00; }
+            .team-alert-table tr.Vert { background-color: #e8f5e9; color: #2e7d32; }
+            
+            .team-stats-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .team-stats-table th, .team-stats-table td {
+                padding: 12px 15px;
+                border-bottom: 1px solid #dddddd;
+            }
+            .team-stats-table tr:nth-of-type(even) { background-color: #f8f8f8; }
+            .team-stats-table td:first-child {
+                text-align: left;
+                color: #555;
+                font-weight: normal;
+            }
+            .team-stats-table td:last-child {
+                text-align: right;
+                font-weight: bold;
                 font-size: 1.05em;
-                text-align: center;
             }
-            /* --- FIN MODIFICATION V26 --- */
         </style>
         
         </head>
         <body>
             <header class="main-header">
                 <div class="logo">ANALYSE DE MATCHS - SC2</div>
-                <nav><a href="#" onclick="showSection('form-section', this); event.preventDefault();" class="form-button">📈 Forme</a>
+                <nav><a href="#" onclick="showSection('team-view-section', this); event.preventDefault();" class="team-button">🔍 Par Équipe</a>
+<a href="#" onclick="showSection('form-section', this); event.preventDefault();" class="form-button">📈 Forme</a>
 <a href="#" onclick="showSection('alert-section', this); event.preventDefault();" class="alert-button">⚠️ Alertes</a>
 <a href="#" onclick="showSection('ft_marque', this); event.preventDefault();">FT Marque</a>
 <a href="#" onclick="showSection('ft_cs', this); event.preventDefault();">FT CS</a>
@@ -144,103 +201,114 @@
                     <h2>Veuillez sélectionner une catégorie dans la barre de navigation.</h2>
                 </div>
                 
+                
+        <div class="section-container tab-content" id="team-view-section">
+            <h2 class="section-title">Analyse par Équipe</h2>
+            <select id="team-selector" onchange="showTeamStats(this.value);"><option value="">-- Choisissez une équipe --</option><option value="Alloa">Alloa</option><option value="Cove Rangers">Cove Rangers</option><option value="East Fife">East Fife</option><option value="Hamilton">Hamilton</option><option value="Inverness C">Inverness C</option><option value="Kelty Hearts">Kelty Hearts</option><option value="Montrose">Montrose</option><option value="Peterhead">Peterhead</option><option value="Queen of Sth">Queen of Sth</option><option value="Stenhousemuir">Stenhousemuir</option></select>
+            <div id="team-details-container">
+                <div id="team-alerts-output"></div>
+                <div id="team-stats-output"></div>
+            </div>
+        </div>
+        
+                
                 <div class="section-container tab-content" id="form-section">
                     <h2 class="section-title">ÉTAT DE FORME (SC2)</h2>
                     <style type="text/css">
-#T_a4f93_row0_col1, #T_a4f93_row1_col1, #T_a4f93_row2_col1, #T_a4f93_row3_col1 {
+#T_9949c_row0_col1, #T_9949c_row1_col1, #T_9949c_row2_col1, #T_9949c_row3_col1 {
   color: #2e7d32;
   font-weight: bold;
 }
-#T_a4f93_row0_col2, #T_a4f93_row1_col2, #T_a4f93_row2_col2, #T_a4f93_row3_col2, #T_a4f93_row4_col2, #T_a4f93_row5_col2, #T_a4f93_row6_col2, #T_a4f93_row7_col2, #T_a4f93_row8_col2, #T_a4f93_row9_col2 {
+#T_9949c_row0_col2, #T_9949c_row1_col2, #T_9949c_row2_col2, #T_9949c_row3_col2, #T_9949c_row4_col2, #T_9949c_row5_col2, #T_9949c_row6_col2, #T_9949c_row7_col2, #T_9949c_row8_col2, #T_9949c_row9_col2 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
-#T_a4f93_row0_col3, #T_a4f93_row1_col3, #T_a4f93_row2_col3, #T_a4f93_row3_col3, #T_a4f93_row4_col3, #T_a4f93_row5_col3, #T_a4f93_row6_col3, #T_a4f93_row7_col3, #T_a4f93_row8_col3, #T_a4f93_row9_col3 {
+#T_9949c_row0_col3, #T_9949c_row1_col3, #T_9949c_row2_col3, #T_9949c_row3_col3, #T_9949c_row4_col3, #T_9949c_row5_col3, #T_9949c_row6_col3, #T_9949c_row7_col3, #T_9949c_row8_col3, #T_9949c_row9_col3 {
   font-weight: normal;
   color: #17a2b8;
   font-size: 0.9em;
 }
-#T_a4f93_row4_col1, #T_a4f93_row5_col1, #T_a4f93_row6_col1 {
+#T_9949c_row4_col1, #T_9949c_row5_col1, #T_9949c_row6_col1 {
   color: #28a745;
 }
-#T_a4f93_row7_col1, #T_a4f93_row8_col1 {
+#T_9949c_row7_col1, #T_9949c_row8_col1 {
   color: #dc3545;
 }
-#T_a4f93_row9_col1 {
+#T_9949c_row9_col1 {
   color: #c62828;
   font-weight: bold;
 }
 </style>
-<table id="T_a4f93" class="styled-table form-table">
+<table id="T_9949c" class="styled-table form-table">
   <thead>
     <tr>
-      <th id="T_a4f93_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_a4f93_level0_col1" class="col_heading level0 col1" >Score de Forme</th>
-      <th id="T_a4f93_level0_col2" class="col_heading level0 col2" >5 Derniers (Détails)</th>
-      <th id="T_a4f93_level0_col3" class="col_heading level0 col3" >Prochain Match</th>
+      <th id="T_9949c_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_9949c_level0_col1" class="col_heading level0 col1" >Score de Forme</th>
+      <th id="T_9949c_level0_col2" class="col_heading level0 col2" >5 Derniers (Détails)</th>
+      <th id="T_9949c_level0_col3" class="col_heading level0 col3" >Prochain Match</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_a4f93_row0_col0" class="data row0 col0" >Alloa</td>
-      <td id="T_a4f93_row0_col1" class="data row0 col1" >+19.8</td>
-      <td id="T_a4f93_row0_col2" class="data row0 col2" >V (4-0), V (3-0), N (0-0), N (1-1), V (2-0)</td>
-      <td id="T_a4f93_row0_col3" class="data row0 col3" >N/A</td>
+      <td id="T_9949c_row0_col0" class="data row0 col0" >Alloa</td>
+      <td id="T_9949c_row0_col1" class="data row0 col1" >+19.8</td>
+      <td id="T_9949c_row0_col2" class="data row0 col2" >V, V, N, N, V</td>
+      <td id="T_9949c_row0_col3" class="data row0 col3" >N/A</td>
     </tr>
     <tr>
-      <td id="T_a4f93_row1_col0" class="data row1 col0" >Inverness C</td>
-      <td id="T_a4f93_row1_col1" class="data row1 col1" >+16.6</td>
-      <td id="T_a4f93_row1_col2" class="data row1 col2" >V (1-0), V (1-0), V (1-0), N (2-2), D (1-3)</td>
-      <td id="T_a4f93_row1_col3" class="data row1 col3" >N/A</td>
+      <td id="T_9949c_row1_col0" class="data row1 col0" >Inverness C</td>
+      <td id="T_9949c_row1_col1" class="data row1 col1" >+16.6</td>
+      <td id="T_9949c_row1_col2" class="data row1 col2" >V, V, V, N, D</td>
+      <td id="T_9949c_row1_col3" class="data row1 col3" >N/A</td>
     </tr>
     <tr>
-      <td id="T_a4f93_row2_col0" class="data row2 col0" >Queen of Sth</td>
-      <td id="T_a4f93_row2_col1" class="data row2 col1" >+13.0</td>
-      <td id="T_a4f93_row2_col2" class="data row2 col2" >V (3-0), N (1-1), V (2-1), D (0-3), V (1-0)</td>
-      <td id="T_a4f93_row2_col3" class="data row2 col3" >-> Kelty Hearts (Ext)</td>
+      <td id="T_9949c_row2_col0" class="data row2 col0" >Queen of Sth</td>
+      <td id="T_9949c_row2_col1" class="data row2 col1" >+13.0</td>
+      <td id="T_9949c_row2_col2" class="data row2 col2" >V, N, V, D, V</td>
+      <td id="T_9949c_row2_col3" class="data row2 col3" >N/A</td>
     </tr>
     <tr>
-      <td id="T_a4f93_row3_col0" class="data row3 col0" >Hamilton</td>
-      <td id="T_a4f93_row3_col1" class="data row3 col1" >+13.0</td>
-      <td id="T_a4f93_row3_col2" class="data row3 col2" >V (3-0), N (1-1), D (1-2), V (4-0), V (3-1)</td>
-      <td id="T_a4f93_row3_col3" class="data row3 col3" >-> Cove Rangers (Ext)</td>
+      <td id="T_9949c_row3_col0" class="data row3 col0" >Hamilton</td>
+      <td id="T_9949c_row3_col1" class="data row3 col1" >+13.0</td>
+      <td id="T_9949c_row3_col2" class="data row3 col2" >V, N, D, V, V</td>
+      <td id="T_9949c_row3_col3" class="data row3 col3" >N/A</td>
     </tr>
     <tr>
-      <td id="T_a4f93_row4_col0" class="data row4 col0" >Stenhousemuir</td>
-      <td id="T_a4f93_row4_col1" class="data row4 col1" >+7.8</td>
-      <td id="T_a4f93_row4_col2" class="data row4 col2" >N (2-2), N (1-1), N (0-0), V (1-0), V (3-1)</td>
-      <td id="T_a4f93_row4_col3" class="data row4 col3" >-> East Fife (Ext)</td>
+      <td id="T_9949c_row4_col0" class="data row4 col0" >Stenhousemuir</td>
+      <td id="T_9949c_row4_col1" class="data row4 col1" >+7.8</td>
+      <td id="T_9949c_row4_col2" class="data row4 col2" >N, N, N, V, V</td>
+      <td id="T_9949c_row4_col3" class="data row4 col3" >N/A</td>
     </tr>
     <tr>
-      <td id="T_a4f93_row5_col0" class="data row5 col0" >East Fife</td>
-      <td id="T_a4f93_row5_col1" class="data row5 col1" >+5.0</td>
-      <td id="T_a4f93_row5_col2" class="data row5 col2" >D (0-3), N (1-1), V (3-0), N (1-1), V (2-0)</td>
-      <td id="T_a4f93_row5_col3" class="data row5 col3" >-> Stenhousemuir (Dom)</td>
+      <td id="T_9949c_row5_col0" class="data row5 col0" >East Fife</td>
+      <td id="T_9949c_row5_col1" class="data row5 col1" >+5.0</td>
+      <td id="T_9949c_row5_col2" class="data row5 col2" >D, N, V, N, V</td>
+      <td id="T_9949c_row5_col3" class="data row5 col3" >N/A</td>
     </tr>
     <tr>
-      <td id="T_a4f93_row6_col0" class="data row6 col0" >Peterhead</td>
-      <td id="T_a4f93_row6_col1" class="data row6 col1" >+3.8</td>
-      <td id="T_a4f93_row6_col2" class="data row6 col2" >D (0-3), V (2-1), D (0-1), V (3-0), V (2-1)</td>
-      <td id="T_a4f93_row6_col3" class="data row6 col3" >-> Montrose (Dom)</td>
+      <td id="T_9949c_row6_col0" class="data row6 col0" >Peterhead</td>
+      <td id="T_9949c_row6_col1" class="data row6 col1" >+3.8</td>
+      <td id="T_9949c_row6_col2" class="data row6 col2" >D, V, D, V, V</td>
+      <td id="T_9949c_row6_col3" class="data row6 col3" >N/A</td>
     </tr>
     <tr>
-      <td id="T_a4f93_row7_col0" class="data row7 col0" >Cove Rangers</td>
-      <td id="T_a4f93_row7_col1" class="data row7 col1" >-1.8</td>
-      <td id="T_a4f93_row7_col2" class="data row7 col2" >D (0-1), D (1-2), V (3-0), D (0-1), D (0-2)</td>
-      <td id="T_a4f93_row7_col3" class="data row7 col3" >-> Hamilton (Dom)</td>
+      <td id="T_9949c_row7_col0" class="data row7 col0" >Cove Rangers</td>
+      <td id="T_9949c_row7_col1" class="data row7 col1" >-1.8</td>
+      <td id="T_9949c_row7_col2" class="data row7 col2" >D, D, V, D, D</td>
+      <td id="T_9949c_row7_col3" class="data row7 col3" >N/A</td>
     </tr>
     <tr>
-      <td id="T_a4f93_row8_col0" class="data row8 col0" >Kelty Hearts</td>
-      <td id="T_a4f93_row8_col1" class="data row8 col1" >-3.4</td>
-      <td id="T_a4f93_row8_col2" class="data row8 col2" >N (2-2), D (0-3), D (0-3), N (2-2), D (0-2)</td>
-      <td id="T_a4f93_row8_col3" class="data row8 col3" >-> Queen of Sth (Dom)</td>
+      <td id="T_9949c_row8_col0" class="data row8 col0" >Kelty Hearts</td>
+      <td id="T_9949c_row8_col1" class="data row8 col1" >-3.4</td>
+      <td id="T_9949c_row8_col2" class="data row8 col2" >N, D, D, N, D</td>
+      <td id="T_9949c_row8_col3" class="data row8 col3" >N/A</td>
     </tr>
     <tr>
-      <td id="T_a4f93_row9_col0" class="data row9 col0" >Montrose</td>
-      <td id="T_a4f93_row9_col1" class="data row9 col1" >-9.0</td>
-      <td id="T_a4f93_row9_col2" class="data row9 col2" >D (0-4), D (0-1), D (0-3), D (0-4), D (1-3)</td>
-      <td id="T_a4f93_row9_col3" class="data row9 col3" >-> Peterhead (Ext)</td>
+      <td id="T_9949c_row9_col0" class="data row9 col0" >Montrose</td>
+      <td id="T_9949c_row9_col1" class="data row9 col1" >-9.0</td>
+      <td id="T_9949c_row9_col2" class="data row9 col2" >D, D, D, D, D</td>
+      <td id="T_9949c_row9_col3" class="data row9 col3" >N/A</td>
     </tr>
   </tbody>
 </table>
@@ -250,12 +318,12 @@
                 <div class="section-container tab-content" id="alert-section">
                     <h2 class="section-title">TABLEAU DES ALERTES (SC2)</h2>
                     <style type="text/css">
-#T_d7e0d_row0_col0, #T_d7e0d_row0_col1, #T_d7e0d_row0_col2, #T_d7e0d_row0_col3, #T_d7e0d_row0_col6, #T_d7e0d_row1_col0, #T_d7e0d_row1_col1, #T_d7e0d_row1_col2, #T_d7e0d_row1_col3, #T_d7e0d_row1_col6, #T_d7e0d_row2_col0, #T_d7e0d_row2_col1, #T_d7e0d_row2_col2, #T_d7e0d_row2_col3, #T_d7e0d_row2_col6 {
+#T_cbb11_row0_col0, #T_cbb11_row0_col1, #T_cbb11_row0_col2, #T_cbb11_row0_col3, #T_cbb11_row0_col6, #T_cbb11_row1_col0, #T_cbb11_row1_col1, #T_cbb11_row1_col2, #T_cbb11_row1_col3, #T_cbb11_row1_col6, #T_cbb11_row2_col0, #T_cbb11_row2_col1, #T_cbb11_row2_col2, #T_cbb11_row2_col3, #T_cbb11_row2_col6 {
   background-color: #ffebee;
   color: #c62828;
   font-weight: bold;
 }
-#T_d7e0d_row0_col4, #T_d7e0d_row1_col4, #T_d7e0d_row2_col4 {
+#T_cbb11_row0_col4, #T_cbb11_row1_col4, #T_cbb11_row2_col4 {
   background-color: #ffebee;
   color: #c62828;
   font-weight: bold;
@@ -263,7 +331,7 @@
   color: #333;
   font-size: 0.9em;
 }
-#T_d7e0d_row0_col5, #T_d7e0d_row1_col5, #T_d7e0d_row2_col5 {
+#T_cbb11_row0_col5, #T_cbb11_row1_col5, #T_cbb11_row2_col5 {
   background-color: #ffebee;
   color: #c62828;
   font-weight: bold;
@@ -271,12 +339,12 @@
   color: #17a2b8;
   font-size: 0.9em;
 }
-#T_d7e0d_row3_col0, #T_d7e0d_row3_col1, #T_d7e0d_row3_col2, #T_d7e0d_row3_col3, #T_d7e0d_row3_col6, #T_d7e0d_row4_col0, #T_d7e0d_row4_col1, #T_d7e0d_row4_col2, #T_d7e0d_row4_col3, #T_d7e0d_row4_col6 {
+#T_cbb11_row3_col0, #T_cbb11_row3_col1, #T_cbb11_row3_col2, #T_cbb11_row3_col3, #T_cbb11_row3_col6, #T_cbb11_row4_col0, #T_cbb11_row4_col1, #T_cbb11_row4_col2, #T_cbb11_row4_col3, #T_cbb11_row4_col6 {
   background-color: #fff3e0;
   color: #f57c00;
   font-weight: bold;
 }
-#T_d7e0d_row3_col4, #T_d7e0d_row4_col4 {
+#T_cbb11_row3_col4, #T_cbb11_row4_col4 {
   background-color: #fff3e0;
   color: #f57c00;
   font-weight: bold;
@@ -284,7 +352,7 @@
   color: #333;
   font-size: 0.9em;
 }
-#T_d7e0d_row3_col5, #T_d7e0d_row4_col5 {
+#T_cbb11_row3_col5, #T_cbb11_row4_col5 {
   background-color: #fff3e0;
   color: #f57c00;
   font-weight: bold;
@@ -292,12 +360,12 @@
   color: #17a2b8;
   font-size: 0.9em;
 }
-#T_d7e0d_row5_col0, #T_d7e0d_row5_col1, #T_d7e0d_row5_col2, #T_d7e0d_row5_col3, #T_d7e0d_row5_col6, #T_d7e0d_row6_col0, #T_d7e0d_row6_col1, #T_d7e0d_row6_col2, #T_d7e0d_row6_col3, #T_d7e0d_row6_col6, #T_d7e0d_row7_col0, #T_d7e0d_row7_col1, #T_d7e0d_row7_col2, #T_d7e0d_row7_col3, #T_d7e0d_row7_col6, #T_d7e0d_row8_col0, #T_d7e0d_row8_col1, #T_d7e0d_row8_col2, #T_d7e0d_row8_col3, #T_d7e0d_row8_col6, #T_d7e0d_row9_col0, #T_d7e0d_row9_col1, #T_d7e0d_row9_col2, #T_d7e0d_row9_col3, #T_d7e0d_row9_col6 {
+#T_cbb11_row5_col0, #T_cbb11_row5_col1, #T_cbb11_row5_col2, #T_cbb11_row5_col3, #T_cbb11_row5_col6, #T_cbb11_row6_col0, #T_cbb11_row6_col1, #T_cbb11_row6_col2, #T_cbb11_row6_col3, #T_cbb11_row6_col6, #T_cbb11_row7_col0, #T_cbb11_row7_col1, #T_cbb11_row7_col2, #T_cbb11_row7_col3, #T_cbb11_row7_col6, #T_cbb11_row8_col0, #T_cbb11_row8_col1, #T_cbb11_row8_col2, #T_cbb11_row8_col3, #T_cbb11_row8_col6, #T_cbb11_row9_col0, #T_cbb11_row9_col1, #T_cbb11_row9_col2, #T_cbb11_row9_col3, #T_cbb11_row9_col6 {
   background-color: #e8f5e9;
   color: #2e7d32;
   font-weight: bold;
 }
-#T_d7e0d_row5_col4, #T_d7e0d_row6_col4, #T_d7e0d_row7_col4, #T_d7e0d_row8_col4, #T_d7e0d_row9_col4 {
+#T_cbb11_row5_col4, #T_cbb11_row6_col4, #T_cbb11_row7_col4, #T_cbb11_row8_col4, #T_cbb11_row9_col4 {
   background-color: #e8f5e9;
   color: #2e7d32;
   font-weight: bold;
@@ -305,7 +373,7 @@
   color: #333;
   font-size: 0.9em;
 }
-#T_d7e0d_row5_col5, #T_d7e0d_row6_col5, #T_d7e0d_row7_col5, #T_d7e0d_row8_col5, #T_d7e0d_row9_col5 {
+#T_cbb11_row5_col5, #T_cbb11_row6_col5, #T_cbb11_row7_col5, #T_cbb11_row8_col5, #T_cbb11_row9_col5 {
   background-color: #e8f5e9;
   color: #2e7d32;
   font-weight: bold;
@@ -314,108 +382,108 @@
   font-size: 0.9em;
 }
 </style>
-<table id="T_d7e0d" class="styled-table alerts-table">
+<table id="T_cbb11" class="styled-table alerts-table">
   <thead>
     <tr>
-      <th id="T_d7e0d_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_d7e0d_level0_col1" class="col_heading level0 col1" >Statistique</th>
-      <th id="T_d7e0d_level0_col2" class="col_heading level0 col2" >Record</th>
-      <th id="T_d7e0d_level0_col3" class="col_heading level0 col3" >Série en Cours</th>
-      <th id="T_d7e0d_level0_col4" class="col_heading level0 col4" >5 Derniers Buts</th>
-      <th id="T_d7e0d_level0_col5" class="col_heading level0 col5" >Prochain Match</th>
-      <th id="T_d7e0d_level0_col6" class="col_heading level0 col6" >Cote (Pari Inverse)</th>
+      <th id="T_cbb11_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_cbb11_level0_col1" class="col_heading level0 col1" >Statistique</th>
+      <th id="T_cbb11_level0_col2" class="col_heading level0 col2" >Record</th>
+      <th id="T_cbb11_level0_col3" class="col_heading level0 col3" >Série en Cours</th>
+      <th id="T_cbb11_level0_col4" class="col_heading level0 col4" >5 Derniers Buts</th>
+      <th id="T_cbb11_level0_col5" class="col_heading level0 col5" >Prochain Match</th>
+      <th id="T_cbb11_level0_col6" class="col_heading level0 col6" >Cote (Pari Inverse)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_d7e0d_row0_col0" class="data row0 col0" >Alloa</td>
-      <td id="T_d7e0d_row0_col1" class="data row0 col1" >FT CS</td>
-      <td id="T_d7e0d_row0_col2" class="data row0 col2" >3</td>
-      <td id="T_d7e0d_row0_col3" class="data row0 col3" >3</td>
-      <td id="T_d7e0d_row0_col4" class="data row0 col4" >2, 2, 0, 3, 4</td>
-      <td id="T_d7e0d_row0_col5" class="data row0 col5" >N/A</td>
-      <td id="T_d7e0d_row0_col6" class="data row0 col6" >(Stat?)</td>
+      <td id="T_cbb11_row0_col0" class="data row0 col0" >Alloa</td>
+      <td id="T_cbb11_row0_col1" class="data row0 col1" >FT CS</td>
+      <td id="T_cbb11_row0_col2" class="data row0 col2" >3</td>
+      <td id="T_cbb11_row0_col3" class="data row0 col3" >3</td>
+      <td id="T_cbb11_row0_col4" class="data row0 col4" >2, 2, 0, 3, 4</td>
+      <td id="T_cbb11_row0_col5" class="data row0 col5" >N/A</td>
+      <td id="T_cbb11_row0_col6" class="data row0 col6" >(Match?)</td>
     </tr>
     <tr>
-      <td id="T_d7e0d_row1_col0" class="data row1 col0" >Inverness C</td>
-      <td id="T_d7e0d_row1_col1" class="data row1 col1" >FT Marque</td>
-      <td id="T_d7e0d_row1_col2" class="data row1 col2" >16</td>
-      <td id="T_d7e0d_row1_col3" class="data row1 col3" >16</td>
-      <td id="T_d7e0d_row1_col4" class="data row1 col4" >4, 4, 1, 1, 1</td>
-      <td id="T_d7e0d_row1_col5" class="data row1 col5" >N/A</td>
-      <td id="T_d7e0d_row1_col6" class="data row1 col6" >(Stat?)</td>
+      <td id="T_cbb11_row1_col0" class="data row1 col0" >Inverness C</td>
+      <td id="T_cbb11_row1_col1" class="data row1 col1" >FT Marque</td>
+      <td id="T_cbb11_row1_col2" class="data row1 col2" >16</td>
+      <td id="T_cbb11_row1_col3" class="data row1 col3" >16</td>
+      <td id="T_cbb11_row1_col4" class="data row1 col4" >4, 4, 1, 1, 1</td>
+      <td id="T_cbb11_row1_col5" class="data row1 col5" >N/A</td>
+      <td id="T_cbb11_row1_col6" class="data row1 col6" >(Match?)</td>
     </tr>
     <tr>
-      <td id="T_d7e0d_row2_col0" class="data row2 col0" >Kelty Hearts</td>
-      <td id="T_d7e0d_row2_col1" class="data row2 col1" >MT +0.5</td>
-      <td id="T_d7e0d_row2_col2" class="data row2 col2" >16</td>
-      <td id="T_d7e0d_row2_col3" class="data row2 col3" >16</td>
-      <td id="T_d7e0d_row2_col4" class="data row2 col4" >1, 3, 1, 2, 1</td>
-      <td id="T_d7e0d_row2_col5" class="data row2 col5" >-> Queen of Sth (Dom)</td>
-      <td id="T_d7e0d_row2_col6" class="data row2 col6" >(Stat?)</td>
+      <td id="T_cbb11_row2_col0" class="data row2 col0" >Kelty Hearts</td>
+      <td id="T_cbb11_row2_col1" class="data row2 col1" >MT +0.5</td>
+      <td id="T_cbb11_row2_col2" class="data row2 col2" >16</td>
+      <td id="T_cbb11_row2_col3" class="data row2 col3" >16</td>
+      <td id="T_cbb11_row2_col4" class="data row2 col4" >1, 3, 1, 2, 1</td>
+      <td id="T_cbb11_row2_col5" class="data row2 col5" >N/A</td>
+      <td id="T_cbb11_row2_col6" class="data row2 col6" >(Match?)</td>
     </tr>
     <tr>
-      <td id="T_d7e0d_row3_col0" class="data row3 col0" >Cove Rangers</td>
-      <td id="T_d7e0d_row3_col1" class="data row3 col1" >FT -3.5</td>
-      <td id="T_d7e0d_row3_col2" class="data row3 col2" >10</td>
-      <td id="T_d7e0d_row3_col3" class="data row3 col3" >9</td>
-      <td id="T_d7e0d_row3_col4" class="data row3 col4" >2, 1, 3, 3, 1</td>
-      <td id="T_d7e0d_row3_col5" class="data row3 col5" >-> Hamilton (Dom)</td>
-      <td id="T_d7e0d_row3_col6" class="data row3 col6" >(B365>3.5?)</td>
+      <td id="T_cbb11_row3_col0" class="data row3 col0" >Cove Rangers</td>
+      <td id="T_cbb11_row3_col1" class="data row3 col1" >FT -3.5</td>
+      <td id="T_cbb11_row3_col2" class="data row3 col2" >10</td>
+      <td id="T_cbb11_row3_col3" class="data row3 col3" >9</td>
+      <td id="T_cbb11_row3_col4" class="data row3 col4" >2, 1, 3, 3, 1</td>
+      <td id="T_cbb11_row3_col5" class="data row3 col5" >N/A</td>
+      <td id="T_cbb11_row3_col6" class="data row3 col6" >(Match?)</td>
     </tr>
     <tr>
-      <td id="T_d7e0d_row4_col0" class="data row4 col0" >Hamilton</td>
-      <td id="T_d7e0d_row4_col1" class="data row4 col1" >FT Marque</td>
-      <td id="T_d7e0d_row4_col2" class="data row4 col2" >9</td>
-      <td id="T_d7e0d_row4_col3" class="data row4 col3" >8</td>
-      <td id="T_d7e0d_row4_col4" class="data row4 col4" >4, 4, 3, 2, 3</td>
-      <td id="T_d7e0d_row4_col5" class="data row4 col5" >-> Cove Rangers (Ext)</td>
-      <td id="T_d7e0d_row4_col6" class="data row4 col6" >(Stat?)</td>
+      <td id="T_cbb11_row4_col0" class="data row4 col0" >Hamilton</td>
+      <td id="T_cbb11_row4_col1" class="data row4 col1" >FT Marque</td>
+      <td id="T_cbb11_row4_col2" class="data row4 col2" >9</td>
+      <td id="T_cbb11_row4_col3" class="data row4 col3" >8</td>
+      <td id="T_cbb11_row4_col4" class="data row4 col4" >4, 4, 3, 2, 3</td>
+      <td id="T_cbb11_row4_col5" class="data row4 col5" >N/A</td>
+      <td id="T_cbb11_row4_col6" class="data row4 col6" >(Match?)</td>
     </tr>
     <tr>
-      <td id="T_d7e0d_row5_col0" class="data row5 col0" >Alloa</td>
-      <td id="T_d7e0d_row5_col1" class="data row5 col1" >FT +3.5</td>
-      <td id="T_d7e0d_row5_col2" class="data row5 col2" >3</td>
-      <td id="T_d7e0d_row5_col3" class="data row5 col3" >1</td>
-      <td id="T_d7e0d_row5_col4" class="data row5 col4" >2, 2, 0, 3, 4</td>
-      <td id="T_d7e0d_row5_col5" class="data row5 col5" >N/A</td>
-      <td id="T_d7e0d_row5_col6" class="data row5 col6" >(Match?)</td>
+      <td id="T_cbb11_row5_col0" class="data row5 col0" >Alloa</td>
+      <td id="T_cbb11_row5_col1" class="data row5 col1" >FT +3.5</td>
+      <td id="T_cbb11_row5_col2" class="data row5 col2" >3</td>
+      <td id="T_cbb11_row5_col3" class="data row5 col3" >1</td>
+      <td id="T_cbb11_row5_col4" class="data row5 col4" >2, 2, 0, 3, 4</td>
+      <td id="T_cbb11_row5_col5" class="data row5 col5" >N/A</td>
+      <td id="T_cbb11_row5_col6" class="data row5 col6" >(Match?)</td>
     </tr>
     <tr>
-      <td id="T_d7e0d_row6_col0" class="data row6 col0" >Inverness C</td>
-      <td id="T_d7e0d_row6_col1" class="data row6 col1" >FT CS</td>
-      <td id="T_d7e0d_row6_col2" class="data row6 col2" >5</td>
-      <td id="T_d7e0d_row6_col3" class="data row6 col3" >3</td>
-      <td id="T_d7e0d_row6_col4" class="data row6 col4" >4, 4, 1, 1, 1</td>
-      <td id="T_d7e0d_row6_col5" class="data row6 col5" >N/A</td>
-      <td id="T_d7e0d_row6_col6" class="data row6 col6" >(Stat?)</td>
+      <td id="T_cbb11_row6_col0" class="data row6 col0" >Inverness C</td>
+      <td id="T_cbb11_row6_col1" class="data row6 col1" >FT CS</td>
+      <td id="T_cbb11_row6_col2" class="data row6 col2" >5</td>
+      <td id="T_cbb11_row6_col3" class="data row6 col3" >3</td>
+      <td id="T_cbb11_row6_col4" class="data row6 col4" >4, 4, 1, 1, 1</td>
+      <td id="T_cbb11_row6_col5" class="data row6 col5" >N/A</td>
+      <td id="T_cbb11_row6_col6" class="data row6 col6" >(Match?)</td>
     </tr>
     <tr>
-      <td id="T_d7e0d_row7_col0" class="data row7 col0" >Inverness C</td>
-      <td id="T_d7e0d_row7_col1" class="data row7 col1" >FT -1.5</td>
-      <td id="T_d7e0d_row7_col2" class="data row7 col2" >5</td>
-      <td id="T_d7e0d_row7_col3" class="data row7 col3" >3</td>
-      <td id="T_d7e0d_row7_col4" class="data row7 col4" >4, 4, 1, 1, 1</td>
-      <td id="T_d7e0d_row7_col5" class="data row7 col5" >N/A</td>
-      <td id="T_d7e0d_row7_col6" class="data row7 col6" >(Match?)</td>
+      <td id="T_cbb11_row7_col0" class="data row7 col0" >Inverness C</td>
+      <td id="T_cbb11_row7_col1" class="data row7 col1" >FT -1.5</td>
+      <td id="T_cbb11_row7_col2" class="data row7 col2" >5</td>
+      <td id="T_cbb11_row7_col3" class="data row7 col3" >3</td>
+      <td id="T_cbb11_row7_col4" class="data row7 col4" >4, 4, 1, 1, 1</td>
+      <td id="T_cbb11_row7_col5" class="data row7 col5" >N/A</td>
+      <td id="T_cbb11_row7_col6" class="data row7 col6" >(Match?)</td>
     </tr>
     <tr>
-      <td id="T_d7e0d_row8_col0" class="data row8 col0" >Kelty Hearts</td>
-      <td id="T_d7e0d_row8_col1" class="data row8 col1" >FT Nuls</td>
-      <td id="T_d7e0d_row8_col2" class="data row8 col2" >3</td>
-      <td id="T_d7e0d_row8_col3" class="data row8 col3" >1</td>
-      <td id="T_d7e0d_row8_col4" class="data row8 col4" >2, 4, 3, 3, 4</td>
-      <td id="T_d7e0d_row8_col5" class="data row8 col5" >-> Queen of Sth (Dom)</td>
-      <td id="T_d7e0d_row8_col6" class="data row8 col6" >(Stat?)</td>
+      <td id="T_cbb11_row8_col0" class="data row8 col0" >Kelty Hearts</td>
+      <td id="T_cbb11_row8_col1" class="data row8 col1" >FT Nuls</td>
+      <td id="T_cbb11_row8_col2" class="data row8 col2" >3</td>
+      <td id="T_cbb11_row8_col3" class="data row8 col3" >1</td>
+      <td id="T_cbb11_row8_col4" class="data row8 col4" >2, 4, 3, 3, 4</td>
+      <td id="T_cbb11_row8_col5" class="data row8 col5" >N/A</td>
+      <td id="T_cbb11_row8_col6" class="data row8 col6" >(Match?)</td>
     </tr>
     <tr>
-      <td id="T_d7e0d_row9_col0" class="data row9 col0" >Queen of Sth</td>
-      <td id="T_d7e0d_row9_col1" class="data row9 col1" >FT CS</td>
-      <td id="T_d7e0d_row9_col2" class="data row9 col2" >3</td>
-      <td id="T_d7e0d_row9_col3" class="data row9 col3" >1</td>
-      <td id="T_d7e0d_row9_col4" class="data row9 col4" >1, 3, 3, 2, 3</td>
-      <td id="T_d7e0d_row9_col5" class="data row9 col5" >-> Kelty Hearts (Ext)</td>
-      <td id="T_d7e0d_row9_col6" class="data row9 col6" >(Stat?)</td>
+      <td id="T_cbb11_row9_col0" class="data row9 col0" >Queen of Sth</td>
+      <td id="T_cbb11_row9_col1" class="data row9 col1" >FT CS</td>
+      <td id="T_cbb11_row9_col2" class="data row9 col2" >3</td>
+      <td id="T_cbb11_row9_col3" class="data row9 col3" >1</td>
+      <td id="T_cbb11_row9_col4" class="data row9 col4" >1, 3, 3, 2, 3</td>
+      <td id="T_cbb11_row9_col5" class="data row9 col5" >N/A</td>
+      <td id="T_cbb11_row9_col6" class="data row9 col6" >(Match?)</td>
     </tr>
   </tbody>
 </table>
@@ -426,95 +494,95 @@
             <div class="section-container tab-content" id="ft_marque">
                 <h2 class="section-title">Record - L'équipe Marque (FT)</h2>
                 <style type="text/css">
-#T_0447a_row0_col2, #T_0447a_row1_col2, #T_0447a_row2_col2, #T_0447a_row3_col2, #T_0447a_row5_col2, #T_0447a_row6_col2, #T_0447a_row8_col2, #T_0447a_row9_col2 {
+#T_2e158_row0_col2, #T_2e158_row1_col2, #T_2e158_row2_col2, #T_2e158_row3_col2, #T_2e158_row5_col2, #T_2e158_row6_col2, #T_2e158_row8_col2, #T_2e158_row9_col2 {
   font-weight: normal;
   color: #555;
 }
-#T_0447a_row0_col3, #T_0447a_row1_col3, #T_0447a_row2_col3, #T_0447a_row3_col3, #T_0447a_row4_col3, #T_0447a_row5_col3, #T_0447a_row6_col3, #T_0447a_row7_col3, #T_0447a_row8_col3, #T_0447a_row9_col3 {
+#T_2e158_row0_col3, #T_2e158_row1_col3, #T_2e158_row2_col3, #T_2e158_row3_col3, #T_2e158_row4_col3, #T_2e158_row5_col3, #T_2e158_row6_col3, #T_2e158_row7_col3, #T_2e158_row8_col3, #T_2e158_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
-#T_0447a_row4_col2 {
+#T_2e158_row4_col2 {
   background-color: #ffebee;
   color: #c62828;
   font-weight: bold;
 }
-#T_0447a_row7_col2 {
+#T_2e158_row7_col2 {
   background-color: #fff3e0;
   color: #f57c00;
   font-weight: bold;
 }
 </style>
-<table id="T_0447a" class="styled-table">
+<table id="T_2e158" class="styled-table">
   <thead>
     <tr>
-      <th id="T_0447a_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_0447a_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_0447a_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_0447a_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+      <th id="T_2e158_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_2e158_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_2e158_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_2e158_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_0447a_row0_col0" class="data row0 col0" >Stenhousemuir</td>
-      <td id="T_0447a_row0_col1" class="data row0 col1" >25</td>
-      <td id="T_0447a_row0_col2" class="data row0 col2" >2</td>
-      <td id="T_0447a_row0_col3" class="data row0 col3" >4, 1, 0, 2, 4</td>
+      <td id="T_2e158_row0_col0" class="data row0 col0" >Stenhousemuir</td>
+      <td id="T_2e158_row0_col1" class="data row0 col1" >25</td>
+      <td id="T_2e158_row0_col2" class="data row0 col2" >2</td>
+      <td id="T_2e158_row0_col3" class="data row0 col3" >4, 1, 0, 2, 4</td>
     </tr>
     <tr>
-      <td id="T_0447a_row1_col0" class="data row1 col0" >Cove Rangers</td>
-      <td id="T_0447a_row1_col1" class="data row1 col1" >22</td>
-      <td id="T_0447a_row1_col2" class="data row1 col2" >0</td>
-      <td id="T_0447a_row1_col3" class="data row1 col3" >2, 1, 3, 3, 1</td>
+      <td id="T_2e158_row1_col0" class="data row1 col0" >Cove Rangers</td>
+      <td id="T_2e158_row1_col1" class="data row1 col1" >22</td>
+      <td id="T_2e158_row1_col2" class="data row1 col2" >0</td>
+      <td id="T_2e158_row1_col3" class="data row1 col3" >2, 1, 3, 3, 1</td>
     </tr>
     <tr>
-      <td id="T_0447a_row2_col0" class="data row2 col0" >Alloa</td>
-      <td id="T_0447a_row2_col1" class="data row2 col1" >21</td>
-      <td id="T_0447a_row2_col2" class="data row2 col2" >2</td>
-      <td id="T_0447a_row2_col3" class="data row2 col3" >2, 2, 0, 3, 4</td>
+      <td id="T_2e158_row2_col0" class="data row2 col0" >Alloa</td>
+      <td id="T_2e158_row2_col1" class="data row2 col1" >21</td>
+      <td id="T_2e158_row2_col2" class="data row2 col2" >2</td>
+      <td id="T_2e158_row2_col3" class="data row2 col3" >2, 2, 0, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_0447a_row3_col0" class="data row3 col0" >Kelty Hearts</td>
-      <td id="T_0447a_row3_col1" class="data row3 col1" >19</td>
-      <td id="T_0447a_row3_col2" class="data row3 col2" >1</td>
-      <td id="T_0447a_row3_col3" class="data row3 col3" >2, 4, 3, 3, 4</td>
+      <td id="T_2e158_row3_col0" class="data row3 col0" >Kelty Hearts</td>
+      <td id="T_2e158_row3_col1" class="data row3 col1" >19</td>
+      <td id="T_2e158_row3_col2" class="data row3 col2" >1</td>
+      <td id="T_2e158_row3_col3" class="data row3 col3" >2, 4, 3, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_0447a_row4_col0" class="data row4 col0" >Inverness C</td>
-      <td id="T_0447a_row4_col1" class="data row4 col1" >16</td>
-      <td id="T_0447a_row4_col2" class="data row4 col2" >16</td>
-      <td id="T_0447a_row4_col3" class="data row4 col3" >4, 4, 1, 1, 1</td>
+      <td id="T_2e158_row4_col0" class="data row4 col0" >Inverness C</td>
+      <td id="T_2e158_row4_col1" class="data row4 col1" >16</td>
+      <td id="T_2e158_row4_col2" class="data row4 col2" >16</td>
+      <td id="T_2e158_row4_col3" class="data row4 col3" >4, 4, 1, 1, 1</td>
     </tr>
     <tr>
-      <td id="T_0447a_row5_col0" class="data row5 col0" >Queen of Sth</td>
-      <td id="T_0447a_row5_col1" class="data row5 col1" >15</td>
-      <td id="T_0447a_row5_col2" class="data row5 col2" >3</td>
-      <td id="T_0447a_row5_col3" class="data row5 col3" >1, 3, 3, 2, 3</td>
+      <td id="T_2e158_row5_col0" class="data row5 col0" >Queen of Sth</td>
+      <td id="T_2e158_row5_col1" class="data row5 col1" >15</td>
+      <td id="T_2e158_row5_col2" class="data row5 col2" >3</td>
+      <td id="T_2e158_row5_col3" class="data row5 col3" >1, 3, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_0447a_row6_col0" class="data row6 col0" >East Fife</td>
-      <td id="T_0447a_row6_col1" class="data row6 col1" >10</td>
-      <td id="T_0447a_row6_col2" class="data row6 col2" >0</td>
-      <td id="T_0447a_row6_col3" class="data row6 col3" >2, 2, 3, 2, 3</td>
+      <td id="T_2e158_row6_col0" class="data row6 col0" >East Fife</td>
+      <td id="T_2e158_row6_col1" class="data row6 col1" >10</td>
+      <td id="T_2e158_row6_col2" class="data row6 col2" >0</td>
+      <td id="T_2e158_row6_col3" class="data row6 col3" >2, 2, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_0447a_row7_col0" class="data row7 col0" >Hamilton</td>
-      <td id="T_0447a_row7_col1" class="data row7 col1" >9</td>
-      <td id="T_0447a_row7_col2" class="data row7 col2" >8</td>
-      <td id="T_0447a_row7_col3" class="data row7 col3" >4, 4, 3, 2, 3</td>
+      <td id="T_2e158_row7_col0" class="data row7 col0" >Hamilton</td>
+      <td id="T_2e158_row7_col1" class="data row7 col1" >9</td>
+      <td id="T_2e158_row7_col2" class="data row7 col2" >8</td>
+      <td id="T_2e158_row7_col3" class="data row7 col3" >4, 4, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_0447a_row8_col0" class="data row8 col0" >Peterhead</td>
-      <td id="T_0447a_row8_col1" class="data row8 col1" >9</td>
-      <td id="T_0447a_row8_col2" class="data row8 col2" >0</td>
-      <td id="T_0447a_row8_col3" class="data row8 col3" >3, 3, 1, 3, 3</td>
+      <td id="T_2e158_row8_col0" class="data row8 col0" >Peterhead</td>
+      <td id="T_2e158_row8_col1" class="data row8 col1" >9</td>
+      <td id="T_2e158_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_2e158_row8_col3" class="data row8 col3" >3, 3, 1, 3, 3</td>
     </tr>
     <tr>
-      <td id="T_0447a_row9_col0" class="data row9 col0" >Montrose</td>
-      <td id="T_0447a_row9_col1" class="data row9 col1" >9</td>
-      <td id="T_0447a_row9_col2" class="data row9 col2" >0</td>
-      <td id="T_0447a_row9_col3" class="data row9 col3" >4, 4, 3, 1, 4</td>
+      <td id="T_2e158_row9_col0" class="data row9 col0" >Montrose</td>
+      <td id="T_2e158_row9_col1" class="data row9 col1" >9</td>
+      <td id="T_2e158_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_2e158_row9_col3" class="data row9 col3" >4, 4, 3, 1, 4</td>
     </tr>
   </tbody>
 </table>
@@ -524,95 +592,95 @@
             <div class="section-container tab-content" id="ft_cs">
                 <h2 class="section-title">Record - Clean Sheet (FT)</h2>
                 <style type="text/css">
-#T_d21f3_row0_col2, #T_d21f3_row1_col2, #T_d21f3_row3_col2, #T_d21f3_row4_col2, #T_d21f3_row5_col2, #T_d21f3_row7_col2, #T_d21f3_row8_col2 {
+#T_dc77b_row0_col2, #T_dc77b_row1_col2, #T_dc77b_row3_col2, #T_dc77b_row4_col2, #T_dc77b_row5_col2, #T_dc77b_row7_col2, #T_dc77b_row8_col2 {
   font-weight: normal;
   color: #555;
 }
-#T_d21f3_row0_col3, #T_d21f3_row1_col3, #T_d21f3_row2_col3, #T_d21f3_row3_col3, #T_d21f3_row4_col3, #T_d21f3_row5_col3, #T_d21f3_row6_col3, #T_d21f3_row7_col3, #T_d21f3_row8_col3, #T_d21f3_row9_col3 {
+#T_dc77b_row0_col3, #T_dc77b_row1_col3, #T_dc77b_row2_col3, #T_dc77b_row3_col3, #T_dc77b_row4_col3, #T_dc77b_row5_col3, #T_dc77b_row6_col3, #T_dc77b_row7_col3, #T_dc77b_row8_col3, #T_dc77b_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
-#T_d21f3_row2_col2, #T_d21f3_row9_col2 {
+#T_dc77b_row2_col2, #T_dc77b_row9_col2 {
   background-color: #e8f5e9;
   color: #2e7d32;
   font-weight: bold;
 }
-#T_d21f3_row6_col2 {
+#T_dc77b_row6_col2 {
   background-color: #ffebee;
   color: #c62828;
   font-weight: bold;
 }
 </style>
-<table id="T_d21f3" class="styled-table">
+<table id="T_dc77b" class="styled-table">
   <thead>
     <tr>
-      <th id="T_d21f3_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_d21f3_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_d21f3_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_d21f3_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+      <th id="T_dc77b_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_dc77b_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_dc77b_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_dc77b_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_d21f3_row0_col0" class="data row0 col0" >Cove Rangers</td>
-      <td id="T_d21f3_row0_col1" class="data row0 col1" >6</td>
-      <td id="T_d21f3_row0_col2" class="data row0 col2" >0</td>
-      <td id="T_d21f3_row0_col3" class="data row0 col3" >2, 1, 3, 3, 1</td>
+      <td id="T_dc77b_row0_col0" class="data row0 col0" >Cove Rangers</td>
+      <td id="T_dc77b_row0_col1" class="data row0 col1" >6</td>
+      <td id="T_dc77b_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_dc77b_row0_col3" class="data row0 col3" >2, 1, 3, 3, 1</td>
     </tr>
     <tr>
-      <td id="T_d21f3_row1_col0" class="data row1 col0" >Hamilton</td>
-      <td id="T_d21f3_row1_col1" class="data row1 col1" >5</td>
-      <td id="T_d21f3_row1_col2" class="data row1 col2" >1</td>
-      <td id="T_d21f3_row1_col3" class="data row1 col3" >4, 4, 3, 2, 3</td>
+      <td id="T_dc77b_row1_col0" class="data row1 col0" >Hamilton</td>
+      <td id="T_dc77b_row1_col1" class="data row1 col1" >5</td>
+      <td id="T_dc77b_row1_col2" class="data row1 col2" >1</td>
+      <td id="T_dc77b_row1_col3" class="data row1 col3" >4, 4, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_d21f3_row2_col0" class="data row2 col0" >Inverness C</td>
-      <td id="T_d21f3_row2_col1" class="data row2 col1" >5</td>
-      <td id="T_d21f3_row2_col2" class="data row2 col2" >3</td>
-      <td id="T_d21f3_row2_col3" class="data row2 col3" >4, 4, 1, 1, 1</td>
+      <td id="T_dc77b_row2_col0" class="data row2 col0" >Inverness C</td>
+      <td id="T_dc77b_row2_col1" class="data row2 col1" >5</td>
+      <td id="T_dc77b_row2_col2" class="data row2 col2" >3</td>
+      <td id="T_dc77b_row2_col3" class="data row2 col3" >4, 4, 1, 1, 1</td>
     </tr>
     <tr>
-      <td id="T_d21f3_row3_col0" class="data row3 col0" >Stenhousemuir</td>
-      <td id="T_d21f3_row3_col1" class="data row3 col1" >4</td>
-      <td id="T_d21f3_row3_col2" class="data row3 col2" >0</td>
-      <td id="T_d21f3_row3_col3" class="data row3 col3" >4, 1, 0, 2, 4</td>
+      <td id="T_dc77b_row3_col0" class="data row3 col0" >Stenhousemuir</td>
+      <td id="T_dc77b_row3_col1" class="data row3 col1" >4</td>
+      <td id="T_dc77b_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_dc77b_row3_col3" class="data row3 col3" >4, 1, 0, 2, 4</td>
     </tr>
     <tr>
-      <td id="T_d21f3_row4_col0" class="data row4 col0" >East Fife</td>
-      <td id="T_d21f3_row4_col1" class="data row4 col1" >4</td>
-      <td id="T_d21f3_row4_col2" class="data row4 col2" >0</td>
-      <td id="T_d21f3_row4_col3" class="data row4 col3" >2, 2, 3, 2, 3</td>
+      <td id="T_dc77b_row4_col0" class="data row4 col0" >East Fife</td>
+      <td id="T_dc77b_row4_col1" class="data row4 col1" >4</td>
+      <td id="T_dc77b_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_dc77b_row4_col3" class="data row4 col3" >2, 2, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_d21f3_row5_col0" class="data row5 col0" >Peterhead</td>
-      <td id="T_d21f3_row5_col1" class="data row5 col1" >4</td>
-      <td id="T_d21f3_row5_col2" class="data row5 col2" >0</td>
-      <td id="T_d21f3_row5_col3" class="data row5 col3" >3, 3, 1, 3, 3</td>
+      <td id="T_dc77b_row5_col0" class="data row5 col0" >Peterhead</td>
+      <td id="T_dc77b_row5_col1" class="data row5 col1" >4</td>
+      <td id="T_dc77b_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_dc77b_row5_col3" class="data row5 col3" >3, 3, 1, 3, 3</td>
     </tr>
     <tr>
-      <td id="T_d21f3_row6_col0" class="data row6 col0" >Alloa</td>
-      <td id="T_d21f3_row6_col1" class="data row6 col1" >3</td>
-      <td id="T_d21f3_row6_col2" class="data row6 col2" >3</td>
-      <td id="T_d21f3_row6_col3" class="data row6 col3" >2, 2, 0, 3, 4</td>
+      <td id="T_dc77b_row6_col0" class="data row6 col0" >Alloa</td>
+      <td id="T_dc77b_row6_col1" class="data row6 col1" >3</td>
+      <td id="T_dc77b_row6_col2" class="data row6 col2" >3</td>
+      <td id="T_dc77b_row6_col3" class="data row6 col3" >2, 2, 0, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_d21f3_row7_col0" class="data row7 col0" >Kelty Hearts</td>
-      <td id="T_d21f3_row7_col1" class="data row7 col1" >3</td>
-      <td id="T_d21f3_row7_col2" class="data row7 col2" >0</td>
-      <td id="T_d21f3_row7_col3" class="data row7 col3" >2, 4, 3, 3, 4</td>
+      <td id="T_dc77b_row7_col0" class="data row7 col0" >Kelty Hearts</td>
+      <td id="T_dc77b_row7_col1" class="data row7 col1" >3</td>
+      <td id="T_dc77b_row7_col2" class="data row7 col2" >0</td>
+      <td id="T_dc77b_row7_col3" class="data row7 col3" >2, 4, 3, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_d21f3_row8_col0" class="data row8 col0" >Montrose</td>
-      <td id="T_d21f3_row8_col1" class="data row8 col1" >3</td>
-      <td id="T_d21f3_row8_col2" class="data row8 col2" >0</td>
-      <td id="T_d21f3_row8_col3" class="data row8 col3" >4, 4, 3, 1, 4</td>
+      <td id="T_dc77b_row8_col0" class="data row8 col0" >Montrose</td>
+      <td id="T_dc77b_row8_col1" class="data row8 col1" >3</td>
+      <td id="T_dc77b_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_dc77b_row8_col3" class="data row8 col3" >4, 4, 3, 1, 4</td>
     </tr>
     <tr>
-      <td id="T_d21f3_row9_col0" class="data row9 col0" >Queen of Sth</td>
-      <td id="T_d21f3_row9_col1" class="data row9 col1" >3</td>
-      <td id="T_d21f3_row9_col2" class="data row9 col2" >1</td>
-      <td id="T_d21f3_row9_col3" class="data row9 col3" >1, 3, 3, 2, 3</td>
+      <td id="T_dc77b_row9_col0" class="data row9 col0" >Queen of Sth</td>
+      <td id="T_dc77b_row9_col1" class="data row9 col1" >3</td>
+      <td id="T_dc77b_row9_col2" class="data row9 col2" >1</td>
+      <td id="T_dc77b_row9_col3" class="data row9 col3" >1, 3, 3, 2, 3</td>
     </tr>
   </tbody>
 </table>
@@ -622,85 +690,85 @@
             <div class="section-container tab-content" id="ft_no_cs">
                 <h2 class="section-title">Record - Non Clean Sheet (FT)</h2>
                 <style type="text/css">
-#T_aed8f_row0_col2, #T_aed8f_row1_col2, #T_aed8f_row2_col2, #T_aed8f_row3_col2, #T_aed8f_row4_col2, #T_aed8f_row5_col2, #T_aed8f_row6_col2, #T_aed8f_row7_col2, #T_aed8f_row8_col2, #T_aed8f_row9_col2 {
+#T_1f04b_row0_col2, #T_1f04b_row1_col2, #T_1f04b_row2_col2, #T_1f04b_row3_col2, #T_1f04b_row4_col2, #T_1f04b_row5_col2, #T_1f04b_row6_col2, #T_1f04b_row7_col2, #T_1f04b_row8_col2, #T_1f04b_row9_col2 {
   font-weight: normal;
   color: #555;
 }
-#T_aed8f_row0_col3, #T_aed8f_row1_col3, #T_aed8f_row2_col3, #T_aed8f_row3_col3, #T_aed8f_row4_col3, #T_aed8f_row5_col3, #T_aed8f_row6_col3, #T_aed8f_row7_col3, #T_aed8f_row8_col3, #T_aed8f_row9_col3 {
+#T_1f04b_row0_col3, #T_1f04b_row1_col3, #T_1f04b_row2_col3, #T_1f04b_row3_col3, #T_1f04b_row4_col3, #T_1f04b_row5_col3, #T_1f04b_row6_col3, #T_1f04b_row7_col3, #T_1f04b_row8_col3, #T_1f04b_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
 </style>
-<table id="T_aed8f" class="styled-table">
+<table id="T_1f04b" class="styled-table">
   <thead>
     <tr>
-      <th id="T_aed8f_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_aed8f_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_aed8f_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_aed8f_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+      <th id="T_1f04b_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_1f04b_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_1f04b_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_1f04b_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_aed8f_row0_col0" class="data row0 col0" >Alloa</td>
-      <td id="T_aed8f_row0_col1" class="data row0 col1" >19</td>
-      <td id="T_aed8f_row0_col2" class="data row0 col2" >0</td>
-      <td id="T_aed8f_row0_col3" class="data row0 col3" >2, 2, 0, 3, 4</td>
+      <td id="T_1f04b_row0_col0" class="data row0 col0" >Alloa</td>
+      <td id="T_1f04b_row0_col1" class="data row0 col1" >19</td>
+      <td id="T_1f04b_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_1f04b_row0_col3" class="data row0 col3" >2, 2, 0, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_aed8f_row1_col0" class="data row1 col0" >Stenhousemuir</td>
-      <td id="T_aed8f_row1_col1" class="data row1 col1" >19</td>
-      <td id="T_aed8f_row1_col2" class="data row1 col2" >2</td>
-      <td id="T_aed8f_row1_col3" class="data row1 col3" >4, 1, 0, 2, 4</td>
+      <td id="T_1f04b_row1_col0" class="data row1 col0" >Stenhousemuir</td>
+      <td id="T_1f04b_row1_col1" class="data row1 col1" >19</td>
+      <td id="T_1f04b_row1_col2" class="data row1 col2" >2</td>
+      <td id="T_1f04b_row1_col3" class="data row1 col3" >4, 1, 0, 2, 4</td>
     </tr>
     <tr>
-      <td id="T_aed8f_row2_col0" class="data row2 col0" >Peterhead</td>
-      <td id="T_aed8f_row2_col1" class="data row2 col1" >19</td>
-      <td id="T_aed8f_row2_col2" class="data row2 col2" >3</td>
-      <td id="T_aed8f_row2_col3" class="data row2 col3" >3, 3, 1, 3, 3</td>
+      <td id="T_1f04b_row2_col0" class="data row2 col0" >Peterhead</td>
+      <td id="T_1f04b_row2_col1" class="data row2 col1" >19</td>
+      <td id="T_1f04b_row2_col2" class="data row2 col2" >3</td>
+      <td id="T_1f04b_row2_col3" class="data row2 col3" >3, 3, 1, 3, 3</td>
     </tr>
     <tr>
-      <td id="T_aed8f_row3_col0" class="data row3 col0" >East Fife</td>
-      <td id="T_aed8f_row3_col1" class="data row3 col1" >17</td>
-      <td id="T_aed8f_row3_col2" class="data row3 col2" >2</td>
-      <td id="T_aed8f_row3_col3" class="data row3 col3" >2, 2, 3, 2, 3</td>
+      <td id="T_1f04b_row3_col0" class="data row3 col0" >East Fife</td>
+      <td id="T_1f04b_row3_col1" class="data row3 col1" >17</td>
+      <td id="T_1f04b_row3_col2" class="data row3 col2" >2</td>
+      <td id="T_1f04b_row3_col3" class="data row3 col3" >2, 2, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_aed8f_row4_col0" class="data row4 col0" >Queen of Sth</td>
-      <td id="T_aed8f_row4_col1" class="data row4 col1" >16</td>
-      <td id="T_aed8f_row4_col2" class="data row4 col2" >0</td>
-      <td id="T_aed8f_row4_col3" class="data row4 col3" >1, 3, 3, 2, 3</td>
+      <td id="T_1f04b_row4_col0" class="data row4 col0" >Queen of Sth</td>
+      <td id="T_1f04b_row4_col1" class="data row4 col1" >16</td>
+      <td id="T_1f04b_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_1f04b_row4_col3" class="data row4 col3" >1, 3, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_aed8f_row5_col0" class="data row5 col0" >Hamilton</td>
-      <td id="T_aed8f_row5_col1" class="data row5 col1" >15</td>
-      <td id="T_aed8f_row5_col2" class="data row5 col2" >0</td>
-      <td id="T_aed8f_row5_col3" class="data row5 col3" >4, 4, 3, 2, 3</td>
+      <td id="T_1f04b_row5_col0" class="data row5 col0" >Hamilton</td>
+      <td id="T_1f04b_row5_col1" class="data row5 col1" >15</td>
+      <td id="T_1f04b_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_1f04b_row5_col3" class="data row5 col3" >4, 4, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_aed8f_row6_col0" class="data row6 col0" >Montrose</td>
-      <td id="T_aed8f_row6_col1" class="data row6 col1" >15</td>
-      <td id="T_aed8f_row6_col2" class="data row6 col2" >7</td>
-      <td id="T_aed8f_row6_col3" class="data row6 col3" >4, 4, 3, 1, 4</td>
+      <td id="T_1f04b_row6_col0" class="data row6 col0" >Montrose</td>
+      <td id="T_1f04b_row6_col1" class="data row6 col1" >15</td>
+      <td id="T_1f04b_row6_col2" class="data row6 col2" >7</td>
+      <td id="T_1f04b_row6_col3" class="data row6 col3" >4, 4, 3, 1, 4</td>
     </tr>
     <tr>
-      <td id="T_aed8f_row7_col0" class="data row7 col0" >Cove Rangers</td>
-      <td id="T_aed8f_row7_col1" class="data row7 col1" >12</td>
-      <td id="T_aed8f_row7_col2" class="data row7 col2" >2</td>
-      <td id="T_aed8f_row7_col3" class="data row7 col3" >2, 1, 3, 3, 1</td>
+      <td id="T_1f04b_row7_col0" class="data row7 col0" >Cove Rangers</td>
+      <td id="T_1f04b_row7_col1" class="data row7 col1" >12</td>
+      <td id="T_1f04b_row7_col2" class="data row7 col2" >2</td>
+      <td id="T_1f04b_row7_col3" class="data row7 col3" >2, 1, 3, 3, 1</td>
     </tr>
     <tr>
-      <td id="T_aed8f_row8_col0" class="data row8 col0" >Inverness C</td>
-      <td id="T_aed8f_row8_col1" class="data row8 col1" >11</td>
-      <td id="T_aed8f_row8_col2" class="data row8 col2" >0</td>
-      <td id="T_aed8f_row8_col3" class="data row8 col3" >4, 4, 1, 1, 1</td>
+      <td id="T_1f04b_row8_col0" class="data row8 col0" >Inverness C</td>
+      <td id="T_1f04b_row8_col1" class="data row8 col1" >11</td>
+      <td id="T_1f04b_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_1f04b_row8_col3" class="data row8 col3" >4, 4, 1, 1, 1</td>
     </tr>
     <tr>
-      <td id="T_aed8f_row9_col0" class="data row9 col0" >Kelty Hearts</td>
-      <td id="T_aed8f_row9_col1" class="data row9 col1" >10</td>
-      <td id="T_aed8f_row9_col2" class="data row9 col2" >6</td>
-      <td id="T_aed8f_row9_col3" class="data row9 col3" >2, 4, 3, 3, 4</td>
+      <td id="T_1f04b_row9_col0" class="data row9 col0" >Kelty Hearts</td>
+      <td id="T_1f04b_row9_col1" class="data row9 col1" >10</td>
+      <td id="T_1f04b_row9_col2" class="data row9 col2" >6</td>
+      <td id="T_1f04b_row9_col3" class="data row9 col3" >2, 4, 3, 3, 4</td>
     </tr>
   </tbody>
 </table>
@@ -710,85 +778,85 @@
             <div class="section-container tab-content" id="ft_moins_0_5">
                 <h2 class="section-title">Record - Fin de Match -0.5 (0 Buts)</h2>
                 <style type="text/css">
-#T_38e7e_row0_col2, #T_38e7e_row1_col2, #T_38e7e_row2_col2, #T_38e7e_row3_col2, #T_38e7e_row4_col2, #T_38e7e_row5_col2, #T_38e7e_row6_col2, #T_38e7e_row7_col2, #T_38e7e_row8_col2, #T_38e7e_row9_col2 {
+#T_d2967_row0_col2, #T_d2967_row1_col2, #T_d2967_row2_col2, #T_d2967_row3_col2, #T_d2967_row4_col2, #T_d2967_row5_col2, #T_d2967_row6_col2, #T_d2967_row7_col2, #T_d2967_row8_col2, #T_d2967_row9_col2 {
   font-weight: normal;
   color: #555;
 }
-#T_38e7e_row0_col3, #T_38e7e_row1_col3, #T_38e7e_row2_col3, #T_38e7e_row3_col3, #T_38e7e_row4_col3, #T_38e7e_row5_col3, #T_38e7e_row6_col3, #T_38e7e_row7_col3, #T_38e7e_row8_col3, #T_38e7e_row9_col3 {
+#T_d2967_row0_col3, #T_d2967_row1_col3, #T_d2967_row2_col3, #T_d2967_row3_col3, #T_d2967_row4_col3, #T_d2967_row5_col3, #T_d2967_row6_col3, #T_d2967_row7_col3, #T_d2967_row8_col3, #T_d2967_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
 </style>
-<table id="T_38e7e" class="styled-table">
+<table id="T_d2967" class="styled-table">
   <thead>
     <tr>
-      <th id="T_38e7e_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_38e7e_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_38e7e_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_38e7e_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+      <th id="T_d2967_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_d2967_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_d2967_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_d2967_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_38e7e_row0_col0" class="data row0 col0" >Stenhousemuir</td>
-      <td id="T_38e7e_row0_col1" class="data row0 col1" >3</td>
-      <td id="T_38e7e_row0_col2" class="data row0 col2" >0</td>
-      <td id="T_38e7e_row0_col3" class="data row0 col3" >4, 1, 0, 2, 4</td>
+      <td id="T_d2967_row0_col0" class="data row0 col0" >Stenhousemuir</td>
+      <td id="T_d2967_row0_col1" class="data row0 col1" >3</td>
+      <td id="T_d2967_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_d2967_row0_col3" class="data row0 col3" >4, 1, 0, 2, 4</td>
     </tr>
     <tr>
-      <td id="T_38e7e_row1_col0" class="data row1 col0" >Kelty Hearts</td>
-      <td id="T_38e7e_row1_col1" class="data row1 col1" >3</td>
-      <td id="T_38e7e_row1_col2" class="data row1 col2" >0</td>
-      <td id="T_38e7e_row1_col3" class="data row1 col3" >2, 4, 3, 3, 4</td>
+      <td id="T_d2967_row1_col0" class="data row1 col0" >Kelty Hearts</td>
+      <td id="T_d2967_row1_col1" class="data row1 col1" >3</td>
+      <td id="T_d2967_row1_col2" class="data row1 col2" >0</td>
+      <td id="T_d2967_row1_col3" class="data row1 col3" >2, 4, 3, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_38e7e_row2_col0" class="data row2 col0" >Peterhead</td>
-      <td id="T_38e7e_row2_col1" class="data row2 col1" >2</td>
-      <td id="T_38e7e_row2_col2" class="data row2 col2" >0</td>
-      <td id="T_38e7e_row2_col3" class="data row2 col3" >3, 3, 1, 3, 3</td>
+      <td id="T_d2967_row2_col0" class="data row2 col0" >Peterhead</td>
+      <td id="T_d2967_row2_col1" class="data row2 col1" >2</td>
+      <td id="T_d2967_row2_col2" class="data row2 col2" >0</td>
+      <td id="T_d2967_row2_col3" class="data row2 col3" >3, 3, 1, 3, 3</td>
     </tr>
     <tr>
-      <td id="T_38e7e_row3_col0" class="data row3 col0" >Montrose</td>
-      <td id="T_38e7e_row3_col1" class="data row3 col1" >2</td>
-      <td id="T_38e7e_row3_col2" class="data row3 col2" >0</td>
-      <td id="T_38e7e_row3_col3" class="data row3 col3" >4, 4, 3, 1, 4</td>
+      <td id="T_d2967_row3_col0" class="data row3 col0" >Montrose</td>
+      <td id="T_d2967_row3_col1" class="data row3 col1" >2</td>
+      <td id="T_d2967_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_d2967_row3_col3" class="data row3 col3" >4, 4, 3, 1, 4</td>
     </tr>
     <tr>
-      <td id="T_38e7e_row4_col0" class="data row4 col0" >Inverness C</td>
-      <td id="T_38e7e_row4_col1" class="data row4 col1" >2</td>
-      <td id="T_38e7e_row4_col2" class="data row4 col2" >0</td>
-      <td id="T_38e7e_row4_col3" class="data row4 col3" >4, 4, 1, 1, 1</td>
+      <td id="T_d2967_row4_col0" class="data row4 col0" >Inverness C</td>
+      <td id="T_d2967_row4_col1" class="data row4 col1" >2</td>
+      <td id="T_d2967_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_d2967_row4_col3" class="data row4 col3" >4, 4, 1, 1, 1</td>
     </tr>
     <tr>
-      <td id="T_38e7e_row5_col0" class="data row5 col0" >East Fife</td>
-      <td id="T_38e7e_row5_col1" class="data row5 col1" >2</td>
-      <td id="T_38e7e_row5_col2" class="data row5 col2" >0</td>
-      <td id="T_38e7e_row5_col3" class="data row5 col3" >2, 2, 3, 2, 3</td>
+      <td id="T_d2967_row5_col0" class="data row5 col0" >East Fife</td>
+      <td id="T_d2967_row5_col1" class="data row5 col1" >2</td>
+      <td id="T_d2967_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_d2967_row5_col3" class="data row5 col3" >2, 2, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_38e7e_row6_col0" class="data row6 col0" >Queen of Sth</td>
-      <td id="T_38e7e_row6_col1" class="data row6 col1" >2</td>
-      <td id="T_38e7e_row6_col2" class="data row6 col2" >0</td>
-      <td id="T_38e7e_row6_col3" class="data row6 col3" >1, 3, 3, 2, 3</td>
+      <td id="T_d2967_row6_col0" class="data row6 col0" >Queen of Sth</td>
+      <td id="T_d2967_row6_col1" class="data row6 col1" >2</td>
+      <td id="T_d2967_row6_col2" class="data row6 col2" >0</td>
+      <td id="T_d2967_row6_col3" class="data row6 col3" >1, 3, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_38e7e_row7_col0" class="data row7 col0" >Alloa</td>
-      <td id="T_38e7e_row7_col1" class="data row7 col1" >1</td>
-      <td id="T_38e7e_row7_col2" class="data row7 col2" >0</td>
-      <td id="T_38e7e_row7_col3" class="data row7 col3" >2, 2, 0, 3, 4</td>
+      <td id="T_d2967_row7_col0" class="data row7 col0" >Alloa</td>
+      <td id="T_d2967_row7_col1" class="data row7 col1" >1</td>
+      <td id="T_d2967_row7_col2" class="data row7 col2" >0</td>
+      <td id="T_d2967_row7_col3" class="data row7 col3" >2, 2, 0, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_38e7e_row8_col0" class="data row8 col0" >Cove Rangers</td>
-      <td id="T_38e7e_row8_col1" class="data row8 col1" >1</td>
-      <td id="T_38e7e_row8_col2" class="data row8 col2" >0</td>
-      <td id="T_38e7e_row8_col3" class="data row8 col3" >2, 1, 3, 3, 1</td>
+      <td id="T_d2967_row8_col0" class="data row8 col0" >Cove Rangers</td>
+      <td id="T_d2967_row8_col1" class="data row8 col1" >1</td>
+      <td id="T_d2967_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_d2967_row8_col3" class="data row8 col3" >2, 1, 3, 3, 1</td>
     </tr>
     <tr>
-      <td id="T_38e7e_row9_col0" class="data row9 col0" >Hamilton</td>
-      <td id="T_38e7e_row9_col1" class="data row9 col1" >1</td>
-      <td id="T_38e7e_row9_col2" class="data row9 col2" >0</td>
-      <td id="T_38e7e_row9_col3" class="data row9 col3" >4, 4, 3, 2, 3</td>
+      <td id="T_d2967_row9_col0" class="data row9 col0" >Hamilton</td>
+      <td id="T_d2967_row9_col1" class="data row9 col1" >1</td>
+      <td id="T_d2967_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_d2967_row9_col3" class="data row9 col3" >4, 4, 3, 2, 3</td>
     </tr>
   </tbody>
 </table>
@@ -798,85 +866,85 @@
             <div class="section-container tab-content" id="ft_plus_1_5">
                 <h2 class="section-title">Record - Fin de Match +1.5 (2+ Buts)</h2>
                 <style type="text/css">
-#T_a75b0_row0_col2, #T_a75b0_row1_col2, #T_a75b0_row2_col2, #T_a75b0_row3_col2, #T_a75b0_row4_col2, #T_a75b0_row5_col2, #T_a75b0_row6_col2, #T_a75b0_row7_col2, #T_a75b0_row8_col2, #T_a75b0_row9_col2 {
+#T_65c2a_row0_col2, #T_65c2a_row1_col2, #T_65c2a_row2_col2, #T_65c2a_row3_col2, #T_65c2a_row4_col2, #T_65c2a_row5_col2, #T_65c2a_row6_col2, #T_65c2a_row7_col2, #T_65c2a_row8_col2, #T_65c2a_row9_col2 {
   font-weight: normal;
   color: #555;
 }
-#T_a75b0_row0_col3, #T_a75b0_row1_col3, #T_a75b0_row2_col3, #T_a75b0_row3_col3, #T_a75b0_row4_col3, #T_a75b0_row5_col3, #T_a75b0_row6_col3, #T_a75b0_row7_col3, #T_a75b0_row8_col3, #T_a75b0_row9_col3 {
+#T_65c2a_row0_col3, #T_65c2a_row1_col3, #T_65c2a_row2_col3, #T_65c2a_row3_col3, #T_65c2a_row4_col3, #T_65c2a_row5_col3, #T_65c2a_row6_col3, #T_65c2a_row7_col3, #T_65c2a_row8_col3, #T_65c2a_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
 </style>
-<table id="T_a75b0" class="styled-table">
+<table id="T_65c2a" class="styled-table">
   <thead>
     <tr>
-      <th id="T_a75b0_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_a75b0_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_a75b0_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_a75b0_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+      <th id="T_65c2a_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_65c2a_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_65c2a_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_65c2a_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_a75b0_row0_col0" class="data row0 col0" >Stenhousemuir</td>
-      <td id="T_a75b0_row0_col1" class="data row0 col1" >23</td>
-      <td id="T_a75b0_row0_col2" class="data row0 col2" >2</td>
-      <td id="T_a75b0_row0_col3" class="data row0 col3" >4, 1, 0, 2, 4</td>
+      <td id="T_65c2a_row0_col0" class="data row0 col0" >Stenhousemuir</td>
+      <td id="T_65c2a_row0_col1" class="data row0 col1" >23</td>
+      <td id="T_65c2a_row0_col2" class="data row0 col2" >2</td>
+      <td id="T_65c2a_row0_col3" class="data row0 col3" >4, 1, 0, 2, 4</td>
     </tr>
     <tr>
-      <td id="T_a75b0_row1_col0" class="data row1 col0" >East Fife</td>
-      <td id="T_a75b0_row1_col1" class="data row1 col1" >22</td>
-      <td id="T_a75b0_row1_col2" class="data row1 col2" >11</td>
-      <td id="T_a75b0_row1_col3" class="data row1 col3" >2, 2, 3, 2, 3</td>
+      <td id="T_65c2a_row1_col0" class="data row1 col0" >East Fife</td>
+      <td id="T_65c2a_row1_col1" class="data row1 col1" >22</td>
+      <td id="T_65c2a_row1_col2" class="data row1 col2" >11</td>
+      <td id="T_65c2a_row1_col3" class="data row1 col3" >2, 2, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_a75b0_row2_col0" class="data row2 col0" >Peterhead</td>
-      <td id="T_a75b0_row2_col1" class="data row2 col1" >19</td>
-      <td id="T_a75b0_row2_col2" class="data row2 col2" >2</td>
-      <td id="T_a75b0_row2_col3" class="data row2 col3" >3, 3, 1, 3, 3</td>
+      <td id="T_65c2a_row2_col0" class="data row2 col0" >Peterhead</td>
+      <td id="T_65c2a_row2_col1" class="data row2 col1" >19</td>
+      <td id="T_65c2a_row2_col2" class="data row2 col2" >2</td>
+      <td id="T_65c2a_row2_col3" class="data row2 col3" >3, 3, 1, 3, 3</td>
     </tr>
     <tr>
-      <td id="T_a75b0_row3_col0" class="data row3 col0" >Alloa</td>
-      <td id="T_a75b0_row3_col1" class="data row3 col1" >19</td>
-      <td id="T_a75b0_row3_col2" class="data row3 col2" >2</td>
-      <td id="T_a75b0_row3_col3" class="data row3 col3" >2, 2, 0, 3, 4</td>
+      <td id="T_65c2a_row3_col0" class="data row3 col0" >Alloa</td>
+      <td id="T_65c2a_row3_col1" class="data row3 col1" >19</td>
+      <td id="T_65c2a_row3_col2" class="data row3 col2" >2</td>
+      <td id="T_65c2a_row3_col3" class="data row3 col3" >2, 2, 0, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_a75b0_row4_col0" class="data row4 col0" >Cove Rangers</td>
-      <td id="T_a75b0_row4_col1" class="data row4 col1" >18</td>
-      <td id="T_a75b0_row4_col2" class="data row4 col2" >0</td>
-      <td id="T_a75b0_row4_col3" class="data row4 col3" >2, 1, 3, 3, 1</td>
+      <td id="T_65c2a_row4_col0" class="data row4 col0" >Cove Rangers</td>
+      <td id="T_65c2a_row4_col1" class="data row4 col1" >18</td>
+      <td id="T_65c2a_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_65c2a_row4_col3" class="data row4 col3" >2, 1, 3, 3, 1</td>
     </tr>
     <tr>
-      <td id="T_a75b0_row5_col0" class="data row5 col0" >Inverness C</td>
-      <td id="T_a75b0_row5_col1" class="data row5 col1" >17</td>
-      <td id="T_a75b0_row5_col2" class="data row5 col2" >0</td>
-      <td id="T_a75b0_row5_col3" class="data row5 col3" >4, 4, 1, 1, 1</td>
+      <td id="T_65c2a_row5_col0" class="data row5 col0" >Inverness C</td>
+      <td id="T_65c2a_row5_col1" class="data row5 col1" >17</td>
+      <td id="T_65c2a_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_65c2a_row5_col3" class="data row5 col3" >4, 4, 1, 1, 1</td>
     </tr>
     <tr>
-      <td id="T_a75b0_row6_col0" class="data row6 col0" >Queen of Sth</td>
-      <td id="T_a75b0_row6_col1" class="data row6 col1" >17</td>
-      <td id="T_a75b0_row6_col2" class="data row6 col2" >4</td>
-      <td id="T_a75b0_row6_col3" class="data row6 col3" >1, 3, 3, 2, 3</td>
+      <td id="T_65c2a_row6_col0" class="data row6 col0" >Queen of Sth</td>
+      <td id="T_65c2a_row6_col1" class="data row6 col1" >17</td>
+      <td id="T_65c2a_row6_col2" class="data row6 col2" >4</td>
+      <td id="T_65c2a_row6_col3" class="data row6 col3" >1, 3, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_a75b0_row7_col0" class="data row7 col0" >Montrose</td>
-      <td id="T_a75b0_row7_col1" class="data row7 col1" >13</td>
-      <td id="T_a75b0_row7_col2" class="data row7 col2" >1</td>
-      <td id="T_a75b0_row7_col3" class="data row7 col3" >4, 4, 3, 1, 4</td>
+      <td id="T_65c2a_row7_col0" class="data row7 col0" >Montrose</td>
+      <td id="T_65c2a_row7_col1" class="data row7 col1" >13</td>
+      <td id="T_65c2a_row7_col2" class="data row7 col2" >1</td>
+      <td id="T_65c2a_row7_col3" class="data row7 col3" >4, 4, 3, 1, 4</td>
     </tr>
     <tr>
-      <td id="T_a75b0_row8_col0" class="data row8 col0" >Kelty Hearts</td>
-      <td id="T_a75b0_row8_col1" class="data row8 col1" >11</td>
-      <td id="T_a75b0_row8_col2" class="data row8 col2" >8</td>
-      <td id="T_a75b0_row8_col3" class="data row8 col3" >2, 4, 3, 3, 4</td>
+      <td id="T_65c2a_row8_col0" class="data row8 col0" >Kelty Hearts</td>
+      <td id="T_65c2a_row8_col1" class="data row8 col1" >11</td>
+      <td id="T_65c2a_row8_col2" class="data row8 col2" >8</td>
+      <td id="T_65c2a_row8_col3" class="data row8 col3" >2, 4, 3, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_a75b0_row9_col0" class="data row9 col0" >Hamilton</td>
-      <td id="T_a75b0_row9_col1" class="data row9 col1" >11</td>
-      <td id="T_a75b0_row9_col2" class="data row9 col2" >8</td>
-      <td id="T_a75b0_row9_col3" class="data row9 col3" >4, 4, 3, 2, 3</td>
+      <td id="T_65c2a_row9_col0" class="data row9 col0" >Hamilton</td>
+      <td id="T_65c2a_row9_col1" class="data row9 col1" >11</td>
+      <td id="T_65c2a_row9_col2" class="data row9 col2" >8</td>
+      <td id="T_65c2a_row9_col3" class="data row9 col3" >4, 4, 3, 2, 3</td>
     </tr>
   </tbody>
 </table>
@@ -886,90 +954,90 @@
             <div class="section-container tab-content" id="ft_moins_1_5">
                 <h2 class="section-title">Record - Fin de Match -1.5 (0-1 Buts)</h2>
                 <style type="text/css">
-#T_9717e_row0_col2 {
+#T_aada3_row0_col2 {
   background-color: #e8f5e9;
   color: #2e7d32;
   font-weight: bold;
 }
-#T_9717e_row0_col3, #T_9717e_row1_col3, #T_9717e_row2_col3, #T_9717e_row3_col3, #T_9717e_row4_col3, #T_9717e_row5_col3, #T_9717e_row6_col3, #T_9717e_row7_col3, #T_9717e_row8_col3, #T_9717e_row9_col3 {
+#T_aada3_row0_col3, #T_aada3_row1_col3, #T_aada3_row2_col3, #T_aada3_row3_col3, #T_aada3_row4_col3, #T_aada3_row5_col3, #T_aada3_row6_col3, #T_aada3_row7_col3, #T_aada3_row8_col3, #T_aada3_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
-#T_9717e_row1_col2, #T_9717e_row2_col2, #T_9717e_row3_col2, #T_9717e_row4_col2, #T_9717e_row5_col2, #T_9717e_row6_col2, #T_9717e_row7_col2, #T_9717e_row8_col2, #T_9717e_row9_col2 {
+#T_aada3_row1_col2, #T_aada3_row2_col2, #T_aada3_row3_col2, #T_aada3_row4_col2, #T_aada3_row5_col2, #T_aada3_row6_col2, #T_aada3_row7_col2, #T_aada3_row8_col2, #T_aada3_row9_col2 {
   font-weight: normal;
   color: #555;
 }
 </style>
-<table id="T_9717e" class="styled-table">
+<table id="T_aada3" class="styled-table">
   <thead>
     <tr>
-      <th id="T_9717e_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_9717e_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_9717e_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_9717e_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+      <th id="T_aada3_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_aada3_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_aada3_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_aada3_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_9717e_row0_col0" class="data row0 col0" >Inverness C</td>
-      <td id="T_9717e_row0_col1" class="data row0 col1" >5</td>
-      <td id="T_9717e_row0_col2" class="data row0 col2" >3</td>
-      <td id="T_9717e_row0_col3" class="data row0 col3" >4, 4, 1, 1, 1</td>
+      <td id="T_aada3_row0_col0" class="data row0 col0" >Inverness C</td>
+      <td id="T_aada3_row0_col1" class="data row0 col1" >5</td>
+      <td id="T_aada3_row0_col2" class="data row0 col2" >3</td>
+      <td id="T_aada3_row0_col3" class="data row0 col3" >4, 4, 1, 1, 1</td>
     </tr>
     <tr>
-      <td id="T_9717e_row1_col0" class="data row1 col0" >Alloa</td>
-      <td id="T_9717e_row1_col1" class="data row1 col1" >4</td>
-      <td id="T_9717e_row1_col2" class="data row1 col2" >0</td>
-      <td id="T_9717e_row1_col3" class="data row1 col3" >2, 2, 0, 3, 4</td>
+      <td id="T_aada3_row1_col0" class="data row1 col0" >Alloa</td>
+      <td id="T_aada3_row1_col1" class="data row1 col1" >4</td>
+      <td id="T_aada3_row1_col2" class="data row1 col2" >0</td>
+      <td id="T_aada3_row1_col3" class="data row1 col3" >2, 2, 0, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_9717e_row2_col0" class="data row2 col0" >Cove Rangers</td>
-      <td id="T_9717e_row2_col1" class="data row2 col1" >4</td>
-      <td id="T_9717e_row2_col2" class="data row2 col2" >1</td>
-      <td id="T_9717e_row2_col3" class="data row2 col3" >2, 1, 3, 3, 1</td>
+      <td id="T_aada3_row2_col0" class="data row2 col0" >Cove Rangers</td>
+      <td id="T_aada3_row2_col1" class="data row2 col1" >4</td>
+      <td id="T_aada3_row2_col2" class="data row2 col2" >1</td>
+      <td id="T_aada3_row2_col3" class="data row2 col3" >2, 1, 3, 3, 1</td>
     </tr>
     <tr>
-      <td id="T_9717e_row3_col0" class="data row3 col0" >Hamilton</td>
-      <td id="T_9717e_row3_col1" class="data row3 col1" >4</td>
-      <td id="T_9717e_row3_col2" class="data row3 col2" >0</td>
-      <td id="T_9717e_row3_col3" class="data row3 col3" >4, 4, 3, 2, 3</td>
+      <td id="T_aada3_row3_col0" class="data row3 col0" >Hamilton</td>
+      <td id="T_aada3_row3_col1" class="data row3 col1" >4</td>
+      <td id="T_aada3_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_aada3_row3_col3" class="data row3 col3" >4, 4, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_9717e_row4_col0" class="data row4 col0" >Kelty Hearts</td>
-      <td id="T_9717e_row4_col1" class="data row4 col1" >4</td>
-      <td id="T_9717e_row4_col2" class="data row4 col2" >0</td>
-      <td id="T_9717e_row4_col3" class="data row4 col3" >2, 4, 3, 3, 4</td>
+      <td id="T_aada3_row4_col0" class="data row4 col0" >Kelty Hearts</td>
+      <td id="T_aada3_row4_col1" class="data row4 col1" >4</td>
+      <td id="T_aada3_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_aada3_row4_col3" class="data row4 col3" >2, 4, 3, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_9717e_row5_col0" class="data row5 col0" >Montrose</td>
-      <td id="T_9717e_row5_col1" class="data row5 col1" >3</td>
-      <td id="T_9717e_row5_col2" class="data row5 col2" >0</td>
-      <td id="T_9717e_row5_col3" class="data row5 col3" >4, 4, 3, 1, 4</td>
+      <td id="T_aada3_row5_col0" class="data row5 col0" >Montrose</td>
+      <td id="T_aada3_row5_col1" class="data row5 col1" >3</td>
+      <td id="T_aada3_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_aada3_row5_col3" class="data row5 col3" >4, 4, 3, 1, 4</td>
     </tr>
     <tr>
-      <td id="T_9717e_row6_col0" class="data row6 col0" >Queen of Sth</td>
-      <td id="T_9717e_row6_col1" class="data row6 col1" >3</td>
-      <td id="T_9717e_row6_col2" class="data row6 col2" >0</td>
-      <td id="T_9717e_row6_col3" class="data row6 col3" >1, 3, 3, 2, 3</td>
+      <td id="T_aada3_row6_col0" class="data row6 col0" >Queen of Sth</td>
+      <td id="T_aada3_row6_col1" class="data row6 col1" >3</td>
+      <td id="T_aada3_row6_col2" class="data row6 col2" >0</td>
+      <td id="T_aada3_row6_col3" class="data row6 col3" >1, 3, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_9717e_row7_col0" class="data row7 col0" >Peterhead</td>
-      <td id="T_9717e_row7_col1" class="data row7 col1" >3</td>
-      <td id="T_9717e_row7_col2" class="data row7 col2" >0</td>
-      <td id="T_9717e_row7_col3" class="data row7 col3" >3, 3, 1, 3, 3</td>
+      <td id="T_aada3_row7_col0" class="data row7 col0" >Peterhead</td>
+      <td id="T_aada3_row7_col1" class="data row7 col1" >3</td>
+      <td id="T_aada3_row7_col2" class="data row7 col2" >0</td>
+      <td id="T_aada3_row7_col3" class="data row7 col3" >3, 3, 1, 3, 3</td>
     </tr>
     <tr>
-      <td id="T_9717e_row8_col0" class="data row8 col0" >Stenhousemuir</td>
-      <td id="T_9717e_row8_col1" class="data row8 col1" >3</td>
-      <td id="T_9717e_row8_col2" class="data row8 col2" >0</td>
-      <td id="T_9717e_row8_col3" class="data row8 col3" >4, 1, 0, 2, 4</td>
+      <td id="T_aada3_row8_col0" class="data row8 col0" >Stenhousemuir</td>
+      <td id="T_aada3_row8_col1" class="data row8 col1" >3</td>
+      <td id="T_aada3_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_aada3_row8_col3" class="data row8 col3" >4, 1, 0, 2, 4</td>
     </tr>
     <tr>
-      <td id="T_9717e_row9_col0" class="data row9 col0" >East Fife</td>
-      <td id="T_9717e_row9_col1" class="data row9 col1" >2</td>
-      <td id="T_9717e_row9_col2" class="data row9 col2" >0</td>
-      <td id="T_9717e_row9_col3" class="data row9 col3" >2, 2, 3, 2, 3</td>
+      <td id="T_aada3_row9_col0" class="data row9 col0" >East Fife</td>
+      <td id="T_aada3_row9_col1" class="data row9 col1" >2</td>
+      <td id="T_aada3_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_aada3_row9_col3" class="data row9 col3" >2, 2, 3, 2, 3</td>
     </tr>
   </tbody>
 </table>
@@ -979,85 +1047,85 @@
             <div class="section-container tab-content" id="ft_plus_2_5">
                 <h2 class="section-title">Record - Fin de Match +2.5 (3+ Buts)</h2>
                 <style type="text/css">
-#T_3a3e1_row0_col2, #T_3a3e1_row1_col2, #T_3a3e1_row2_col2, #T_3a3e1_row3_col2, #T_3a3e1_row4_col2, #T_3a3e1_row5_col2, #T_3a3e1_row6_col2, #T_3a3e1_row7_col2, #T_3a3e1_row8_col2, #T_3a3e1_row9_col2 {
+#T_a0a6a_row0_col2, #T_a0a6a_row1_col2, #T_a0a6a_row2_col2, #T_a0a6a_row3_col2, #T_a0a6a_row4_col2, #T_a0a6a_row5_col2, #T_a0a6a_row6_col2, #T_a0a6a_row7_col2, #T_a0a6a_row8_col2, #T_a0a6a_row9_col2 {
   font-weight: normal;
   color: #555;
 }
-#T_3a3e1_row0_col3, #T_3a3e1_row1_col3, #T_3a3e1_row2_col3, #T_3a3e1_row3_col3, #T_3a3e1_row4_col3, #T_3a3e1_row5_col3, #T_3a3e1_row6_col3, #T_3a3e1_row7_col3, #T_3a3e1_row8_col3, #T_3a3e1_row9_col3 {
+#T_a0a6a_row0_col3, #T_a0a6a_row1_col3, #T_a0a6a_row2_col3, #T_a0a6a_row3_col3, #T_a0a6a_row4_col3, #T_a0a6a_row5_col3, #T_a0a6a_row6_col3, #T_a0a6a_row7_col3, #T_a0a6a_row8_col3, #T_a0a6a_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
 </style>
-<table id="T_3a3e1" class="styled-table">
+<table id="T_a0a6a" class="styled-table">
   <thead>
     <tr>
-      <th id="T_3a3e1_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_3a3e1_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_3a3e1_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_3a3e1_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+      <th id="T_a0a6a_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_a0a6a_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_a0a6a_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_a0a6a_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_3a3e1_row0_col0" class="data row0 col0" >Stenhousemuir</td>
-      <td id="T_3a3e1_row0_col1" class="data row0 col1" >13</td>
-      <td id="T_3a3e1_row0_col2" class="data row0 col2" >1</td>
-      <td id="T_3a3e1_row0_col3" class="data row0 col3" >4, 1, 0, 2, 4</td>
+      <td id="T_a0a6a_row0_col0" class="data row0 col0" >Stenhousemuir</td>
+      <td id="T_a0a6a_row0_col1" class="data row0 col1" >13</td>
+      <td id="T_a0a6a_row0_col2" class="data row0 col2" >1</td>
+      <td id="T_a0a6a_row0_col3" class="data row0 col3" >4, 1, 0, 2, 4</td>
     </tr>
     <tr>
-      <td id="T_3a3e1_row1_col0" class="data row1 col0" >Queen of Sth</td>
-      <td id="T_3a3e1_row1_col1" class="data row1 col1" >12</td>
-      <td id="T_3a3e1_row1_col2" class="data row1 col2" >1</td>
-      <td id="T_3a3e1_row1_col3" class="data row1 col3" >1, 3, 3, 2, 3</td>
+      <td id="T_a0a6a_row1_col0" class="data row1 col0" >Queen of Sth</td>
+      <td id="T_a0a6a_row1_col1" class="data row1 col1" >12</td>
+      <td id="T_a0a6a_row1_col2" class="data row1 col2" >1</td>
+      <td id="T_a0a6a_row1_col3" class="data row1 col3" >1, 3, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_3a3e1_row2_col0" class="data row2 col0" >East Fife</td>
-      <td id="T_3a3e1_row2_col1" class="data row2 col1" >10</td>
-      <td id="T_3a3e1_row2_col2" class="data row2 col2" >1</td>
-      <td id="T_3a3e1_row2_col3" class="data row2 col3" >2, 2, 3, 2, 3</td>
+      <td id="T_a0a6a_row2_col0" class="data row2 col0" >East Fife</td>
+      <td id="T_a0a6a_row2_col1" class="data row2 col1" >10</td>
+      <td id="T_a0a6a_row2_col2" class="data row2 col2" >1</td>
+      <td id="T_a0a6a_row2_col3" class="data row2 col3" >2, 2, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_3a3e1_row3_col0" class="data row3 col0" >Peterhead</td>
-      <td id="T_3a3e1_row3_col1" class="data row3 col1" >8</td>
-      <td id="T_3a3e1_row3_col2" class="data row3 col2" >2</td>
-      <td id="T_3a3e1_row3_col3" class="data row3 col3" >3, 3, 1, 3, 3</td>
+      <td id="T_a0a6a_row3_col0" class="data row3 col0" >Peterhead</td>
+      <td id="T_a0a6a_row3_col1" class="data row3 col1" >8</td>
+      <td id="T_a0a6a_row3_col2" class="data row3 col2" >2</td>
+      <td id="T_a0a6a_row3_col3" class="data row3 col3" >3, 3, 1, 3, 3</td>
     </tr>
     <tr>
-      <td id="T_3a3e1_row4_col0" class="data row4 col0" >Hamilton</td>
-      <td id="T_3a3e1_row4_col1" class="data row4 col1" >7</td>
-      <td id="T_3a3e1_row4_col2" class="data row4 col2" >1</td>
-      <td id="T_3a3e1_row4_col3" class="data row4 col3" >4, 4, 3, 2, 3</td>
+      <td id="T_a0a6a_row4_col0" class="data row4 col0" >Hamilton</td>
+      <td id="T_a0a6a_row4_col1" class="data row4 col1" >7</td>
+      <td id="T_a0a6a_row4_col2" class="data row4 col2" >1</td>
+      <td id="T_a0a6a_row4_col3" class="data row4 col3" >4, 4, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_3a3e1_row5_col0" class="data row5 col0" >Alloa</td>
-      <td id="T_3a3e1_row5_col1" class="data row5 col1" >7</td>
-      <td id="T_3a3e1_row5_col2" class="data row5 col2" >2</td>
-      <td id="T_3a3e1_row5_col3" class="data row5 col3" >2, 2, 0, 3, 4</td>
+      <td id="T_a0a6a_row5_col0" class="data row5 col0" >Alloa</td>
+      <td id="T_a0a6a_row5_col1" class="data row5 col1" >7</td>
+      <td id="T_a0a6a_row5_col2" class="data row5 col2" >2</td>
+      <td id="T_a0a6a_row5_col3" class="data row5 col3" >2, 2, 0, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_3a3e1_row6_col0" class="data row6 col0" >Kelty Hearts</td>
-      <td id="T_3a3e1_row6_col1" class="data row6 col1" >7</td>
-      <td id="T_3a3e1_row6_col2" class="data row6 col2" >4</td>
-      <td id="T_3a3e1_row6_col3" class="data row6 col3" >2, 4, 3, 3, 4</td>
+      <td id="T_a0a6a_row6_col0" class="data row6 col0" >Kelty Hearts</td>
+      <td id="T_a0a6a_row6_col1" class="data row6 col1" >7</td>
+      <td id="T_a0a6a_row6_col2" class="data row6 col2" >4</td>
+      <td id="T_a0a6a_row6_col3" class="data row6 col3" >2, 4, 3, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_3a3e1_row7_col0" class="data row7 col0" >Cove Rangers</td>
-      <td id="T_3a3e1_row7_col1" class="data row7 col1" >6</td>
-      <td id="T_3a3e1_row7_col2" class="data row7 col2" >0</td>
-      <td id="T_3a3e1_row7_col3" class="data row7 col3" >2, 1, 3, 3, 1</td>
+      <td id="T_a0a6a_row7_col0" class="data row7 col0" >Cove Rangers</td>
+      <td id="T_a0a6a_row7_col1" class="data row7 col1" >6</td>
+      <td id="T_a0a6a_row7_col2" class="data row7 col2" >0</td>
+      <td id="T_a0a6a_row7_col3" class="data row7 col3" >2, 1, 3, 3, 1</td>
     </tr>
     <tr>
-      <td id="T_3a3e1_row8_col0" class="data row8 col0" >Montrose</td>
-      <td id="T_3a3e1_row8_col1" class="data row8 col1" >6</td>
-      <td id="T_3a3e1_row8_col2" class="data row8 col2" >1</td>
-      <td id="T_3a3e1_row8_col3" class="data row8 col3" >4, 4, 3, 1, 4</td>
+      <td id="T_a0a6a_row8_col0" class="data row8 col0" >Montrose</td>
+      <td id="T_a0a6a_row8_col1" class="data row8 col1" >6</td>
+      <td id="T_a0a6a_row8_col2" class="data row8 col2" >1</td>
+      <td id="T_a0a6a_row8_col3" class="data row8 col3" >4, 4, 3, 1, 4</td>
     </tr>
     <tr>
-      <td id="T_3a3e1_row9_col0" class="data row9 col0" >Inverness C</td>
-      <td id="T_3a3e1_row9_col1" class="data row9 col1" >4</td>
-      <td id="T_3a3e1_row9_col2" class="data row9 col2" >0</td>
-      <td id="T_3a3e1_row9_col3" class="data row9 col3" >4, 4, 1, 1, 1</td>
+      <td id="T_a0a6a_row9_col0" class="data row9 col0" >Inverness C</td>
+      <td id="T_a0a6a_row9_col1" class="data row9 col1" >4</td>
+      <td id="T_a0a6a_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_a0a6a_row9_col3" class="data row9 col3" >4, 4, 1, 1, 1</td>
     </tr>
   </tbody>
 </table>
@@ -1067,85 +1135,85 @@
             <div class="section-container tab-content" id="ft_moins_2_5">
                 <h2 class="section-title">Record - Fin de Match -2.5 (0-2 Buts)</h2>
                 <style type="text/css">
-#T_367f7_row0_col2, #T_367f7_row1_col2, #T_367f7_row2_col2, #T_367f7_row3_col2, #T_367f7_row4_col2, #T_367f7_row5_col2, #T_367f7_row6_col2, #T_367f7_row7_col2, #T_367f7_row8_col2, #T_367f7_row9_col2 {
+#T_a0dd2_row0_col2, #T_a0dd2_row1_col2, #T_a0dd2_row2_col2, #T_a0dd2_row3_col2, #T_a0dd2_row4_col2, #T_a0dd2_row5_col2, #T_a0dd2_row6_col2, #T_a0dd2_row7_col2, #T_a0dd2_row8_col2, #T_a0dd2_row9_col2 {
   font-weight: normal;
   color: #555;
 }
-#T_367f7_row0_col3, #T_367f7_row1_col3, #T_367f7_row2_col3, #T_367f7_row3_col3, #T_367f7_row4_col3, #T_367f7_row5_col3, #T_367f7_row6_col3, #T_367f7_row7_col3, #T_367f7_row8_col3, #T_367f7_row9_col3 {
+#T_a0dd2_row0_col3, #T_a0dd2_row1_col3, #T_a0dd2_row2_col3, #T_a0dd2_row3_col3, #T_a0dd2_row4_col3, #T_a0dd2_row5_col3, #T_a0dd2_row6_col3, #T_a0dd2_row7_col3, #T_a0dd2_row8_col3, #T_a0dd2_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
 </style>
-<table id="T_367f7" class="styled-table">
+<table id="T_a0dd2" class="styled-table">
   <thead>
     <tr>
-      <th id="T_367f7_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_367f7_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_367f7_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_367f7_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+      <th id="T_a0dd2_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_a0dd2_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_a0dd2_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_a0dd2_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_367f7_row0_col0" class="data row0 col0" >Stenhousemuir</td>
-      <td id="T_367f7_row0_col1" class="data row0 col1" >11</td>
-      <td id="T_367f7_row0_col2" class="data row0 col2" >0</td>
-      <td id="T_367f7_row0_col3" class="data row0 col3" >4, 1, 0, 2, 4</td>
+      <td id="T_a0dd2_row0_col0" class="data row0 col0" >Stenhousemuir</td>
+      <td id="T_a0dd2_row0_col1" class="data row0 col1" >11</td>
+      <td id="T_a0dd2_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_a0dd2_row0_col3" class="data row0 col3" >4, 1, 0, 2, 4</td>
     </tr>
     <tr>
-      <td id="T_367f7_row1_col0" class="data row1 col0" >Cove Rangers</td>
-      <td id="T_367f7_row1_col1" class="data row1 col1" >9</td>
-      <td id="T_367f7_row1_col2" class="data row1 col2" >1</td>
-      <td id="T_367f7_row1_col3" class="data row1 col3" >2, 1, 3, 3, 1</td>
+      <td id="T_a0dd2_row1_col0" class="data row1 col0" >Cove Rangers</td>
+      <td id="T_a0dd2_row1_col1" class="data row1 col1" >9</td>
+      <td id="T_a0dd2_row1_col2" class="data row1 col2" >1</td>
+      <td id="T_a0dd2_row1_col3" class="data row1 col3" >2, 1, 3, 3, 1</td>
     </tr>
     <tr>
-      <td id="T_367f7_row2_col0" class="data row2 col0" >Queen of Sth</td>
-      <td id="T_367f7_row2_col1" class="data row2 col1" >8</td>
-      <td id="T_367f7_row2_col2" class="data row2 col2" >0</td>
-      <td id="T_367f7_row2_col3" class="data row2 col3" >1, 3, 3, 2, 3</td>
+      <td id="T_a0dd2_row2_col0" class="data row2 col0" >Queen of Sth</td>
+      <td id="T_a0dd2_row2_col1" class="data row2 col1" >8</td>
+      <td id="T_a0dd2_row2_col2" class="data row2 col2" >0</td>
+      <td id="T_a0dd2_row2_col3" class="data row2 col3" >1, 3, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_367f7_row3_col0" class="data row3 col0" >Peterhead</td>
-      <td id="T_367f7_row3_col1" class="data row3 col1" >7</td>
-      <td id="T_367f7_row3_col2" class="data row3 col2" >0</td>
-      <td id="T_367f7_row3_col3" class="data row3 col3" >3, 3, 1, 3, 3</td>
+      <td id="T_a0dd2_row3_col0" class="data row3 col0" >Peterhead</td>
+      <td id="T_a0dd2_row3_col1" class="data row3 col1" >7</td>
+      <td id="T_a0dd2_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_a0dd2_row3_col3" class="data row3 col3" >3, 3, 1, 3, 3</td>
     </tr>
     <tr>
-      <td id="T_367f7_row4_col0" class="data row4 col0" >Alloa</td>
-      <td id="T_367f7_row4_col1" class="data row4 col1" >6</td>
-      <td id="T_367f7_row4_col2" class="data row4 col2" >0</td>
-      <td id="T_367f7_row4_col3" class="data row4 col3" >2, 2, 0, 3, 4</td>
+      <td id="T_a0dd2_row4_col0" class="data row4 col0" >Alloa</td>
+      <td id="T_a0dd2_row4_col1" class="data row4 col1" >6</td>
+      <td id="T_a0dd2_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_a0dd2_row4_col3" class="data row4 col3" >2, 2, 0, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_367f7_row5_col0" class="data row5 col0" >Hamilton</td>
-      <td id="T_367f7_row5_col1" class="data row5 col1" >6</td>
-      <td id="T_367f7_row5_col2" class="data row5 col2" >0</td>
-      <td id="T_367f7_row5_col3" class="data row5 col3" >4, 4, 3, 2, 3</td>
+      <td id="T_a0dd2_row5_col0" class="data row5 col0" >Hamilton</td>
+      <td id="T_a0dd2_row5_col1" class="data row5 col1" >6</td>
+      <td id="T_a0dd2_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_a0dd2_row5_col3" class="data row5 col3" >4, 4, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_367f7_row6_col0" class="data row6 col0" >Inverness C</td>
-      <td id="T_367f7_row6_col1" class="data row6 col1" >6</td>
-      <td id="T_367f7_row6_col2" class="data row6 col2" >3</td>
-      <td id="T_367f7_row6_col3" class="data row6 col3" >4, 4, 1, 1, 1</td>
+      <td id="T_a0dd2_row6_col0" class="data row6 col0" >Inverness C</td>
+      <td id="T_a0dd2_row6_col1" class="data row6 col1" >6</td>
+      <td id="T_a0dd2_row6_col2" class="data row6 col2" >3</td>
+      <td id="T_a0dd2_row6_col3" class="data row6 col3" >4, 4, 1, 1, 1</td>
     </tr>
     <tr>
-      <td id="T_367f7_row7_col0" class="data row7 col0" >Montrose</td>
-      <td id="T_367f7_row7_col1" class="data row7 col1" >6</td>
-      <td id="T_367f7_row7_col2" class="data row7 col2" >0</td>
-      <td id="T_367f7_row7_col3" class="data row7 col3" >4, 4, 3, 1, 4</td>
+      <td id="T_a0dd2_row7_col0" class="data row7 col0" >Montrose</td>
+      <td id="T_a0dd2_row7_col1" class="data row7 col1" >6</td>
+      <td id="T_a0dd2_row7_col2" class="data row7 col2" >0</td>
+      <td id="T_a0dd2_row7_col3" class="data row7 col3" >4, 4, 3, 1, 4</td>
     </tr>
     <tr>
-      <td id="T_367f7_row8_col0" class="data row8 col0" >Kelty Hearts</td>
-      <td id="T_367f7_row8_col1" class="data row8 col1" >5</td>
-      <td id="T_367f7_row8_col2" class="data row8 col2" >0</td>
-      <td id="T_367f7_row8_col3" class="data row8 col3" >2, 4, 3, 3, 4</td>
+      <td id="T_a0dd2_row8_col0" class="data row8 col0" >Kelty Hearts</td>
+      <td id="T_a0dd2_row8_col1" class="data row8 col1" >5</td>
+      <td id="T_a0dd2_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_a0dd2_row8_col3" class="data row8 col3" >2, 4, 3, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_367f7_row9_col0" class="data row9 col0" >East Fife</td>
-      <td id="T_367f7_row9_col1" class="data row9 col1" >5</td>
-      <td id="T_367f7_row9_col2" class="data row9 col2" >0</td>
-      <td id="T_367f7_row9_col3" class="data row9 col3" >2, 2, 3, 2, 3</td>
+      <td id="T_a0dd2_row9_col0" class="data row9 col0" >East Fife</td>
+      <td id="T_a0dd2_row9_col1" class="data row9 col1" >5</td>
+      <td id="T_a0dd2_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_a0dd2_row9_col3" class="data row9 col3" >2, 2, 3, 2, 3</td>
     </tr>
   </tbody>
 </table>
@@ -1155,90 +1223,90 @@
             <div class="section-container tab-content" id="ft_plus_3_5">
                 <h2 class="section-title">Record - Fin de Match +3.5 (4+ Buts)</h2>
                 <style type="text/css">
-#T_f7a87_row0_col2, #T_f7a87_row1_col2, #T_f7a87_row2_col2, #T_f7a87_row3_col2, #T_f7a87_row4_col2, #T_f7a87_row5_col2, #T_f7a87_row6_col2, #T_f7a87_row7_col2, #T_f7a87_row9_col2 {
+#T_6f91a_row0_col2, #T_6f91a_row1_col2, #T_6f91a_row2_col2, #T_6f91a_row3_col2, #T_6f91a_row4_col2, #T_6f91a_row5_col2, #T_6f91a_row6_col2, #T_6f91a_row7_col2, #T_6f91a_row9_col2 {
   font-weight: normal;
   color: #555;
 }
-#T_f7a87_row0_col3, #T_f7a87_row1_col3, #T_f7a87_row2_col3, #T_f7a87_row3_col3, #T_f7a87_row4_col3, #T_f7a87_row5_col3, #T_f7a87_row6_col3, #T_f7a87_row7_col3, #T_f7a87_row8_col3, #T_f7a87_row9_col3 {
+#T_6f91a_row0_col3, #T_6f91a_row1_col3, #T_6f91a_row2_col3, #T_6f91a_row3_col3, #T_6f91a_row4_col3, #T_6f91a_row5_col3, #T_6f91a_row6_col3, #T_6f91a_row7_col3, #T_6f91a_row8_col3, #T_6f91a_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
-#T_f7a87_row8_col2 {
+#T_6f91a_row8_col2 {
   background-color: #e8f5e9;
   color: #2e7d32;
   font-weight: bold;
 }
 </style>
-<table id="T_f7a87" class="styled-table">
+<table id="T_6f91a" class="styled-table">
   <thead>
     <tr>
-      <th id="T_f7a87_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_f7a87_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_f7a87_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_f7a87_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+      <th id="T_6f91a_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_6f91a_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_6f91a_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_6f91a_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_f7a87_row0_col0" class="data row0 col0" >Stenhousemuir</td>
-      <td id="T_f7a87_row0_col1" class="data row0 col1" >6</td>
-      <td id="T_f7a87_row0_col2" class="data row0 col2" >1</td>
-      <td id="T_f7a87_row0_col3" class="data row0 col3" >4, 1, 0, 2, 4</td>
+      <td id="T_6f91a_row0_col0" class="data row0 col0" >Stenhousemuir</td>
+      <td id="T_6f91a_row0_col1" class="data row0 col1" >6</td>
+      <td id="T_6f91a_row0_col2" class="data row0 col2" >1</td>
+      <td id="T_6f91a_row0_col3" class="data row0 col3" >4, 1, 0, 2, 4</td>
     </tr>
     <tr>
-      <td id="T_f7a87_row1_col0" class="data row1 col0" >Queen of Sth</td>
-      <td id="T_f7a87_row1_col1" class="data row1 col1" >6</td>
-      <td id="T_f7a87_row1_col2" class="data row1 col2" >0</td>
-      <td id="T_f7a87_row1_col3" class="data row1 col3" >1, 3, 3, 2, 3</td>
+      <td id="T_6f91a_row1_col0" class="data row1 col0" >Queen of Sth</td>
+      <td id="T_6f91a_row1_col1" class="data row1 col1" >6</td>
+      <td id="T_6f91a_row1_col2" class="data row1 col2" >0</td>
+      <td id="T_6f91a_row1_col3" class="data row1 col3" >1, 3, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_f7a87_row2_col0" class="data row2 col0" >Kelty Hearts</td>
-      <td id="T_f7a87_row2_col1" class="data row2 col1" >5</td>
-      <td id="T_f7a87_row2_col2" class="data row2 col2" >1</td>
-      <td id="T_f7a87_row2_col3" class="data row2 col3" >2, 4, 3, 3, 4</td>
+      <td id="T_6f91a_row2_col0" class="data row2 col0" >Kelty Hearts</td>
+      <td id="T_6f91a_row2_col1" class="data row2 col1" >5</td>
+      <td id="T_6f91a_row2_col2" class="data row2 col2" >1</td>
+      <td id="T_6f91a_row2_col3" class="data row2 col3" >2, 4, 3, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_f7a87_row3_col0" class="data row3 col0" >Cove Rangers</td>
-      <td id="T_f7a87_row3_col1" class="data row3 col1" >5</td>
-      <td id="T_f7a87_row3_col2" class="data row3 col2" >0</td>
-      <td id="T_f7a87_row3_col3" class="data row3 col3" >2, 1, 3, 3, 1</td>
+      <td id="T_6f91a_row3_col0" class="data row3 col0" >Cove Rangers</td>
+      <td id="T_6f91a_row3_col1" class="data row3 col1" >5</td>
+      <td id="T_6f91a_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_6f91a_row3_col3" class="data row3 col3" >2, 1, 3, 3, 1</td>
     </tr>
     <tr>
-      <td id="T_f7a87_row4_col0" class="data row4 col0" >Montrose</td>
-      <td id="T_f7a87_row4_col1" class="data row4 col1" >5</td>
-      <td id="T_f7a87_row4_col2" class="data row4 col2" >1</td>
-      <td id="T_f7a87_row4_col3" class="data row4 col3" >4, 4, 3, 1, 4</td>
+      <td id="T_6f91a_row4_col0" class="data row4 col0" >Montrose</td>
+      <td id="T_6f91a_row4_col1" class="data row4 col1" >5</td>
+      <td id="T_6f91a_row4_col2" class="data row4 col2" >1</td>
+      <td id="T_6f91a_row4_col3" class="data row4 col3" >4, 4, 3, 1, 4</td>
     </tr>
     <tr>
-      <td id="T_f7a87_row5_col0" class="data row5 col0" >East Fife</td>
-      <td id="T_f7a87_row5_col1" class="data row5 col1" >4</td>
-      <td id="T_f7a87_row5_col2" class="data row5 col2" >0</td>
-      <td id="T_f7a87_row5_col3" class="data row5 col3" >2, 2, 3, 2, 3</td>
+      <td id="T_6f91a_row5_col0" class="data row5 col0" >East Fife</td>
+      <td id="T_6f91a_row5_col1" class="data row5 col1" >4</td>
+      <td id="T_6f91a_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_6f91a_row5_col3" class="data row5 col3" >2, 2, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_f7a87_row6_col0" class="data row6 col0" >Peterhead</td>
-      <td id="T_f7a87_row6_col1" class="data row6 col1" >4</td>
-      <td id="T_f7a87_row6_col2" class="data row6 col2" >0</td>
-      <td id="T_f7a87_row6_col3" class="data row6 col3" >3, 3, 1, 3, 3</td>
+      <td id="T_6f91a_row6_col0" class="data row6 col0" >Peterhead</td>
+      <td id="T_6f91a_row6_col1" class="data row6 col1" >4</td>
+      <td id="T_6f91a_row6_col2" class="data row6 col2" >0</td>
+      <td id="T_6f91a_row6_col3" class="data row6 col3" >3, 3, 1, 3, 3</td>
     </tr>
     <tr>
-      <td id="T_f7a87_row7_col0" class="data row7 col0" >Hamilton</td>
-      <td id="T_f7a87_row7_col1" class="data row7 col1" >4</td>
-      <td id="T_f7a87_row7_col2" class="data row7 col2" >0</td>
-      <td id="T_f7a87_row7_col3" class="data row7 col3" >4, 4, 3, 2, 3</td>
+      <td id="T_6f91a_row7_col0" class="data row7 col0" >Hamilton</td>
+      <td id="T_6f91a_row7_col1" class="data row7 col1" >4</td>
+      <td id="T_6f91a_row7_col2" class="data row7 col2" >0</td>
+      <td id="T_6f91a_row7_col3" class="data row7 col3" >4, 4, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_f7a87_row8_col0" class="data row8 col0" >Alloa</td>
-      <td id="T_f7a87_row8_col1" class="data row8 col1" >3</td>
-      <td id="T_f7a87_row8_col2" class="data row8 col2" >1</td>
-      <td id="T_f7a87_row8_col3" class="data row8 col3" >2, 2, 0, 3, 4</td>
+      <td id="T_6f91a_row8_col0" class="data row8 col0" >Alloa</td>
+      <td id="T_6f91a_row8_col1" class="data row8 col1" >3</td>
+      <td id="T_6f91a_row8_col2" class="data row8 col2" >1</td>
+      <td id="T_6f91a_row8_col3" class="data row8 col3" >2, 2, 0, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_f7a87_row9_col0" class="data row9 col0" >Inverness C</td>
-      <td id="T_f7a87_row9_col1" class="data row9 col1" >3</td>
-      <td id="T_f7a87_row9_col2" class="data row9 col2" >0</td>
-      <td id="T_f7a87_row9_col3" class="data row9 col3" >4, 4, 1, 1, 1</td>
+      <td id="T_6f91a_row9_col0" class="data row9 col0" >Inverness C</td>
+      <td id="T_6f91a_row9_col1" class="data row9 col1" >3</td>
+      <td id="T_6f91a_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_6f91a_row9_col3" class="data row9 col3" >4, 4, 1, 1, 1</td>
     </tr>
   </tbody>
 </table>
@@ -1248,90 +1316,90 @@
             <div class="section-container tab-content" id="ft_moins_3_5">
                 <h2 class="section-title">Record - Fin de Match -3.5 (0-3 Buts)</h2>
                 <style type="text/css">
-#T_e87b2_row0_col2, #T_e87b2_row1_col2, #T_e87b2_row2_col2, #T_e87b2_row3_col2, #T_e87b2_row4_col2, #T_e87b2_row5_col2, #T_e87b2_row7_col2, #T_e87b2_row8_col2, #T_e87b2_row9_col2 {
+#T_ab3da_row0_col2, #T_ab3da_row1_col2, #T_ab3da_row2_col2, #T_ab3da_row3_col2, #T_ab3da_row4_col2, #T_ab3da_row5_col2, #T_ab3da_row7_col2, #T_ab3da_row8_col2, #T_ab3da_row9_col2 {
   font-weight: normal;
   color: #555;
 }
-#T_e87b2_row0_col3, #T_e87b2_row1_col3, #T_e87b2_row2_col3, #T_e87b2_row3_col3, #T_e87b2_row4_col3, #T_e87b2_row5_col3, #T_e87b2_row6_col3, #T_e87b2_row7_col3, #T_e87b2_row8_col3, #T_e87b2_row9_col3 {
+#T_ab3da_row0_col3, #T_ab3da_row1_col3, #T_ab3da_row2_col3, #T_ab3da_row3_col3, #T_ab3da_row4_col3, #T_ab3da_row5_col3, #T_ab3da_row6_col3, #T_ab3da_row7_col3, #T_ab3da_row8_col3, #T_ab3da_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
-#T_e87b2_row6_col2 {
+#T_ab3da_row6_col2 {
   background-color: #fff3e0;
   color: #f57c00;
   font-weight: bold;
 }
 </style>
-<table id="T_e87b2" class="styled-table">
+<table id="T_ab3da" class="styled-table">
   <thead>
     <tr>
-      <th id="T_e87b2_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_e87b2_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_e87b2_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_e87b2_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+      <th id="T_ab3da_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_ab3da_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_ab3da_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_ab3da_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_e87b2_row0_col0" class="data row0 col0" >Inverness C</td>
-      <td id="T_e87b2_row0_col1" class="data row0 col1" >19</td>
-      <td id="T_e87b2_row0_col2" class="data row0 col2" >3</td>
-      <td id="T_e87b2_row0_col3" class="data row0 col3" >4, 4, 1, 1, 1</td>
+      <td id="T_ab3da_row0_col0" class="data row0 col0" >Inverness C</td>
+      <td id="T_ab3da_row0_col1" class="data row0 col1" >19</td>
+      <td id="T_ab3da_row0_col2" class="data row0 col2" >3</td>
+      <td id="T_ab3da_row0_col3" class="data row0 col3" >4, 4, 1, 1, 1</td>
     </tr>
     <tr>
-      <td id="T_e87b2_row1_col0" class="data row1 col0" >Alloa</td>
-      <td id="T_e87b2_row1_col1" class="data row1 col1" >16</td>
-      <td id="T_e87b2_row1_col2" class="data row1 col2" >0</td>
-      <td id="T_e87b2_row1_col3" class="data row1 col3" >2, 2, 0, 3, 4</td>
+      <td id="T_ab3da_row1_col0" class="data row1 col0" >Alloa</td>
+      <td id="T_ab3da_row1_col1" class="data row1 col1" >16</td>
+      <td id="T_ab3da_row1_col2" class="data row1 col2" >0</td>
+      <td id="T_ab3da_row1_col3" class="data row1 col3" >2, 2, 0, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_e87b2_row2_col0" class="data row2 col0" >Stenhousemuir</td>
-      <td id="T_e87b2_row2_col1" class="data row2 col1" >15</td>
-      <td id="T_e87b2_row2_col2" class="data row2 col2" >0</td>
-      <td id="T_e87b2_row2_col3" class="data row2 col3" >4, 1, 0, 2, 4</td>
+      <td id="T_ab3da_row2_col0" class="data row2 col0" >Stenhousemuir</td>
+      <td id="T_ab3da_row2_col1" class="data row2 col1" >15</td>
+      <td id="T_ab3da_row2_col2" class="data row2 col2" >0</td>
+      <td id="T_ab3da_row2_col3" class="data row2 col3" >4, 1, 0, 2, 4</td>
     </tr>
     <tr>
-      <td id="T_e87b2_row3_col0" class="data row3 col0" >Peterhead</td>
-      <td id="T_e87b2_row3_col1" class="data row3 col1" >15</td>
-      <td id="T_e87b2_row3_col2" class="data row3 col2" >6</td>
-      <td id="T_e87b2_row3_col3" class="data row3 col3" >3, 3, 1, 3, 3</td>
+      <td id="T_ab3da_row3_col0" class="data row3 col0" >Peterhead</td>
+      <td id="T_ab3da_row3_col1" class="data row3 col1" >15</td>
+      <td id="T_ab3da_row3_col2" class="data row3 col2" >6</td>
+      <td id="T_ab3da_row3_col3" class="data row3 col3" >3, 3, 1, 3, 3</td>
     </tr>
     <tr>
-      <td id="T_e87b2_row4_col0" class="data row4 col0" >Queen of Sth</td>
-      <td id="T_e87b2_row4_col1" class="data row4 col1" >13</td>
-      <td id="T_e87b2_row4_col2" class="data row4 col2" >10</td>
-      <td id="T_e87b2_row4_col3" class="data row4 col3" >1, 3, 3, 2, 3</td>
+      <td id="T_ab3da_row4_col0" class="data row4 col0" >Queen of Sth</td>
+      <td id="T_ab3da_row4_col1" class="data row4 col1" >13</td>
+      <td id="T_ab3da_row4_col2" class="data row4 col2" >10</td>
+      <td id="T_ab3da_row4_col3" class="data row4 col3" >1, 3, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_e87b2_row5_col0" class="data row5 col0" >Hamilton</td>
-      <td id="T_e87b2_row5_col1" class="data row5 col1" >11</td>
-      <td id="T_e87b2_row5_col2" class="data row5 col2" >3</td>
-      <td id="T_e87b2_row5_col3" class="data row5 col3" >4, 4, 3, 2, 3</td>
+      <td id="T_ab3da_row5_col0" class="data row5 col0" >Hamilton</td>
+      <td id="T_ab3da_row5_col1" class="data row5 col1" >11</td>
+      <td id="T_ab3da_row5_col2" class="data row5 col2" >3</td>
+      <td id="T_ab3da_row5_col3" class="data row5 col3" >4, 4, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_e87b2_row6_col0" class="data row6 col0" >Cove Rangers</td>
-      <td id="T_e87b2_row6_col1" class="data row6 col1" >10</td>
-      <td id="T_e87b2_row6_col2" class="data row6 col2" >9</td>
-      <td id="T_e87b2_row6_col3" class="data row6 col3" >2, 1, 3, 3, 1</td>
+      <td id="T_ab3da_row6_col0" class="data row6 col0" >Cove Rangers</td>
+      <td id="T_ab3da_row6_col1" class="data row6 col1" >10</td>
+      <td id="T_ab3da_row6_col2" class="data row6 col2" >9</td>
+      <td id="T_ab3da_row6_col3" class="data row6 col3" >2, 1, 3, 3, 1</td>
     </tr>
     <tr>
-      <td id="T_e87b2_row7_col0" class="data row7 col0" >East Fife</td>
-      <td id="T_e87b2_row7_col1" class="data row7 col1" >9</td>
-      <td id="T_e87b2_row7_col2" class="data row7 col2" >5</td>
-      <td id="T_e87b2_row7_col3" class="data row7 col3" >2, 2, 3, 2, 3</td>
+      <td id="T_ab3da_row7_col0" class="data row7 col0" >East Fife</td>
+      <td id="T_ab3da_row7_col1" class="data row7 col1" >9</td>
+      <td id="T_ab3da_row7_col2" class="data row7 col2" >5</td>
+      <td id="T_ab3da_row7_col3" class="data row7 col3" >2, 2, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_e87b2_row8_col0" class="data row8 col0" >Kelty Hearts</td>
-      <td id="T_e87b2_row8_col1" class="data row8 col1" >9</td>
-      <td id="T_e87b2_row8_col2" class="data row8 col2" >0</td>
-      <td id="T_e87b2_row8_col3" class="data row8 col3" >2, 4, 3, 3, 4</td>
+      <td id="T_ab3da_row8_col0" class="data row8 col0" >Kelty Hearts</td>
+      <td id="T_ab3da_row8_col1" class="data row8 col1" >9</td>
+      <td id="T_ab3da_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_ab3da_row8_col3" class="data row8 col3" >2, 4, 3, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_e87b2_row9_col0" class="data row9 col0" >Montrose</td>
-      <td id="T_e87b2_row9_col1" class="data row9 col1" >8</td>
-      <td id="T_e87b2_row9_col2" class="data row9 col2" >0</td>
-      <td id="T_e87b2_row9_col3" class="data row9 col3" >4, 4, 3, 1, 4</td>
+      <td id="T_ab3da_row9_col0" class="data row9 col0" >Montrose</td>
+      <td id="T_ab3da_row9_col1" class="data row9 col1" >8</td>
+      <td id="T_ab3da_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_ab3da_row9_col3" class="data row9 col3" >4, 4, 3, 1, 4</td>
     </tr>
   </tbody>
 </table>
@@ -1341,90 +1409,90 @@
             <div class="section-container tab-content" id="ft_nuls">
                 <h2 class="section-title">Record - Fin de Match (Nuls)</h2>
                 <style type="text/css">
-#T_168d7_row0_col2, #T_168d7_row1_col2, #T_168d7_row2_col2, #T_168d7_row3_col2, #T_168d7_row4_col2, #T_168d7_row5_col2, #T_168d7_row7_col2, #T_168d7_row8_col2, #T_168d7_row9_col2 {
+#T_36b6f_row0_col2, #T_36b6f_row1_col2, #T_36b6f_row2_col2, #T_36b6f_row3_col2, #T_36b6f_row4_col2, #T_36b6f_row5_col2, #T_36b6f_row7_col2, #T_36b6f_row8_col2, #T_36b6f_row9_col2 {
   font-weight: normal;
   color: #555;
 }
-#T_168d7_row0_col3, #T_168d7_row1_col3, #T_168d7_row2_col3, #T_168d7_row3_col3, #T_168d7_row4_col3, #T_168d7_row5_col3, #T_168d7_row6_col3, #T_168d7_row7_col3, #T_168d7_row8_col3, #T_168d7_row9_col3 {
+#T_36b6f_row0_col3, #T_36b6f_row1_col3, #T_36b6f_row2_col3, #T_36b6f_row3_col3, #T_36b6f_row4_col3, #T_36b6f_row5_col3, #T_36b6f_row6_col3, #T_36b6f_row7_col3, #T_36b6f_row8_col3, #T_36b6f_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
-#T_168d7_row6_col2 {
+#T_36b6f_row6_col2 {
   background-color: #e8f5e9;
   color: #2e7d32;
   font-weight: bold;
 }
 </style>
-<table id="T_168d7" class="styled-table">
+<table id="T_36b6f" class="styled-table">
   <thead>
     <tr>
-      <th id="T_168d7_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_168d7_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_168d7_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_168d7_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
+      <th id="T_36b6f_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_36b6f_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_36b6f_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_36b6f_level0_col3" class="col_heading level0 col3" >5 Derniers (FT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_168d7_row0_col0" class="data row0 col0" >Stenhousemuir</td>
-      <td id="T_168d7_row0_col1" class="data row0 col1" >8</td>
-      <td id="T_168d7_row0_col2" class="data row0 col2" >3</td>
-      <td id="T_168d7_row0_col3" class="data row0 col3" >4, 1, 0, 2, 4</td>
+      <td id="T_36b6f_row0_col0" class="data row0 col0" >Stenhousemuir</td>
+      <td id="T_36b6f_row0_col1" class="data row0 col1" >8</td>
+      <td id="T_36b6f_row0_col2" class="data row0 col2" >3</td>
+      <td id="T_36b6f_row0_col3" class="data row0 col3" >4, 1, 0, 2, 4</td>
     </tr>
     <tr>
-      <td id="T_168d7_row1_col0" class="data row1 col0" >Inverness C</td>
-      <td id="T_168d7_row1_col1" class="data row1 col1" >7</td>
-      <td id="T_168d7_row1_col2" class="data row1 col2" >0</td>
-      <td id="T_168d7_row1_col3" class="data row1 col3" >4, 4, 1, 1, 1</td>
+      <td id="T_36b6f_row1_col0" class="data row1 col0" >Inverness C</td>
+      <td id="T_36b6f_row1_col1" class="data row1 col1" >7</td>
+      <td id="T_36b6f_row1_col2" class="data row1 col2" >0</td>
+      <td id="T_36b6f_row1_col3" class="data row1 col3" >4, 4, 1, 1, 1</td>
     </tr>
     <tr>
-      <td id="T_168d7_row2_col0" class="data row2 col0" >Peterhead</td>
-      <td id="T_168d7_row2_col1" class="data row2 col1" >4</td>
-      <td id="T_168d7_row2_col2" class="data row2 col2" >0</td>
-      <td id="T_168d7_row2_col3" class="data row2 col3" >3, 3, 1, 3, 3</td>
+      <td id="T_36b6f_row2_col0" class="data row2 col0" >Peterhead</td>
+      <td id="T_36b6f_row2_col1" class="data row2 col1" >4</td>
+      <td id="T_36b6f_row2_col2" class="data row2 col2" >0</td>
+      <td id="T_36b6f_row2_col3" class="data row2 col3" >3, 3, 1, 3, 3</td>
     </tr>
     <tr>
-      <td id="T_168d7_row3_col0" class="data row3 col0" >Alloa</td>
-      <td id="T_168d7_row3_col1" class="data row3 col1" >3</td>
-      <td id="T_168d7_row3_col2" class="data row3 col2" >0</td>
-      <td id="T_168d7_row3_col3" class="data row3 col3" >2, 2, 0, 3, 4</td>
+      <td id="T_36b6f_row3_col0" class="data row3 col0" >Alloa</td>
+      <td id="T_36b6f_row3_col1" class="data row3 col1" >3</td>
+      <td id="T_36b6f_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_36b6f_row3_col3" class="data row3 col3" >2, 2, 0, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_168d7_row4_col0" class="data row4 col0" >Cove Rangers</td>
-      <td id="T_168d7_row4_col1" class="data row4 col1" >3</td>
-      <td id="T_168d7_row4_col2" class="data row4 col2" >0</td>
-      <td id="T_168d7_row4_col3" class="data row4 col3" >2, 1, 3, 3, 1</td>
+      <td id="T_36b6f_row4_col0" class="data row4 col0" >Cove Rangers</td>
+      <td id="T_36b6f_row4_col1" class="data row4 col1" >3</td>
+      <td id="T_36b6f_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_36b6f_row4_col3" class="data row4 col3" >2, 1, 3, 3, 1</td>
     </tr>
     <tr>
-      <td id="T_168d7_row5_col0" class="data row5 col0" >East Fife</td>
-      <td id="T_168d7_row5_col1" class="data row5 col1" >3</td>
-      <td id="T_168d7_row5_col2" class="data row5 col2" >0</td>
-      <td id="T_168d7_row5_col3" class="data row5 col3" >2, 2, 3, 2, 3</td>
+      <td id="T_36b6f_row5_col0" class="data row5 col0" >East Fife</td>
+      <td id="T_36b6f_row5_col1" class="data row5 col1" >3</td>
+      <td id="T_36b6f_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_36b6f_row5_col3" class="data row5 col3" >2, 2, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_168d7_row6_col0" class="data row6 col0" >Kelty Hearts</td>
-      <td id="T_168d7_row6_col1" class="data row6 col1" >3</td>
-      <td id="T_168d7_row6_col2" class="data row6 col2" >1</td>
-      <td id="T_168d7_row6_col3" class="data row6 col3" >2, 4, 3, 3, 4</td>
+      <td id="T_36b6f_row6_col0" class="data row6 col0" >Kelty Hearts</td>
+      <td id="T_36b6f_row6_col1" class="data row6 col1" >3</td>
+      <td id="T_36b6f_row6_col2" class="data row6 col2" >1</td>
+      <td id="T_36b6f_row6_col3" class="data row6 col3" >2, 4, 3, 3, 4</td>
     </tr>
     <tr>
-      <td id="T_168d7_row7_col0" class="data row7 col0" >Hamilton</td>
-      <td id="T_168d7_row7_col1" class="data row7 col1" >3</td>
-      <td id="T_168d7_row7_col2" class="data row7 col2" >0</td>
-      <td id="T_168d7_row7_col3" class="data row7 col3" >4, 4, 3, 2, 3</td>
+      <td id="T_36b6f_row7_col0" class="data row7 col0" >Hamilton</td>
+      <td id="T_36b6f_row7_col1" class="data row7 col1" >3</td>
+      <td id="T_36b6f_row7_col2" class="data row7 col2" >0</td>
+      <td id="T_36b6f_row7_col3" class="data row7 col3" >4, 4, 3, 2, 3</td>
     </tr>
     <tr>
-      <td id="T_168d7_row8_col0" class="data row8 col0" >Montrose</td>
-      <td id="T_168d7_row8_col1" class="data row8 col1" >3</td>
-      <td id="T_168d7_row8_col2" class="data row8 col2" >0</td>
-      <td id="T_168d7_row8_col3" class="data row8 col3" >4, 4, 3, 1, 4</td>
+      <td id="T_36b6f_row8_col0" class="data row8 col0" >Montrose</td>
+      <td id="T_36b6f_row8_col1" class="data row8 col1" >3</td>
+      <td id="T_36b6f_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_36b6f_row8_col3" class="data row8 col3" >4, 4, 3, 1, 4</td>
     </tr>
     <tr>
-      <td id="T_168d7_row9_col0" class="data row9 col0" >Queen of Sth</td>
-      <td id="T_168d7_row9_col1" class="data row9 col1" >2</td>
-      <td id="T_168d7_row9_col2" class="data row9 col2" >0</td>
-      <td id="T_168d7_row9_col3" class="data row9 col3" >1, 3, 3, 2, 3</td>
+      <td id="T_36b6f_row9_col0" class="data row9 col0" >Queen of Sth</td>
+      <td id="T_36b6f_row9_col1" class="data row9 col1" >2</td>
+      <td id="T_36b6f_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_36b6f_row9_col3" class="data row9 col3" >1, 3, 3, 2, 3</td>
     </tr>
   </tbody>
 </table>
@@ -1434,90 +1502,90 @@
             <div class="section-container tab-content" id="mt_plus_0_5">
                 <h2 class="section-title">Record - Mi-Temps +0.5 (1+ Buts MT)</h2>
                 <style type="text/css">
-#T_1b69a_row0_col2, #T_1b69a_row1_col2, #T_1b69a_row3_col2, #T_1b69a_row4_col2, #T_1b69a_row5_col2, #T_1b69a_row6_col2, #T_1b69a_row7_col2, #T_1b69a_row8_col2, #T_1b69a_row9_col2 {
+#T_6af8b_row0_col2, #T_6af8b_row1_col2, #T_6af8b_row3_col2, #T_6af8b_row4_col2, #T_6af8b_row5_col2, #T_6af8b_row6_col2, #T_6af8b_row7_col2, #T_6af8b_row8_col2, #T_6af8b_row9_col2 {
   font-weight: normal;
   color: #555;
 }
-#T_1b69a_row0_col3, #T_1b69a_row1_col3, #T_1b69a_row2_col3, #T_1b69a_row3_col3, #T_1b69a_row4_col3, #T_1b69a_row5_col3, #T_1b69a_row6_col3, #T_1b69a_row7_col3, #T_1b69a_row8_col3, #T_1b69a_row9_col3 {
+#T_6af8b_row0_col3, #T_6af8b_row1_col3, #T_6af8b_row2_col3, #T_6af8b_row3_col3, #T_6af8b_row4_col3, #T_6af8b_row5_col3, #T_6af8b_row6_col3, #T_6af8b_row7_col3, #T_6af8b_row8_col3, #T_6af8b_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
-#T_1b69a_row2_col2 {
+#T_6af8b_row2_col2 {
   background-color: #ffebee;
   color: #c62828;
   font-weight: bold;
 }
 </style>
-<table id="T_1b69a" class="styled-table">
+<table id="T_6af8b" class="styled-table">
   <thead>
     <tr>
-      <th id="T_1b69a_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_1b69a_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_1b69a_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_1b69a_level0_col3" class="col_heading level0 col3" >5 Derniers (MT)</th>
+      <th id="T_6af8b_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_6af8b_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_6af8b_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_6af8b_level0_col3" class="col_heading level0 col3" >5 Derniers (MT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_1b69a_row0_col0" class="data row0 col0" >Stenhousemuir</td>
-      <td id="T_1b69a_row0_col1" class="data row0 col1" >23</td>
-      <td id="T_1b69a_row0_col2" class="data row0 col2" >2</td>
-      <td id="T_1b69a_row0_col3" class="data row0 col3" >2, 0, 0, 1, 1</td>
+      <td id="T_6af8b_row0_col0" class="data row0 col0" >Stenhousemuir</td>
+      <td id="T_6af8b_row0_col1" class="data row0 col1" >23</td>
+      <td id="T_6af8b_row0_col2" class="data row0 col2" >2</td>
+      <td id="T_6af8b_row0_col3" class="data row0 col3" >2, 0, 0, 1, 1</td>
     </tr>
     <tr>
-      <td id="T_1b69a_row1_col0" class="data row1 col0" >Queen of Sth</td>
-      <td id="T_1b69a_row1_col1" class="data row1 col1" >17</td>
-      <td id="T_1b69a_row1_col2" class="data row1 col2" >4</td>
-      <td id="T_1b69a_row1_col3" class="data row1 col3" >0, 2, 1, 1, 2</td>
+      <td id="T_6af8b_row1_col0" class="data row1 col0" >Queen of Sth</td>
+      <td id="T_6af8b_row1_col1" class="data row1 col1" >17</td>
+      <td id="T_6af8b_row1_col2" class="data row1 col2" >4</td>
+      <td id="T_6af8b_row1_col3" class="data row1 col3" >0, 2, 1, 1, 2</td>
     </tr>
     <tr>
-      <td id="T_1b69a_row2_col0" class="data row2 col0" >Kelty Hearts</td>
-      <td id="T_1b69a_row2_col1" class="data row2 col1" >16</td>
-      <td id="T_1b69a_row2_col2" class="data row2 col2" >16</td>
-      <td id="T_1b69a_row2_col3" class="data row2 col3" >1, 3, 1, 2, 1</td>
+      <td id="T_6af8b_row2_col0" class="data row2 col0" >Kelty Hearts</td>
+      <td id="T_6af8b_row2_col1" class="data row2 col1" >16</td>
+      <td id="T_6af8b_row2_col2" class="data row2 col2" >16</td>
+      <td id="T_6af8b_row2_col3" class="data row2 col3" >1, 3, 1, 2, 1</td>
     </tr>
     <tr>
-      <td id="T_1b69a_row3_col0" class="data row3 col0" >Alloa</td>
-      <td id="T_1b69a_row3_col1" class="data row3 col1" >15</td>
-      <td id="T_1b69a_row3_col2" class="data row3 col2" >2</td>
-      <td id="T_1b69a_row3_col3" class="data row3 col3" >1, 0, 0, 2, 1</td>
+      <td id="T_6af8b_row3_col0" class="data row3 col0" >Alloa</td>
+      <td id="T_6af8b_row3_col1" class="data row3 col1" >15</td>
+      <td id="T_6af8b_row3_col2" class="data row3 col2" >2</td>
+      <td id="T_6af8b_row3_col3" class="data row3 col3" >1, 0, 0, 2, 1</td>
     </tr>
     <tr>
-      <td id="T_1b69a_row4_col0" class="data row4 col0" >Cove Rangers</td>
-      <td id="T_1b69a_row4_col1" class="data row4 col1" >15</td>
-      <td id="T_1b69a_row4_col2" class="data row4 col2" >3</td>
-      <td id="T_1b69a_row4_col3" class="data row4 col3" >1, 0, 1, 2, 1</td>
+      <td id="T_6af8b_row4_col0" class="data row4 col0" >Cove Rangers</td>
+      <td id="T_6af8b_row4_col1" class="data row4 col1" >15</td>
+      <td id="T_6af8b_row4_col2" class="data row4 col2" >3</td>
+      <td id="T_6af8b_row4_col3" class="data row4 col3" >1, 0, 1, 2, 1</td>
     </tr>
     <tr>
-      <td id="T_1b69a_row5_col0" class="data row5 col0" >Peterhead</td>
-      <td id="T_1b69a_row5_col1" class="data row5 col1" >15</td>
-      <td id="T_1b69a_row5_col2" class="data row5 col2" >2</td>
-      <td id="T_1b69a_row5_col3" class="data row5 col3" >2, 2, 0, 2, 2</td>
+      <td id="T_6af8b_row5_col0" class="data row5 col0" >Peterhead</td>
+      <td id="T_6af8b_row5_col1" class="data row5 col1" >15</td>
+      <td id="T_6af8b_row5_col2" class="data row5 col2" >2</td>
+      <td id="T_6af8b_row5_col3" class="data row5 col3" >2, 2, 0, 2, 2</td>
     </tr>
     <tr>
-      <td id="T_1b69a_row6_col0" class="data row6 col0" >East Fife</td>
-      <td id="T_1b69a_row6_col1" class="data row6 col1" >13</td>
-      <td id="T_1b69a_row6_col2" class="data row6 col2" >1</td>
-      <td id="T_1b69a_row6_col3" class="data row6 col3" >1, 0, 1, 0, 2</td>
+      <td id="T_6af8b_row6_col0" class="data row6 col0" >East Fife</td>
+      <td id="T_6af8b_row6_col1" class="data row6 col1" >13</td>
+      <td id="T_6af8b_row6_col2" class="data row6 col2" >1</td>
+      <td id="T_6af8b_row6_col3" class="data row6 col3" >1, 0, 1, 0, 2</td>
     </tr>
     <tr>
-      <td id="T_1b69a_row7_col0" class="data row7 col0" >Montrose</td>
-      <td id="T_1b69a_row7_col1" class="data row7 col1" >12</td>
-      <td id="T_1b69a_row7_col2" class="data row7 col2" >1</td>
-      <td id="T_1b69a_row7_col3" class="data row7 col3" >2, 1, 1, 0, 1</td>
+      <td id="T_6af8b_row7_col0" class="data row7 col0" >Montrose</td>
+      <td id="T_6af8b_row7_col1" class="data row7 col1" >12</td>
+      <td id="T_6af8b_row7_col2" class="data row7 col2" >1</td>
+      <td id="T_6af8b_row7_col3" class="data row7 col3" >2, 1, 1, 0, 1</td>
     </tr>
     <tr>
-      <td id="T_1b69a_row8_col0" class="data row8 col0" >Inverness C</td>
-      <td id="T_1b69a_row8_col1" class="data row8 col1" >11</td>
-      <td id="T_1b69a_row8_col2" class="data row8 col2" >1</td>
-      <td id="T_1b69a_row8_col3" class="data row8 col3" >1, 3, 0, 0, 1</td>
+      <td id="T_6af8b_row8_col0" class="data row8 col0" >Inverness C</td>
+      <td id="T_6af8b_row8_col1" class="data row8 col1" >11</td>
+      <td id="T_6af8b_row8_col2" class="data row8 col2" >1</td>
+      <td id="T_6af8b_row8_col3" class="data row8 col3" >1, 3, 0, 0, 1</td>
     </tr>
     <tr>
-      <td id="T_1b69a_row9_col0" class="data row9 col0" >Hamilton</td>
-      <td id="T_1b69a_row9_col1" class="data row9 col1" >10</td>
-      <td id="T_1b69a_row9_col2" class="data row9 col2" >1</td>
-      <td id="T_1b69a_row9_col3" class="data row9 col3" >1, 1, 1, 0, 2</td>
+      <td id="T_6af8b_row9_col0" class="data row9 col0" >Hamilton</td>
+      <td id="T_6af8b_row9_col1" class="data row9 col1" >10</td>
+      <td id="T_6af8b_row9_col2" class="data row9 col2" >1</td>
+      <td id="T_6af8b_row9_col3" class="data row9 col3" >1, 1, 1, 0, 2</td>
     </tr>
   </tbody>
 </table>
@@ -1527,85 +1595,85 @@
             <div class="section-container tab-content" id="mt_moins_0_5">
                 <h2 class="section-title">Record - Mi-Temps -0.5 (0 Buts MT)</h2>
                 <style type="text/css">
-#T_26880_row0_col2, #T_26880_row1_col2, #T_26880_row2_col2, #T_26880_row3_col2, #T_26880_row4_col2, #T_26880_row5_col2, #T_26880_row6_col2, #T_26880_row7_col2, #T_26880_row8_col2, #T_26880_row9_col2 {
+#T_9674c_row0_col2, #T_9674c_row1_col2, #T_9674c_row2_col2, #T_9674c_row3_col2, #T_9674c_row4_col2, #T_9674c_row5_col2, #T_9674c_row6_col2, #T_9674c_row7_col2, #T_9674c_row8_col2, #T_9674c_row9_col2 {
   font-weight: normal;
   color: #555;
 }
-#T_26880_row0_col3, #T_26880_row1_col3, #T_26880_row2_col3, #T_26880_row3_col3, #T_26880_row4_col3, #T_26880_row5_col3, #T_26880_row6_col3, #T_26880_row7_col3, #T_26880_row8_col3, #T_26880_row9_col3 {
+#T_9674c_row0_col3, #T_9674c_row1_col3, #T_9674c_row2_col3, #T_9674c_row3_col3, #T_9674c_row4_col3, #T_9674c_row5_col3, #T_9674c_row6_col3, #T_9674c_row7_col3, #T_9674c_row8_col3, #T_9674c_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
 </style>
-<table id="T_26880" class="styled-table">
+<table id="T_9674c" class="styled-table">
   <thead>
     <tr>
-      <th id="T_26880_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_26880_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_26880_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_26880_level0_col3" class="col_heading level0 col3" >5 Derniers (MT)</th>
+      <th id="T_9674c_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_9674c_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_9674c_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_9674c_level0_col3" class="col_heading level0 col3" >5 Derniers (MT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_26880_row0_col0" class="data row0 col0" >Alloa</td>
-      <td id="T_26880_row0_col1" class="data row0 col1" >6</td>
-      <td id="T_26880_row0_col2" class="data row0 col2" >0</td>
-      <td id="T_26880_row0_col3" class="data row0 col3" >1, 0, 0, 2, 1</td>
+      <td id="T_9674c_row0_col0" class="data row0 col0" >Alloa</td>
+      <td id="T_9674c_row0_col1" class="data row0 col1" >6</td>
+      <td id="T_9674c_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_9674c_row0_col3" class="data row0 col3" >1, 0, 0, 2, 1</td>
     </tr>
     <tr>
-      <td id="T_26880_row1_col0" class="data row1 col0" >Cove Rangers</td>
-      <td id="T_26880_row1_col1" class="data row1 col1" >5</td>
-      <td id="T_26880_row1_col2" class="data row1 col2" >0</td>
-      <td id="T_26880_row1_col3" class="data row1 col3" >1, 0, 1, 2, 1</td>
+      <td id="T_9674c_row1_col0" class="data row1 col0" >Cove Rangers</td>
+      <td id="T_9674c_row1_col1" class="data row1 col1" >5</td>
+      <td id="T_9674c_row1_col2" class="data row1 col2" >0</td>
+      <td id="T_9674c_row1_col3" class="data row1 col3" >1, 0, 1, 2, 1</td>
     </tr>
     <tr>
-      <td id="T_26880_row2_col0" class="data row2 col0" >East Fife</td>
-      <td id="T_26880_row2_col1" class="data row2 col1" >5</td>
-      <td id="T_26880_row2_col2" class="data row2 col2" >0</td>
-      <td id="T_26880_row2_col3" class="data row2 col3" >1, 0, 1, 0, 2</td>
+      <td id="T_9674c_row2_col0" class="data row2 col0" >East Fife</td>
+      <td id="T_9674c_row2_col1" class="data row2 col1" >5</td>
+      <td id="T_9674c_row2_col2" class="data row2 col2" >0</td>
+      <td id="T_9674c_row2_col3" class="data row2 col3" >1, 0, 1, 0, 2</td>
     </tr>
     <tr>
-      <td id="T_26880_row3_col0" class="data row3 col0" >Hamilton</td>
-      <td id="T_26880_row3_col1" class="data row3 col1" >5</td>
-      <td id="T_26880_row3_col2" class="data row3 col2" >0</td>
-      <td id="T_26880_row3_col3" class="data row3 col3" >1, 1, 1, 0, 2</td>
+      <td id="T_9674c_row3_col0" class="data row3 col0" >Hamilton</td>
+      <td id="T_9674c_row3_col1" class="data row3 col1" >5</td>
+      <td id="T_9674c_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_9674c_row3_col3" class="data row3 col3" >1, 1, 1, 0, 2</td>
     </tr>
     <tr>
-      <td id="T_26880_row4_col0" class="data row4 col0" >Inverness C</td>
-      <td id="T_26880_row4_col1" class="data row4 col1" >5</td>
-      <td id="T_26880_row4_col2" class="data row4 col2" >0</td>
-      <td id="T_26880_row4_col3" class="data row4 col3" >1, 3, 0, 0, 1</td>
+      <td id="T_9674c_row4_col0" class="data row4 col0" >Inverness C</td>
+      <td id="T_9674c_row4_col1" class="data row4 col1" >5</td>
+      <td id="T_9674c_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_9674c_row4_col3" class="data row4 col3" >1, 3, 0, 0, 1</td>
     </tr>
     <tr>
-      <td id="T_26880_row5_col0" class="data row5 col0" >Stenhousemuir</td>
-      <td id="T_26880_row5_col1" class="data row5 col1" >5</td>
-      <td id="T_26880_row5_col2" class="data row5 col2" >0</td>
-      <td id="T_26880_row5_col3" class="data row5 col3" >2, 0, 0, 1, 1</td>
+      <td id="T_9674c_row5_col0" class="data row5 col0" >Stenhousemuir</td>
+      <td id="T_9674c_row5_col1" class="data row5 col1" >5</td>
+      <td id="T_9674c_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_9674c_row5_col3" class="data row5 col3" >2, 0, 0, 1, 1</td>
     </tr>
     <tr>
-      <td id="T_26880_row6_col0" class="data row6 col0" >Kelty Hearts</td>
-      <td id="T_26880_row6_col1" class="data row6 col1" >4</td>
-      <td id="T_26880_row6_col2" class="data row6 col2" >0</td>
-      <td id="T_26880_row6_col3" class="data row6 col3" >1, 3, 1, 2, 1</td>
+      <td id="T_9674c_row6_col0" class="data row6 col0" >Kelty Hearts</td>
+      <td id="T_9674c_row6_col1" class="data row6 col1" >4</td>
+      <td id="T_9674c_row6_col2" class="data row6 col2" >0</td>
+      <td id="T_9674c_row6_col3" class="data row6 col3" >1, 3, 1, 2, 1</td>
     </tr>
     <tr>
-      <td id="T_26880_row7_col0" class="data row7 col0" >Montrose</td>
-      <td id="T_26880_row7_col1" class="data row7 col1" >4</td>
-      <td id="T_26880_row7_col2" class="data row7 col2" >0</td>
-      <td id="T_26880_row7_col3" class="data row7 col3" >2, 1, 1, 0, 1</td>
+      <td id="T_9674c_row7_col0" class="data row7 col0" >Montrose</td>
+      <td id="T_9674c_row7_col1" class="data row7 col1" >4</td>
+      <td id="T_9674c_row7_col2" class="data row7 col2" >0</td>
+      <td id="T_9674c_row7_col3" class="data row7 col3" >2, 1, 1, 0, 1</td>
     </tr>
     <tr>
-      <td id="T_26880_row8_col0" class="data row8 col0" >Peterhead</td>
-      <td id="T_26880_row8_col1" class="data row8 col1" >4</td>
-      <td id="T_26880_row8_col2" class="data row8 col2" >0</td>
-      <td id="T_26880_row8_col3" class="data row8 col3" >2, 2, 0, 2, 2</td>
+      <td id="T_9674c_row8_col0" class="data row8 col0" >Peterhead</td>
+      <td id="T_9674c_row8_col1" class="data row8 col1" >4</td>
+      <td id="T_9674c_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_9674c_row8_col3" class="data row8 col3" >2, 2, 0, 2, 2</td>
     </tr>
     <tr>
-      <td id="T_26880_row9_col0" class="data row9 col0" >Queen of Sth</td>
-      <td id="T_26880_row9_col1" class="data row9 col1" >4</td>
-      <td id="T_26880_row9_col2" class="data row9 col2" >0</td>
-      <td id="T_26880_row9_col3" class="data row9 col3" >0, 2, 1, 1, 2</td>
+      <td id="T_9674c_row9_col0" class="data row9 col0" >Queen of Sth</td>
+      <td id="T_9674c_row9_col1" class="data row9 col1" >4</td>
+      <td id="T_9674c_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_9674c_row9_col3" class="data row9 col3" >0, 2, 1, 1, 2</td>
     </tr>
   </tbody>
 </table>
@@ -1615,85 +1683,85 @@
             <div class="section-container tab-content" id="mt_plus_1_5">
                 <h2 class="section-title">Record - Mi-Temps +1.5 (2+ Buts MT)</h2>
                 <style type="text/css">
-#T_ad6d9_row0_col2, #T_ad6d9_row1_col2, #T_ad6d9_row2_col2, #T_ad6d9_row3_col2, #T_ad6d9_row4_col2, #T_ad6d9_row5_col2, #T_ad6d9_row6_col2, #T_ad6d9_row7_col2, #T_ad6d9_row8_col2, #T_ad6d9_row9_col2 {
+#T_7fe81_row0_col2, #T_7fe81_row1_col2, #T_7fe81_row2_col2, #T_7fe81_row3_col2, #T_7fe81_row4_col2, #T_7fe81_row5_col2, #T_7fe81_row6_col2, #T_7fe81_row7_col2, #T_7fe81_row8_col2, #T_7fe81_row9_col2 {
   font-weight: normal;
   color: #555;
 }
-#T_ad6d9_row0_col3, #T_ad6d9_row1_col3, #T_ad6d9_row2_col3, #T_ad6d9_row3_col3, #T_ad6d9_row4_col3, #T_ad6d9_row5_col3, #T_ad6d9_row6_col3, #T_ad6d9_row7_col3, #T_ad6d9_row8_col3, #T_ad6d9_row9_col3 {
+#T_7fe81_row0_col3, #T_7fe81_row1_col3, #T_7fe81_row2_col3, #T_7fe81_row3_col3, #T_7fe81_row4_col3, #T_7fe81_row5_col3, #T_7fe81_row6_col3, #T_7fe81_row7_col3, #T_7fe81_row8_col3, #T_7fe81_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
 </style>
-<table id="T_ad6d9" class="styled-table">
+<table id="T_7fe81" class="styled-table">
   <thead>
     <tr>
-      <th id="T_ad6d9_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_ad6d9_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_ad6d9_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_ad6d9_level0_col3" class="col_heading level0 col3" >5 Derniers (MT)</th>
+      <th id="T_7fe81_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_7fe81_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_7fe81_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_7fe81_level0_col3" class="col_heading level0 col3" >5 Derniers (MT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_ad6d9_row0_col0" class="data row0 col0" >Alloa</td>
-      <td id="T_ad6d9_row0_col1" class="data row0 col1" >8</td>
-      <td id="T_ad6d9_row0_col2" class="data row0 col2" >0</td>
-      <td id="T_ad6d9_row0_col3" class="data row0 col3" >1, 0, 0, 2, 1</td>
+      <td id="T_7fe81_row0_col0" class="data row0 col0" >Alloa</td>
+      <td id="T_7fe81_row0_col1" class="data row0 col1" >8</td>
+      <td id="T_7fe81_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_7fe81_row0_col3" class="data row0 col3" >1, 0, 0, 2, 1</td>
     </tr>
     <tr>
-      <td id="T_ad6d9_row1_col0" class="data row1 col0" >East Fife</td>
-      <td id="T_ad6d9_row1_col1" class="data row1 col1" >7</td>
-      <td id="T_ad6d9_row1_col2" class="data row1 col2" >1</td>
-      <td id="T_ad6d9_row1_col3" class="data row1 col3" >1, 0, 1, 0, 2</td>
+      <td id="T_7fe81_row1_col0" class="data row1 col0" >East Fife</td>
+      <td id="T_7fe81_row1_col1" class="data row1 col1" >7</td>
+      <td id="T_7fe81_row1_col2" class="data row1 col2" >1</td>
+      <td id="T_7fe81_row1_col3" class="data row1 col3" >1, 0, 1, 0, 2</td>
     </tr>
     <tr>
-      <td id="T_ad6d9_row2_col0" class="data row2 col0" >Peterhead</td>
-      <td id="T_ad6d9_row2_col1" class="data row2 col1" >7</td>
-      <td id="T_ad6d9_row2_col2" class="data row2 col2" >2</td>
-      <td id="T_ad6d9_row2_col3" class="data row2 col3" >2, 2, 0, 2, 2</td>
+      <td id="T_7fe81_row2_col0" class="data row2 col0" >Peterhead</td>
+      <td id="T_7fe81_row2_col1" class="data row2 col1" >7</td>
+      <td id="T_7fe81_row2_col2" class="data row2 col2" >2</td>
+      <td id="T_7fe81_row2_col3" class="data row2 col3" >2, 2, 0, 2, 2</td>
     </tr>
     <tr>
-      <td id="T_ad6d9_row3_col0" class="data row3 col0" >Queen of Sth</td>
-      <td id="T_ad6d9_row3_col1" class="data row3 col1" >6</td>
-      <td id="T_ad6d9_row3_col2" class="data row3 col2" >1</td>
-      <td id="T_ad6d9_row3_col3" class="data row3 col3" >0, 2, 1, 1, 2</td>
+      <td id="T_7fe81_row3_col0" class="data row3 col0" >Queen of Sth</td>
+      <td id="T_7fe81_row3_col1" class="data row3 col1" >6</td>
+      <td id="T_7fe81_row3_col2" class="data row3 col2" >1</td>
+      <td id="T_7fe81_row3_col3" class="data row3 col3" >0, 2, 1, 1, 2</td>
     </tr>
     <tr>
-      <td id="T_ad6d9_row4_col0" class="data row4 col0" >Kelty Hearts</td>
-      <td id="T_ad6d9_row4_col1" class="data row4 col1" >6</td>
-      <td id="T_ad6d9_row4_col2" class="data row4 col2" >0</td>
-      <td id="T_ad6d9_row4_col3" class="data row4 col3" >1, 3, 1, 2, 1</td>
+      <td id="T_7fe81_row4_col0" class="data row4 col0" >Kelty Hearts</td>
+      <td id="T_7fe81_row4_col1" class="data row4 col1" >6</td>
+      <td id="T_7fe81_row4_col2" class="data row4 col2" >0</td>
+      <td id="T_7fe81_row4_col3" class="data row4 col3" >1, 3, 1, 2, 1</td>
     </tr>
     <tr>
-      <td id="T_ad6d9_row5_col0" class="data row5 col0" >Cove Rangers</td>
-      <td id="T_ad6d9_row5_col1" class="data row5 col1" >4</td>
-      <td id="T_ad6d9_row5_col2" class="data row5 col2" >0</td>
-      <td id="T_ad6d9_row5_col3" class="data row5 col3" >1, 0, 1, 2, 1</td>
+      <td id="T_7fe81_row5_col0" class="data row5 col0" >Cove Rangers</td>
+      <td id="T_7fe81_row5_col1" class="data row5 col1" >4</td>
+      <td id="T_7fe81_row5_col2" class="data row5 col2" >0</td>
+      <td id="T_7fe81_row5_col3" class="data row5 col3" >1, 0, 1, 2, 1</td>
     </tr>
     <tr>
-      <td id="T_ad6d9_row6_col0" class="data row6 col0" >Montrose</td>
-      <td id="T_ad6d9_row6_col1" class="data row6 col1" >4</td>
-      <td id="T_ad6d9_row6_col2" class="data row6 col2" >0</td>
-      <td id="T_ad6d9_row6_col3" class="data row6 col3" >2, 1, 1, 0, 1</td>
+      <td id="T_7fe81_row6_col0" class="data row6 col0" >Montrose</td>
+      <td id="T_7fe81_row6_col1" class="data row6 col1" >4</td>
+      <td id="T_7fe81_row6_col2" class="data row6 col2" >0</td>
+      <td id="T_7fe81_row6_col3" class="data row6 col3" >2, 1, 1, 0, 1</td>
     </tr>
     <tr>
-      <td id="T_ad6d9_row7_col0" class="data row7 col0" >Hamilton</td>
-      <td id="T_ad6d9_row7_col1" class="data row7 col1" >4</td>
-      <td id="T_ad6d9_row7_col2" class="data row7 col2" >1</td>
-      <td id="T_ad6d9_row7_col3" class="data row7 col3" >1, 1, 1, 0, 2</td>
+      <td id="T_7fe81_row7_col0" class="data row7 col0" >Hamilton</td>
+      <td id="T_7fe81_row7_col1" class="data row7 col1" >4</td>
+      <td id="T_7fe81_row7_col2" class="data row7 col2" >1</td>
+      <td id="T_7fe81_row7_col3" class="data row7 col3" >1, 1, 1, 0, 2</td>
     </tr>
     <tr>
-      <td id="T_ad6d9_row8_col0" class="data row8 col0" >Stenhousemuir</td>
-      <td id="T_ad6d9_row8_col1" class="data row8 col1" >4</td>
-      <td id="T_ad6d9_row8_col2" class="data row8 col2" >0</td>
-      <td id="T_ad6d9_row8_col3" class="data row8 col3" >2, 0, 0, 1, 1</td>
+      <td id="T_7fe81_row8_col0" class="data row8 col0" >Stenhousemuir</td>
+      <td id="T_7fe81_row8_col1" class="data row8 col1" >4</td>
+      <td id="T_7fe81_row8_col2" class="data row8 col2" >0</td>
+      <td id="T_7fe81_row8_col3" class="data row8 col3" >2, 0, 0, 1, 1</td>
     </tr>
     <tr>
-      <td id="T_ad6d9_row9_col0" class="data row9 col0" >Inverness C</td>
-      <td id="T_ad6d9_row9_col1" class="data row9 col1" >3</td>
-      <td id="T_ad6d9_row9_col2" class="data row9 col2" >0</td>
-      <td id="T_ad6d9_row9_col3" class="data row9 col3" >1, 3, 0, 0, 1</td>
+      <td id="T_7fe81_row9_col0" class="data row9 col0" >Inverness C</td>
+      <td id="T_7fe81_row9_col1" class="data row9 col1" >3</td>
+      <td id="T_7fe81_row9_col2" class="data row9 col2" >0</td>
+      <td id="T_7fe81_row9_col3" class="data row9 col3" >1, 3, 0, 0, 1</td>
     </tr>
   </tbody>
 </table>
@@ -1703,85 +1771,85 @@
             <div class="section-container tab-content" id="mt_moins_1_5">
                 <h2 class="section-title">Record - Mi-Temps -1.5 (0-1 Buts MT)</h2>
                 <style type="text/css">
-#T_3ee3f_row0_col2, #T_3ee3f_row1_col2, #T_3ee3f_row2_col2, #T_3ee3f_row3_col2, #T_3ee3f_row4_col2, #T_3ee3f_row5_col2, #T_3ee3f_row6_col2, #T_3ee3f_row7_col2, #T_3ee3f_row8_col2, #T_3ee3f_row9_col2 {
+#T_ba0d1_row0_col2, #T_ba0d1_row1_col2, #T_ba0d1_row2_col2, #T_ba0d1_row3_col2, #T_ba0d1_row4_col2, #T_ba0d1_row5_col2, #T_ba0d1_row6_col2, #T_ba0d1_row7_col2, #T_ba0d1_row8_col2, #T_ba0d1_row9_col2 {
   font-weight: normal;
   color: #555;
 }
-#T_3ee3f_row0_col3, #T_3ee3f_row1_col3, #T_3ee3f_row2_col3, #T_3ee3f_row3_col3, #T_3ee3f_row4_col3, #T_3ee3f_row5_col3, #T_3ee3f_row6_col3, #T_3ee3f_row7_col3, #T_3ee3f_row8_col3, #T_3ee3f_row9_col3 {
+#T_ba0d1_row0_col3, #T_ba0d1_row1_col3, #T_ba0d1_row2_col3, #T_ba0d1_row3_col3, #T_ba0d1_row4_col3, #T_ba0d1_row5_col3, #T_ba0d1_row6_col3, #T_ba0d1_row7_col3, #T_ba0d1_row8_col3, #T_ba0d1_row9_col3 {
   font-weight: normal;
   color: #777;
   font-size: 0.9em;
 }
 </style>
-<table id="T_3ee3f" class="styled-table">
+<table id="T_ba0d1" class="styled-table">
   <thead>
     <tr>
-      <th id="T_3ee3f_level0_col0" class="col_heading level0 col0" >Équipe</th>
-      <th id="T_3ee3f_level0_col1" class="col_heading level0 col1" >Record</th>
-      <th id="T_3ee3f_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
-      <th id="T_3ee3f_level0_col3" class="col_heading level0 col3" >5 Derniers (MT)</th>
+      <th id="T_ba0d1_level0_col0" class="col_heading level0 col0" >Équipe</th>
+      <th id="T_ba0d1_level0_col1" class="col_heading level0 col1" >Record</th>
+      <th id="T_ba0d1_level0_col2" class="col_heading level0 col2" >Série en Cours</th>
+      <th id="T_ba0d1_level0_col3" class="col_heading level0 col3" >5 Derniers (MT)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td id="T_3ee3f_row0_col0" class="data row0 col0" >Queen of Sth</td>
-      <td id="T_3ee3f_row0_col1" class="data row0 col1" >13</td>
-      <td id="T_3ee3f_row0_col2" class="data row0 col2" >0</td>
-      <td id="T_3ee3f_row0_col3" class="data row0 col3" >0, 2, 1, 1, 2</td>
+      <td id="T_ba0d1_row0_col0" class="data row0 col0" >Queen of Sth</td>
+      <td id="T_ba0d1_row0_col1" class="data row0 col1" >13</td>
+      <td id="T_ba0d1_row0_col2" class="data row0 col2" >0</td>
+      <td id="T_ba0d1_row0_col3" class="data row0 col3" >0, 2, 1, 1, 2</td>
     </tr>
     <tr>
-      <td id="T_3ee3f_row1_col0" class="data row1 col0" >Stenhousemuir</td>
-      <td id="T_3ee3f_row1_col1" class="data row1 col1" >12</td>
-      <td id="T_3ee3f_row1_col2" class="data row1 col2" >4</td>
-      <td id="T_3ee3f_row1_col3" class="data row1 col3" >2, 0, 0, 1, 1</td>
+      <td id="T_ba0d1_row1_col0" class="data row1 col0" >Stenhousemuir</td>
+      <td id="T_ba0d1_row1_col1" class="data row1 col1" >12</td>
+      <td id="T_ba0d1_row1_col2" class="data row1 col2" >4</td>
+      <td id="T_ba0d1_row1_col3" class="data row1 col3" >2, 0, 0, 1, 1</td>
     </tr>
     <tr>
-      <td id="T_3ee3f_row2_col0" class="data row2 col0" >Peterhead</td>
-      <td id="T_3ee3f_row2_col1" class="data row2 col1" >11</td>
-      <td id="T_3ee3f_row2_col2" class="data row2 col2" >0</td>
-      <td id="T_3ee3f_row2_col3" class="data row2 col3" >2, 2, 0, 2, 2</td>
+      <td id="T_ba0d1_row2_col0" class="data row2 col0" >Peterhead</td>
+      <td id="T_ba0d1_row2_col1" class="data row2 col1" >11</td>
+      <td id="T_ba0d1_row2_col2" class="data row2 col2" >0</td>
+      <td id="T_ba0d1_row2_col3" class="data row2 col3" >2, 2, 0, 2, 2</td>
     </tr>
     <tr>
-      <td id="T_3ee3f_row3_col0" class="data row3 col0" >Hamilton</td>
-      <td id="T_3ee3f_row3_col1" class="data row3 col1" >10</td>
-      <td id="T_3ee3f_row3_col2" class="data row3 col2" >0</td>
-      <td id="T_3ee3f_row3_col3" class="data row3 col3" >1, 1, 1, 0, 2</td>
+      <td id="T_ba0d1_row3_col0" class="data row3 col0" >Hamilton</td>
+      <td id="T_ba0d1_row3_col1" class="data row3 col1" >10</td>
+      <td id="T_ba0d1_row3_col2" class="data row3 col2" >0</td>
+      <td id="T_ba0d1_row3_col3" class="data row3 col3" >1, 1, 1, 0, 2</td>
     </tr>
     <tr>
-      <td id="T_3ee3f_row4_col0" class="data row4 col0" >Inverness C</td>
-      <td id="T_3ee3f_row4_col1" class="data row4 col1" >10</td>
-      <td id="T_3ee3f_row4_col2" class="data row4 col2" >3</td>
-      <td id="T_3ee3f_row4_col3" class="data row4 col3" >1, 3, 0, 0, 1</td>
+      <td id="T_ba0d1_row4_col0" class="data row4 col0" >Inverness C</td>
+      <td id="T_ba0d1_row4_col1" class="data row4 col1" >10</td>
+      <td id="T_ba0d1_row4_col2" class="data row4 col2" >3</td>
+      <td id="T_ba0d1_row4_col3" class="data row4 col3" >1, 3, 0, 0, 1</td>
     </tr>
     <tr>
-      <td id="T_3ee3f_row5_col0" class="data row5 col0" >Alloa</td>
-      <td id="T_3ee3f_row5_col1" class="data row5 col1" >9</td>
-      <td id="T_3ee3f_row5_col2" class="data row5 col2" >1</td>
-      <td id="T_3ee3f_row5_col3" class="data row5 col3" >1, 0, 0, 2, 1</td>
+      <td id="T_ba0d1_row5_col0" class="data row5 col0" >Alloa</td>
+      <td id="T_ba0d1_row5_col1" class="data row5 col1" >9</td>
+      <td id="T_ba0d1_row5_col2" class="data row5 col2" >1</td>
+      <td id="T_ba0d1_row5_col3" class="data row5 col3" >1, 0, 0, 2, 1</td>
     </tr>
     <tr>
-      <td id="T_3ee3f_row6_col0" class="data row6 col0" >Cove Rangers</td>
-      <td id="T_3ee3f_row6_col1" class="data row6 col1" >9</td>
-      <td id="T_3ee3f_row6_col2" class="data row6 col2" >1</td>
-      <td id="T_3ee3f_row6_col3" class="data row6 col3" >1, 0, 1, 2, 1</td>
+      <td id="T_ba0d1_row6_col0" class="data row6 col0" >Cove Rangers</td>
+      <td id="T_ba0d1_row6_col1" class="data row6 col1" >9</td>
+      <td id="T_ba0d1_row6_col2" class="data row6 col2" >1</td>
+      <td id="T_ba0d1_row6_col3" class="data row6 col3" >1, 0, 1, 2, 1</td>
     </tr>
     <tr>
-      <td id="T_3ee3f_row7_col0" class="data row7 col0" >East Fife</td>
-      <td id="T_3ee3f_row7_col1" class="data row7 col1" >9</td>
-      <td id="T_3ee3f_row7_col2" class="data row7 col2" >0</td>
-      <td id="T_3ee3f_row7_col3" class="data row7 col3" >1, 0, 1, 0, 2</td>
+      <td id="T_ba0d1_row7_col0" class="data row7 col0" >East Fife</td>
+      <td id="T_ba0d1_row7_col1" class="data row7 col1" >9</td>
+      <td id="T_ba0d1_row7_col2" class="data row7 col2" >0</td>
+      <td id="T_ba0d1_row7_col3" class="data row7 col3" >1, 0, 1, 0, 2</td>
     </tr>
     <tr>
-      <td id="T_3ee3f_row8_col0" class="data row8 col0" >Kelty Hearts</td>
-      <td id="T_3ee3f_row8_col1" class="data row8 col1" >9</td>
-      <td id="T_3ee3f_row8_col2" class="data row8 col2" >1</td>
-      <td id="T_3ee3f_row8_col3" class="data row8 col3" >1, 3, 1, 2, 1</td>
+      <td id="T_ba0d1_row8_col0" class="data row8 col0" >Kelty Hearts</td>
+      <td id="T_ba0d1_row8_col1" class="data row8 col1" >9</td>
+      <td id="T_ba0d1_row8_col2" class="data row8 col2" >1</td>
+      <td id="T_ba0d1_row8_col3" class="data row8 col3" >1, 3, 1, 2, 1</td>
     </tr>
     <tr>
-      <td id="T_3ee3f_row9_col0" class="data row9 col0" >Montrose</td>
-      <td id="T_3ee3f_row9_col1" class="data row9 col1" >8</td>
-      <td id="T_3ee3f_row9_col2" class="data row9 col2" >4</td>
-      <td id="T_3ee3f_row9_col3" class="data row9 col3" >2, 1, 1, 0, 1</td>
+      <td id="T_ba0d1_row9_col0" class="data row9 col0" >Montrose</td>
+      <td id="T_ba0d1_row9_col1" class="data row9 col1" >8</td>
+      <td id="T_ba0d1_row9_col2" class="data row9 col2" >4</td>
+      <td id="T_ba0d1_row9_col3" class="data row9 col3" >2, 1, 1, 0, 1</td>
     </tr>
   </tbody>
 </table>
@@ -1790,25 +1858,158 @@
             
             </div>
             
+            
+        <script>
+        const STATS_CONFIG = {"FT Marque": "FT Marque", "FT CS": "FT CS", "FT No CS": "FT No CS", "FT -0.5": "FT -0.5", "FT +1.5": "FT +1.5", "FT -1.5": "FT -1.5", "FT +2.5": "FT +2.5", "FT -2.5": "FT -2.5", "FT +3.5": "FT +3.5", "FT -3.5": "FT -3.5", "FT Nuls": "FT Nuls", "MT +0.5": "MT +0.5", "MT -0.5": "MT -0.5", "MT +1.5": "MT +1.5", "MT -1.5": "MT -1.5"};
+        </script>
+        
+            
+        <script type="application/json" id="team-data-json">
+        {"Alloa":{"Last_5_FT_Goals":"2, 2, 0, 3, 4","Last_5_MT_Goals":"1, 0, 0, 2, 1","Form_Score":19.8,"Form_Last_5_Str":"V, V, N, N, V","Prochain_Match":"N\/A","FT Marque_Record":21,"FT Marque_EnCours":2,"FT CS_Record":3,"FT CS_EnCours":3,"FT No CS_Record":19,"FT No CS_EnCours":0,"FT -0.5_Record":1,"FT -0.5_EnCours":0,"FT +1.5_Record":19,"FT +1.5_EnCours":2,"FT -1.5_Record":4,"FT -1.5_EnCours":0,"FT +2.5_Record":7,"FT +2.5_EnCours":2,"FT -2.5_Record":6,"FT -2.5_EnCours":0,"FT +3.5_Record":3,"FT +3.5_EnCours":1,"FT -3.5_Record":16,"FT -3.5_EnCours":0,"FT Nuls_Record":3,"FT Nuls_EnCours":0,"MT +0.5_Record":15,"MT +0.5_EnCours":2,"MT -0.5_Record":6,"MT -0.5_EnCours":0,"MT +1.5_Record":8,"MT +1.5_EnCours":0,"MT -1.5_Record":9,"MT -1.5_EnCours":1},"Cove Rangers":{"Last_5_FT_Goals":"2, 1, 3, 3, 1","Last_5_MT_Goals":"1, 0, 1, 2, 1","Form_Score":-1.8,"Form_Last_5_Str":"D, D, V, D, D","Prochain_Match":"N\/A","FT Marque_Record":22,"FT Marque_EnCours":0,"FT CS_Record":6,"FT CS_EnCours":0,"FT No CS_Record":12,"FT No CS_EnCours":2,"FT -0.5_Record":1,"FT -0.5_EnCours":0,"FT +1.5_Record":18,"FT +1.5_EnCours":0,"FT -1.5_Record":4,"FT -1.5_EnCours":1,"FT +2.5_Record":6,"FT +2.5_EnCours":0,"FT -2.5_Record":9,"FT -2.5_EnCours":1,"FT +3.5_Record":5,"FT +3.5_EnCours":0,"FT -3.5_Record":10,"FT -3.5_EnCours":9,"FT Nuls_Record":3,"FT Nuls_EnCours":0,"MT +0.5_Record":15,"MT +0.5_EnCours":3,"MT -0.5_Record":5,"MT -0.5_EnCours":0,"MT +1.5_Record":4,"MT +1.5_EnCours":0,"MT -1.5_Record":9,"MT -1.5_EnCours":1},"East Fife":{"Last_5_FT_Goals":"2, 2, 3, 2, 3","Last_5_MT_Goals":"1, 0, 1, 0, 2","Form_Score":5.0,"Form_Last_5_Str":"D, N, V, N, V","Prochain_Match":"N\/A","FT Marque_Record":10,"FT Marque_EnCours":0,"FT CS_Record":4,"FT CS_EnCours":0,"FT No CS_Record":17,"FT No CS_EnCours":2,"FT -0.5_Record":2,"FT -0.5_EnCours":0,"FT +1.5_Record":22,"FT +1.5_EnCours":11,"FT -1.5_Record":2,"FT -1.5_EnCours":0,"FT +2.5_Record":10,"FT +2.5_EnCours":1,"FT -2.5_Record":5,"FT -2.5_EnCours":0,"FT +3.5_Record":4,"FT +3.5_EnCours":0,"FT -3.5_Record":9,"FT -3.5_EnCours":5,"FT Nuls_Record":3,"FT Nuls_EnCours":0,"MT +0.5_Record":13,"MT +0.5_EnCours":1,"MT -0.5_Record":5,"MT -0.5_EnCours":0,"MT +1.5_Record":7,"MT +1.5_EnCours":1,"MT -1.5_Record":9,"MT -1.5_EnCours":0},"Hamilton":{"Last_5_FT_Goals":"4, 4, 3, 2, 3","Last_5_MT_Goals":"1, 1, 1, 0, 2","Form_Score":13.0,"Form_Last_5_Str":"V, N, D, V, V","Prochain_Match":"N\/A","FT Marque_Record":9,"FT Marque_EnCours":8,"FT CS_Record":5,"FT CS_EnCours":1,"FT No CS_Record":15,"FT No CS_EnCours":0,"FT -0.5_Record":1,"FT -0.5_EnCours":0,"FT +1.5_Record":11,"FT +1.5_EnCours":8,"FT -1.5_Record":4,"FT -1.5_EnCours":0,"FT +2.5_Record":7,"FT +2.5_EnCours":1,"FT -2.5_Record":6,"FT -2.5_EnCours":0,"FT +3.5_Record":4,"FT +3.5_EnCours":0,"FT -3.5_Record":11,"FT -3.5_EnCours":3,"FT Nuls_Record":3,"FT Nuls_EnCours":0,"MT +0.5_Record":10,"MT +0.5_EnCours":1,"MT -0.5_Record":5,"MT -0.5_EnCours":0,"MT +1.5_Record":4,"MT +1.5_EnCours":1,"MT -1.5_Record":10,"MT -1.5_EnCours":0},"Inverness C":{"Last_5_FT_Goals":"4, 4, 1, 1, 1","Last_5_MT_Goals":"1, 3, 0, 0, 1","Form_Score":16.6,"Form_Last_5_Str":"V, V, V, N, D","Prochain_Match":"N\/A","FT Marque_Record":16,"FT Marque_EnCours":16,"FT CS_Record":5,"FT CS_EnCours":3,"FT No CS_Record":11,"FT No CS_EnCours":0,"FT -0.5_Record":2,"FT -0.5_EnCours":0,"FT +1.5_Record":17,"FT +1.5_EnCours":0,"FT -1.5_Record":5,"FT -1.5_EnCours":3,"FT +2.5_Record":4,"FT +2.5_EnCours":0,"FT -2.5_Record":6,"FT -2.5_EnCours":3,"FT +3.5_Record":3,"FT +3.5_EnCours":0,"FT -3.5_Record":19,"FT -3.5_EnCours":3,"FT Nuls_Record":7,"FT Nuls_EnCours":0,"MT +0.5_Record":11,"MT +0.5_EnCours":1,"MT -0.5_Record":5,"MT -0.5_EnCours":0,"MT +1.5_Record":3,"MT +1.5_EnCours":0,"MT -1.5_Record":10,"MT -1.5_EnCours":3},"Kelty Hearts":{"Last_5_FT_Goals":"2, 4, 3, 3, 4","Last_5_MT_Goals":"1, 3, 1, 2, 1","Form_Score":-3.4,"Form_Last_5_Str":"N, D, D, N, D","Prochain_Match":"N\/A","FT Marque_Record":19,"FT Marque_EnCours":1,"FT CS_Record":3,"FT CS_EnCours":0,"FT No CS_Record":10,"FT No CS_EnCours":6,"FT -0.5_Record":3,"FT -0.5_EnCours":0,"FT +1.5_Record":11,"FT +1.5_EnCours":8,"FT -1.5_Record":4,"FT -1.5_EnCours":0,"FT +2.5_Record":7,"FT +2.5_EnCours":4,"FT -2.5_Record":5,"FT -2.5_EnCours":0,"FT +3.5_Record":5,"FT +3.5_EnCours":1,"FT -3.5_Record":9,"FT -3.5_EnCours":0,"FT Nuls_Record":3,"FT Nuls_EnCours":1,"MT +0.5_Record":16,"MT +0.5_EnCours":16,"MT -0.5_Record":4,"MT -0.5_EnCours":0,"MT +1.5_Record":6,"MT +1.5_EnCours":0,"MT -1.5_Record":9,"MT -1.5_EnCours":1},"Montrose":{"Last_5_FT_Goals":"4, 4, 3, 1, 4","Last_5_MT_Goals":"2, 1, 1, 0, 1","Form_Score":-9.0,"Form_Last_5_Str":"D, D, D, D, D","Prochain_Match":"N\/A","FT Marque_Record":9,"FT Marque_EnCours":0,"FT CS_Record":3,"FT CS_EnCours":0,"FT No CS_Record":15,"FT No CS_EnCours":7,"FT -0.5_Record":2,"FT -0.5_EnCours":0,"FT +1.5_Record":13,"FT +1.5_EnCours":1,"FT -1.5_Record":3,"FT -1.5_EnCours":0,"FT +2.5_Record":6,"FT +2.5_EnCours":1,"FT -2.5_Record":6,"FT -2.5_EnCours":0,"FT +3.5_Record":5,"FT +3.5_EnCours":1,"FT -3.5_Record":8,"FT -3.5_EnCours":0,"FT Nuls_Record":3,"FT Nuls_EnCours":0,"MT +0.5_Record":12,"MT +0.5_EnCours":1,"MT -0.5_Record":4,"MT -0.5_EnCours":0,"MT +1.5_Record":4,"MT +1.5_EnCours":0,"MT -1.5_Record":8,"MT -1.5_EnCours":4},"Peterhead":{"Last_5_FT_Goals":"3, 3, 1, 3, 3","Last_5_MT_Goals":"2, 2, 0, 2, 2","Form_Score":3.8,"Form_Last_5_Str":"D, V, D, V, V","Prochain_Match":"N\/A","FT Marque_Record":9,"FT Marque_EnCours":0,"FT CS_Record":4,"FT CS_EnCours":0,"FT No CS_Record":19,"FT No CS_EnCours":3,"FT -0.5_Record":2,"FT -0.5_EnCours":0,"FT +1.5_Record":19,"FT +1.5_EnCours":2,"FT -1.5_Record":3,"FT -1.5_EnCours":0,"FT +2.5_Record":8,"FT +2.5_EnCours":2,"FT -2.5_Record":7,"FT -2.5_EnCours":0,"FT +3.5_Record":4,"FT +3.5_EnCours":0,"FT -3.5_Record":15,"FT -3.5_EnCours":6,"FT Nuls_Record":4,"FT Nuls_EnCours":0,"MT +0.5_Record":15,"MT +0.5_EnCours":2,"MT -0.5_Record":4,"MT -0.5_EnCours":0,"MT +1.5_Record":7,"MT +1.5_EnCours":2,"MT -1.5_Record":11,"MT -1.5_EnCours":0},"Queen of Sth":{"Last_5_FT_Goals":"1, 3, 3, 2, 3","Last_5_MT_Goals":"0, 2, 1, 1, 2","Form_Score":13.0,"Form_Last_5_Str":"V, N, V, D, V","Prochain_Match":"N\/A","FT Marque_Record":15,"FT Marque_EnCours":3,"FT CS_Record":3,"FT CS_EnCours":1,"FT No CS_Record":16,"FT No CS_EnCours":0,"FT -0.5_Record":2,"FT -0.5_EnCours":0,"FT +1.5_Record":17,"FT +1.5_EnCours":4,"FT -1.5_Record":3,"FT -1.5_EnCours":0,"FT +2.5_Record":12,"FT +2.5_EnCours":1,"FT -2.5_Record":8,"FT -2.5_EnCours":0,"FT +3.5_Record":6,"FT +3.5_EnCours":0,"FT -3.5_Record":13,"FT -3.5_EnCours":10,"FT Nuls_Record":2,"FT Nuls_EnCours":0,"MT +0.5_Record":17,"MT +0.5_EnCours":4,"MT -0.5_Record":4,"MT -0.5_EnCours":0,"MT +1.5_Record":6,"MT +1.5_EnCours":1,"MT -1.5_Record":13,"MT -1.5_EnCours":0},"Stenhousemuir":{"Last_5_FT_Goals":"4, 1, 0, 2, 4","Last_5_MT_Goals":"2, 0, 0, 1, 1","Form_Score":7.8,"Form_Last_5_Str":"N, N, N, V, V","Prochain_Match":"N\/A","FT Marque_Record":25,"FT Marque_EnCours":2,"FT CS_Record":4,"FT CS_EnCours":0,"FT No CS_Record":19,"FT No CS_EnCours":2,"FT -0.5_Record":3,"FT -0.5_EnCours":0,"FT +1.5_Record":23,"FT +1.5_EnCours":2,"FT -1.5_Record":3,"FT -1.5_EnCours":0,"FT +2.5_Record":13,"FT +2.5_EnCours":1,"FT -2.5_Record":11,"FT -2.5_EnCours":0,"FT +3.5_Record":6,"FT +3.5_EnCours":1,"FT -3.5_Record":15,"FT -3.5_EnCours":0,"FT Nuls_Record":8,"FT Nuls_EnCours":3,"MT +0.5_Record":23,"MT +0.5_EnCours":2,"MT -0.5_Record":5,"MT -0.5_EnCours":0,"MT +1.5_Record":4,"MT +1.5_EnCours":0,"MT -1.5_Record":12,"MT -1.5_EnCours":4}}
+        </script>
+        
+            
+            
         <script>
             function showSection(sectionId, clickedLink) {
                 var welcomeMsg = document.getElementById('welcome-message');
                 if (welcomeMsg) { welcomeMsg.style.display = 'none'; }
-                
                 var sections = document.getElementsByClassName('tab-content');
                 for (var i = 0; i < sections.length; i++) {
                     sections[i].classList.remove('active');
                 }
-                
                 var links = document.querySelectorAll('.main-header nav a');
                 for (var i = 0; i < links.length; i++) {
                     links[i].classList.remove('active');
                 }
-                
                 var activeSection = document.getElementById(sectionId);
                 if (activeSection) { activeSection.classList.add('active'); }
                 if (clickedLink) { clickedLink.classList.add('active'); }
             }
+
+            function beautifyKey(key) {
+                return key.replace(/_/g, ' ').replace(/\w/g, c => c.toUpperCase());
+            }
+
+            function showTeamStats(teamName) {
+                const alertsContainer = document.getElementById('team-alerts-output');
+                const statsContainer = document.getElementById('team-stats-output');
+                alertsContainer.innerHTML = "";
+                statsContainer.innerHTML = "";
+                if (!teamName) return;
+                const teamData = JSON.parse(document.getElementById('team-data-json').textContent);
+                const stats = teamData[teamName];
+                if (!stats) {
+                    statsContainer.innerHTML = "<p>Erreur : Données non trouvées pour " + teamName + "</p>";
+                    return;
+                }
+                let activeAlerts = [];
+                for (const statName in STATS_CONFIG) {
+                    const col_en_cours = statName + '_EnCours';
+                    const col_record = statName + '_Record';
+                    if (stats[col_en_cours] !== undefined && stats[col_record] !== undefined) {
+                        const en_cours = stats[col_en_cours];
+                        const record = stats[col_record];
+                        let alerte_type = null;
+                        if (en_cours > 0 && en_cours == record) alerte_type = 'Rouge';
+                        else if (en_cours > 0 && en_cours == record - 1) alerte_type = 'Orange';
+                        else if (en_cours > 0 && en_cours == record - 2) alerte_type = 'Vert';
+                        if (alerte_type) {
+                            activeAlerts.push({
+                                type: alerte_type,
+                                stat: statName,
+                                record: record,
+                                en_cours: en_cours
+                            });
+                        }
+                    }
+                }
+                let alertsHtml = "<h3>Alertes Actives</h3>";
+                if (activeAlerts.length > 0) {
+                    alertsHtml += '<table class="team-alert-table"><thead><tr><th>Statistique</th><th>Série en Cours</th><th>Record</th></tr></thead><tbody>';
+                    activeAlerts.forEach(alert => {
+                        alertsHtml += `<tr class="${alert.type}">
+                            <td>${alert.stat}</td>
+                            <td>${alert.en_cours}</td>
+                            <td>${alert.record}</td>
+                        </tr>`;
+                    });
+                    alertsHtml += '</tbody></table>';
+                } else {
+                    alertsHtml += "<p>Aucune alerte active pour cette équipe.</p>";
+                }
+                alertsContainer.innerHTML = alertsHtml;
+                let statsHtml = "<h3>Toutes les Caractéristiques</h3>";
+                statsHtml += '<table class="team-stats-table"><tbody>';
+                statsHtml += `<tr><td>Prochain Match</td><td>${stats.Prochain_Match || 'N/A'}</td></tr>`;
+                statsHtml += `<tr><td>Score de Forme</td><td>${stats.Form_Score !== undefined ? stats.Form_Score.toFixed(1) : 'N/A'}</td></tr>`;
+                statsHtml += `<tr><td>Détails 5 Derniers</td><td>${stats.Form_Last_5_Str || 'N/A'}</td></tr>`;
+                statsHtml += `<tr><td>5 Derniers Buts (FT)</td><td>${stats.Last_5_FT_Goals || 'N/A'}</td></tr>`;
+                statsHtml += `<tr><td>5 Derniers Buts (MT)</td><td>${stats.Last_5_MT_Goals || 'N/A'}</td></tr>`;
+                for (const statName in STATS_CONFIG) {
+                     statsHtml += `<tr>
+                        <td>${statName} (Série)</td>
+                        <td>${stats[statName + '_EnCours']}</td>
+                     </tr>`;
+                     statsHtml += `<tr>
+                        <td>${statName} (Record)</td>
+                        <td>${stats[statName + '_Record']}</td>
+                     </tr>`;
+                }
+                statsHtml += '</tbody></table>';
+                statsContainer.innerHTML = statsHtml;
+            }
+            
+            function sortTable(colIndex, tableId, th) {
+                const table = document.getElementById(tableId);
+                if (!table) return;
+                const tbody = table.querySelector("tbody");
+                const rows = Array.from(tbody.querySelectorAll("tr"));
+                const currentDir = th.getAttribute("data-sort-dir") || "desc";
+                const newDir = currentDir === "asc" ? "desc" : "asc";
+                th.setAttribute("data-sort-dir", newDir);
+                table.querySelectorAll("th").forEach(header => {
+                    header.classList.remove("sort-asc", "sort-desc");
+                });
+                th.classList.add(newDir === "asc" ? "sort-asc" : "sort-desc");
+                rows.sort((a, b) => {
+                    const cellA = a.querySelectorAll("td")[colIndex].innerText;
+                    const cellB = b.querySelectorAll("td")[colIndex].innerText;
+                    const valA = parseFloat(cellA.replace(',', '.'));
+                    const valB = parseFloat(cellB.replace(',', '.'));
+                    let compareA, compareB;
+                    if (!isNaN(valA) && !isNaN(valB)) {
+                        compareA = valA;
+                        compareB = valB;
+                    } else {
+                        compareA = cellA.toLowerCase();
+                        compareB = cellB.toLowerCase();
+                    }
+                    if (compareA < compareB) {
+                        return newDir === "asc" ? -1 : 1;
+                    }
+                    if (compareA > compareB) {
+                        return newDir === "asc" ? 1 : -1;
+                    }
+                    return 0;
+                });
+                rows.forEach(row => tbody.appendChild(row));
+            }
+
+            function makeTablesSortable() {
+                const tables = document.querySelectorAll(".styled-table");
+                tables.forEach((table, index) => {
+                    const tableId = `sortable-table-${index}`;
+                    table.setAttribute("id", tableId);
+                    const headers = table.querySelectorAll("thead th");
+                    headers.forEach((th, colIndex) => {
+                        th.addEventListener("click", () => {
+                            sortTable(colIndex, tableId, th);
+                        });
+                    });
+                });
+            }
+            document.addEventListener("DOMContentLoaded", makeTablesSortable);
         </script>
         
         </body>
