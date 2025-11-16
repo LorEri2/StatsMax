@@ -58,10 +58,10 @@ STATS_COLUMNS_BASE = [
     'MT +0.5', 'MT -0.5', 'MT +1.5', 'MT -1.5'
 ]
 
-# --- (MODIFIÉ V32) Helper 1: Style pour les tableaux (5 colonnes) ---
+# --- (MODIFIÉ V39) Helper 1: Style pour les tableaux (6 colonnes) ---
 def colorier_series_v19(row):
     """
-    Applique un style aux 5 colonnes (Ligue, Équipe, Record, Série, 5 Derniers).
+    Applique un style aux 6 colonnes (Ligue, Équipe, Record, Année Record, Série, 5 Derniers).
     """
     record = row['Record']
     en_cours = row['Série en Cours']
@@ -69,6 +69,8 @@ def colorier_series_v19(row):
     style_ligue = 'font-weight: normal; color: #777; font-size: 0.9em; text-align: left;'
     style_equipe = '' 
     style_record = '' 
+    # NOUVEAU V39: Style pour l'année
+    style_annee_record = 'font-weight: normal; color: #777; font-size: 0.9em; text-align: center;'
     style_en_cours = 'font-weight: normal; color: #555;' 
     style_5_derniers = 'font-weight: normal; color: #777; font-size: 0.9em;' 
 
@@ -79,13 +81,13 @@ def colorier_series_v19(row):
     elif en_cours > 0 and en_cours == record - 2:
         style_en_cours = 'background-color: #e8f5e9; color: #2e7d32; font-weight: bold;'
     
-    return [style_ligue, style_equipe, style_record, style_en_cours, style_5_derniers] 
+    return [style_ligue, style_equipe, style_record, style_annee_record, style_en_cours, style_5_derniers] 
 
-# --- (MODIFIÉ V32) Helper 2: Style pour le tableau d'alertes (9 colonnes) ---
+# --- (MODIFIÉ V39) Helper 2: Style pour le tableau d'alertes (10 colonnes) ---
 def colorier_tableau_alertes_v22(row):
     """
-    Applique un style à la ligne du tableau d'alertes (V32).
-    Gère 9 colonnes (avec 'Ligue')
+    Applique un style à la ligne du tableau d'alertes (V39).
+    Gère 10 colonnes (avec 'Ligue' et 'Année Record')
     """
     alerte_type = row['Alerte']
     style_base = ''
@@ -97,12 +99,13 @@ def colorier_tableau_alertes_v22(row):
         style_base = 'background-color: #e8f5e9; color: #2e7d32; font-weight: bold;'
     
     style_ligue = style_base + 'font-weight: normal; color: #333; font-size: 0.9em; text-align: left;'
+    style_annee_record = style_base + 'font-weight: normal; color: #333; font-size: 0.9em; text-align: center;' # NOUVEAU V39
     style_5_derniers = style_base + 'font-weight: normal; color: #333; font-size: 0.9em;'
     style_prochain_match = style_base + 'font-weight: normal; color: #17a2b8; font-size: 0.9em;'
     
-    # Ordre: Ligue, Équipe, Stat, Record, Série, 5 Derniers, Prochain Match, Cote, Alerte(cachée)
+    # Ordre: Ligue, Équipe, Stat, Record, Année Record, Série, 5 Derniers, Prochain Match, Cote, Alerte(cachée)
     return [
-        style_ligue, style_base, style_base, style_base, style_base, 
+        style_ligue, style_base, style_base, style_base, style_annee_record, style_base, 
         style_5_derniers, style_prochain_match, style_base, style_base
     ]
 
@@ -127,20 +130,39 @@ def colorier_forme_v22(row):
     return [style_ligue, style_equipe, style_score, style_details, style_prochain_match]
 
 
-# --- (MODIFIÉ V35) Helper 4: Génération de la page HTML ---
+# --- (NOUVEAU V37) Helper 5: Formater les pilules de forme ---
+def formater_forme_html(forme_string):
+    """
+    Convertit "V, D, N" en pilules HTML colorées.
+    """
+    if forme_string == "N/A" or not forme_string:
+        return "N/A"
+        
+    mapping = {
+        'V': '<span class="form-pill form-v">V</span>',
+        'N': '<span class="form-pill form-n">N</span>',
+        'D': '<span class="form-pill form-d">D</span>',
+    }
+    
+    pills = [mapping.get(resultat.strip(), resultat) for resultat in forme_string.split(',')]
+    return " ".join(pills)
+
+
+# --- (MODIFIÉ V39.1) Helper 6: Génération de la page HTML ---
+# --- (MODIFIÉ V39.1) Helper 6: Génération de la page HTML ---
 def sauvegarder_rapport_global_html(
     df_rapport_complet, 
     df_series_brisees, 
     count_brisees,      
     count_actives,      
-    df_last_week,       # <-- NOUVEAU V35
+    df_last_week,  
     nom_fichier_html, 
     titre_rapport, 
     odds_api_dict
 ):
     """
     Sauvegarde le DataFrame GLOBAL en un seul fichier index.html.
-    MODIFIÉ V35: Ajout de l'onglet et du tableau "Résultats Semaine".
+    MODIFIÉ V39.1: Corrige le bug de formatage str/float sur 'Année Record'.
     """
     
     # 1. Définir les 14 statistiques de SÉRIE
@@ -171,22 +193,33 @@ def sauvegarder_rapport_global_html(
     }
     
     try:
-        # --- 2. Générer la Barre de Navigation (MODIFIÉ V35) ---
+        # --- 2. Générer la Barre de Navigation (Inchangé) ---
         nav_links = ""
-        # NOUVEAU Bouton "Résultats Semaine"
+        nav_links += '<a href="#" onclick="showSection(\'dashboard-section\', this); event.preventDefault();" class="dashboard-button active">📊 Tableau de Bord</a>\n'
         nav_links += '<a href="#" onclick="showSection(\'last-week-section\', this); event.preventDefault();" class="history-button">📅 Résultats Semaine</a>\n'
         nav_links += '<a href="#" onclick="showSection(\'broken-series-section\', this); event.preventDefault();" class="broken-button">💥 Séries Brisées</a>\n'
         nav_links += '<a href="#" onclick="showSection(\'team-view-section\', this); event.preventDefault();" class="team-button">🔍 Par Équipe</a>\n'
-        nav_links += '<a href="#" onclick="showSection(\'form-section\', this); event.preventDefault();" class="form-button">📈 Forme</a>\n'
-        nav_links += '<a href="#" onclick="showSection(\'alert-section\', this); event.preventDefault();" class="alert-button">⚠️ Alertes</a>\n'
+        nav_links += '<a href="#" onclick="showSection(\'alert-section\', this); event.preventDefault();" class="alert-button">⚠️ Alertes (Rouges)</a>\n'
+        nav_links += '<a href="#" onclick="showSection(\'pre-alert-section\', this); event.preventDefault();" class="pre-alert-button">🟠 Pré-Alertes (O/V)</a>\n'
         for nom_base, config in stats_a_afficher.items():
             id_html = config[0]
             nav_links += f'<a href="#" onclick="showSection(\'{id_html}\', this); event.preventDefault();">{nom_base}</a>\n'
+        
+        # --- NOUVEAU V37: Obtenir la liste des ligues pour le filtre ---
+        liste_ligues = sorted(df_rapport_complet['Ligue'].unique())
+        filtre_ligue_html = '<select id="league-filter" onchange="filterTablesByLeague(this.value);"><option value="Toutes">Toutes les Ligues</option>'
+        for ligue in liste_ligues:
+            filtre_ligue_html += f'<option value="{ligue}">{ligue}</option>'
+        filtre_ligue_html += '</select>'
 
-        # --- 3. Générer le tableau d'alertes (Inchangé) ---
-        alertes_collectees = []
+        # --- 3. Générer les tableaux d'alertes (MODIFIÉ V39) ---
+        alertes_collectees_rouges = []
+        alertes_collectees_pre = [] 
+        count_pre_alertes = 0
+
         for nom_base, config in stats_a_afficher.items():
             col_record = f'{nom_base}_Record'
+            col_annee = f'{nom_base}_Annee_Record' 
             col_en_cours = f'{nom_base}_EnCours'
             col_5_derniers = 'Last_5_FT_Goals' if nom_base.startswith('FT') else 'Last_5_MT_Goals'
             
@@ -195,6 +228,7 @@ def sauvegarder_rapport_global_html(
                 ligue = row['Ligue']
                 if col_record not in row or pd.isna(row[col_record]): continue
                 record = row[col_record]
+                annee_record = row[col_annee] 
                 en_cours = row[col_en_cours]
                 cinq_derniers_str = row.get(col_5_derniers, "N/A")
                 prochain_match_str = row.get('Prochain_Match', "N/A")
@@ -223,57 +257,103 @@ def sauvegarder_rapport_global_html(
                         else: cote_pari = "(Match?)"
                     else: cote_pari = "(Stat?)"
                     
-                    alertes_collectees.append({
+                    data_dict = {
                         'Ligue': ligue,
                         'Équipe': equipe, 'Statistique': nom_base, 'Record': record,
+                        'Année Record': annee_record, 
                         'Série en Cours': en_cours, '5 Derniers Buts': cinq_derniers_str, 
                         'Prochain Match': prochain_match_str, 'Cote (Pari Inverse)': cote_pari,
                         'Alerte': alerte_type 
-                    })
+                    }
+                    
+                    if alerte_type == 'Rouge':
+                        alertes_collectees_rouges.append(data_dict)
+                    else:
+                        alertes_collectees_pre.append(data_dict)
 
-        if not alertes_collectees:
-            alert_table_html = "<h3 class='no-alerts'>Aucune alerte active pour le moment.</h3>"
+        # 3.1 Tableau Alertes ROUGES
+        if not alertes_collectees_rouges:
+            alert_table_html = "<h3 class='no-alerts'>Aucune alerte Rouge active pour le moment.</h3>"
         else:
-            df_alertes = pd.DataFrame(alertes_collectees)
-            df_alertes['Alerte'] = pd.Categorical(df_alertes['Alerte'], categories=["Rouge", "Orange", "Vert"], ordered=True)
-            df_alertes = df_alertes.sort_values(by=['Alerte', 'Ligue', 'Équipe']).reset_index(drop=True)
+            df_alertes = pd.DataFrame(alertes_collectees_rouges)
+            df_alertes['Alerte'] = pd.Categorical(df_alertes['Alerte'], categories=["Rouge"], ordered=True)
+            df_alertes = df_alertes.sort_values(by=['Ligue', 'Équipe']).reset_index(drop=True)
             colonnes_ordre = [
-                'Ligue', 'Équipe', 'Statistique', 'Record', 'Série en Cours',
-                '5 Derniers Buts', 'Prochain Match', 'Cote (Pari Inverse)', 'Alerte'
+                'Ligue', 'Équipe', 'Statistique', 'Record', 'Année Record', # V39
+                'Série en Cours', '5 Derniers Buts', 'Prochain Match', 'Cote (Pari Inverse)', 'Alerte'
             ]
             df_alertes = df_alertes.reindex(columns=colonnes_ordre)
             styler_alertes = df_alertes.style.apply(colorier_tableau_alertes_v22, axis=1) \
-                                        .set_table_attributes('class="styled-table alerts-table"') \
-                                        .format({'Cote (Pari Inverse)': '{}'}) \
+                                        .set_table_attributes('class="styled-table alerts-table filterable-table"') \
+                                        .format({'Cote (Pari Inverse)': '{}', 'Année Record': '{}'}) \
                                         .hide(axis="index") \
                                         .hide(['Alerte'], axis=1) 
             alert_table_html = styler_alertes.to_html()
 
-        # --- 4. Générer le tableau de Forme (Inchangé) ---
+        # 3.2 NOUVEAU Tableau Pré-Alertes (ORANGE / VERT)
+        if not alertes_collectees_pre:
+            pre_alert_table_html = "<h3 class='no-alerts'>Aucune pré-alerte (Orange ou Vert) active.</h3>"
+        else:
+            df_alertes_pre = pd.DataFrame(alertes_collectees_pre)
+            df_alertes_pre['Alerte'] = pd.Categorical(df_alertes_pre['Alerte'], categories=["Orange", "Vert"], ordered=True)
+            df_alertes_pre = df_alertes_pre.sort_values(by=['Alerte', 'Ligue', 'Équipe']).reset_index(drop=True)
+            colonnes_ordre = [
+                'Ligue', 'Équipe', 'Statistique', 'Record', 'Année Record', # V39
+                'Série en Cours', '5 Derniers Buts', 'Prochain Match', 'Cote (Pari Inverse)', 'Alerte'
+            ]
+            df_alertes_pre = df_alertes_pre.reindex(columns=colonnes_ordre)
+            styler_pre_alertes = df_alertes_pre.style.apply(colorier_tableau_alertes_v22, axis=1) \
+                                        .set_table_attributes('class="styled-table alerts-table filterable-table"') \
+                                        .format({'Cote (Pari Inverse)': '{}', 'Année Record': '{}'}) \
+                                        .hide(axis="index") \
+                                        .hide(['Alerte'], axis=1) 
+            pre_alert_table_html = styler_pre_alertes.to_html()
+            
+        count_alertes_rouges = len(alertes_collectees_rouges)
+        count_pre_alertes = len(alertes_collectees_pre)
+
+        # --- 4. Générer le tableau de Forme (POUR LE DASHBOARD V37 / CORRIGÉ V39.1) ---
         cols_forme = ['Ligue', 'Équipe', 'Form_Score', 'Form_Last_5_Str', 'Prochain_Match']
         if 'Form_Score' in df_rapport_complet.columns:
             df_forme = df_rapport_complet[cols_forme].copy()
+            
+            # --- NOUVEAU V37: Formater les pilules de forme ---
+            df_forme['5 Derniers (Détails)'] = df_forme['Form_Last_5_Str'].apply(formater_forme_html) # NOUVELLE COLONNE
+            
             df_forme = df_forme.rename(columns={
                 'Ligue': 'Ligue',
                 'Form_Score': 'Score de Forme',
-                'Form_Last_5_Str': '5 Derniers (Détails)',
                 'Prochain_Match': 'Prochain Match'
             })
-            df_forme = df_forme.sort_values(by='Score de Forme', ascending=False).reset_index(drop=True)
-            styler_forme = df_forme.style.apply(colorier_forme_v22, axis=1) \
-                                        .set_table_attributes('class="styled-table form-table"') \
-                                        .format({'Score de Forme': '{:+.1f}'}) \
+            df_forme = df_forme.sort_values(by='Score de Forme', ascending=False)
+            
+            # --- CORRECTION V39.1 ---
+            # On sélectionne SEULEMENT les colonnes à afficher, en enlevant la raw 'Form_Last_5_Str'
+            cols_to_display = ['Ligue', 'Équipe', 'Score de Forme', '5 Derniers (Détails)', 'Prochain Match']
+            df_forme_final = df_forme[cols_to_display] 
+            
+            # Prendre les 10 meilleurs et 10 pires DEPUIS LE DF FILTRÉ
+            df_top10 = df_forme_final.head(10)
+            df_bottom10 = df_forme_final.tail(10).sort_values(by='Score de Forme', ascending=True)
+            df_forme_display = pd.concat([df_top10, df_bottom10]).reset_index(drop=True)
+            # --- FIN CORRECTION V39.1 ---
+
+            # Maintenant, df_forme_display a 5 colonnes, et colorier_forme_v22 renvoie 5 styles.
+            styler_forme = df_forme_display.style.apply(colorier_forme_v22, axis=1) \
+                                        .set_table_attributes('class="styled-table form-table filterable-table"') \
+                                        .format({'Score de Forme': '{:+.1f}', '5 Derniers (Détails)': '{}'}) \
                                         .hide(axis="index")
             form_table_html = styler_forme.to_html()
         else:
             form_table_html = "<h3 class='no-alerts'>Données 'FTR' non trouvées pour calculer la forme.</h3>"
         
-        # --- 5. Générer le Corps HTML (Onglets de stats - Inchangé) ---
+        # --- 5. Générer le Corps HTML (Onglets de stats - MODIFIÉ V39) ---
         corps_html = ""
         for nom_base, config in stats_a_afficher.items():
             id_html = config[0]
             titre_section = config[1]
             col_record = f'{nom_base}_Record'
+            col_annee = f'{nom_base}_Annee_Record' # NOUVEAU V39
             col_en_cours = f'{nom_base}_EnCours'
             col_5_derniers = 'Last_5_FT_Goals' if nom_base.startswith('FT') else 'Last_5_MT_Goals'
             nom_col_5_derniers = '5 Derniers (FT)' if nom_base.startswith('FT') else '5 Derniers (MT)'
@@ -283,15 +363,20 @@ def sauvegarder_rapport_global_html(
                 continue 
             if col_5_derniers not in df_rapport_complet.columns:
                     df_rapport_complet[col_5_derniers] = "N/A"
+            if col_annee not in df_rapport_complet.columns:
+                    df_rapport_complet[col_annee] = "N/A"
             
-            df_stat = df_rapport_complet[['Ligue', 'Équipe', col_record, col_en_cours, col_5_derniers]].copy()
+            df_stat = df_rapport_complet[['Ligue', 'Équipe', col_record, col_annee, col_en_cours, col_5_derniers]].copy() # V39
             df_stat = df_stat.rename(columns={
-                col_record: 'Record', col_en_cours: 'Série en Cours',
+                col_record: 'Record', 
+                col_annee: 'Année Record', # NOUVEAU V39
+                col_en_cours: 'Série en Cours',
                 col_5_derniers: nom_col_5_derniers
             })
             df_stat = df_stat.sort_values(by='Record', ascending=False).reset_index(drop=True)
             styler = df_stat.style.apply(colorier_series_v19, axis=1) \
-                                .set_table_attributes('class="styled-table"') \
+                                .set_table_attributes('class="styled-table filterable-table"') \
+                                .format({'Année Record': '{}'}) \
                                 .hide(axis="index") 
             table_html = styler.to_html()
             corps_html += f"""
@@ -305,13 +390,10 @@ def sauvegarder_rapport_global_html(
         if df_last_week.empty:
             last_week_table_html = "<h3 class='no-alerts'>Aucun match trouvé dans les 7 derniers jours de données.</h3>"
         else:
-            # S'assurer que les colonnes de buts existent
             if 'FTHG' not in df_last_week.columns: df_last_week['FTHG'] = '?'
             if 'FTAG' not in df_last_week.columns: df_last_week['FTAG'] = '?'
             if 'HTHG' not in df_last_week.columns: df_last_week['HTHG'] = '?'
             if 'HTAG' not in df_last_week.columns: df_last_week['HTAG'] = '?'
-
-            # Formater les colonnes
             df_last_week['Date_str'] = df_last_week['Date'].dt.strftime('%d/%m/%Y')
             df_last_week['Score_FT'] = df_last_week['FTHG'].astype(str).str.split('.').str[0] + ' - ' + df_last_week['FTAG'].astype(str).str.split('.').str[0]
             df_last_week['Score_HT'] = '(' + df_last_week['HTHG'].astype(str).str.split('.').str[0] + ' - ' + df_last_week['HTAG'].astype(str).str.split('.').str[0] + ')'
@@ -323,13 +405,11 @@ def sauvegarder_rapport_global_html(
                 'Score_FT': 'Score Final', 'Score_HT': 'Score MT'
             })
             df_week_display = df_week_display.sort_values(by='Date', ascending=False)
-
             styler_last_week = df_week_display.style \
-                                        .set_table_attributes('class="styled-table last-week-table"') \
+                                        .set_table_attributes('class="styled-table last-week-table filterable-table"') \
                                         .hide(axis="index")
             last_week_table_html = styler_last_week.to_html()
 
-        # Conteneur HTML pour le nouveau tableau
         last_week_html = f"""
         <div class="section-container tab-content" id="last-week-section">
             <h2 class="section-title">Résultats de la Semaine Passée</h2>
@@ -337,20 +417,17 @@ def sauvegarder_rapport_global_html(
             {last_week_table_html}
         </div>
         """
-        # --- FIN NOUVEAU V35 ---
 
-        # --- NOUVEAU V33 / MODIFIÉ V35 : Générer le tableau des Séries Brisées ---
+        # --- NOUVEAU V33 / MODIFIÉ V34 : Générer le tableau des Séries Brisées ---
         if df_series_brisees.empty:
             broken_table_html = "<h3 class='no-alerts'>Aucune série brisée depuis la dernière exécution.</h3>"
         else:
             styler_brisees = df_series_brisees.style \
-                                        .set_table_attributes('class="styled-table broken-table"') \
+                                        .set_table_attributes('class="styled-table broken-table filterable-table"') \
                                         .hide(axis="index")
             broken_table_html = styler_brisees.to_html()
 
-        # Générer le résumé (TOUJOURS)
         total_suivies = count_brisees + count_actives
-        
         if total_suivies == 0:
              summary_html = f"""
             <div class="broken-summary">
@@ -368,9 +445,7 @@ def sauvegarder_rapport_global_html(
                 </ul>
             </div>
             """
-        # --- FIN MODIFICATION V35 ---
 
-        # Conteneur HTML pour le nouveau tableau
         broken_series_html = f"""
         <div class="section-container tab-content" id="broken-series-section">
             <h2 class="section-title">Séries Brisées Récemment (Toutes Ligues)</h2>
@@ -380,16 +455,23 @@ def sauvegarder_rapport_global_html(
         </div>
         """
 
-        # --- 6. Générer la Vue "Par Équipe" (Inchangé) ---
-        team_list = sorted(df_rapport_complet['Équipe'].unique())
-        team_selector_html = '<select id="team-selector" onchange="showTeamStats(this.value);"><option value="">-- Choisissez une équipe --</option>'
-        for team in team_list:
-            team_selector_html += f'<option value="{team}">{team}</option>'
-        team_selector_html += '</select>'
+        # --- 6. Générer la Vue "Par Équipe" (MODIFIÉ V39) ---
+        
+        # (V39) D'abord, on crée le sélecteur de LIGUE
+        liste_ligues_equipe = sorted(df_rapport_complet['Ligue'].unique())
+        league_team_selector_html = '<select id="league-team-selector" onchange="populateTeamSelector(this.value);"><option value="">-- D\'abord, choisissez une ligue --</option>'
+        for ligue in liste_ligues_equipe:
+            league_team_selector_html += f'<option value="{ligue}">{ligue}</option>'
+        league_team_selector_html += '</select>'
+
+        # (V39) Ensuite, le sélecteur d'équipe (vide et désactivé)
+        team_selector_html = '<select id="team-selector" onchange="showTeamStats(this.value);" disabled><option value="">-- Choisissez une équipe --</option></select>'
+        
         team_data_json = df_rapport_complet.set_index('Équipe').to_json(orient="index", force_ascii=False)
         team_view_html = f"""
         <div class="section-container tab-content" id="team-view-section">
             <h2 class="section-title">Analyse par Équipe (Toutes Ligues)</h2>
+            {league_team_selector_html}
             {team_selector_html}
             <div id="team-details-container">
                 <div id="team-alerts-output"></div>
@@ -409,7 +491,41 @@ def sauvegarder_rapport_global_html(
         </script>
         """
 
-        # --- 7. Définir le Style CSS (MODIFIÉ V35) ---
+        # --- NOUVEAU V37: Générer le Tableau de Bord ---
+        dashboard_html = f"""
+        <div class="section-container tab-content active" id="dashboard-section">
+            <h2 class="section-title">Tableau de Bord</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card card-red">
+                    <div class="card-title">Alertes Rouges</div>
+                    <div class="card-value">{count_alertes_rouges}</div>
+                    <div class="card-footer">Séries au record historique</div>
+                </div>
+                <div class="dashboard-card card-orange">
+                    <div class="card-title">Pré-Alertes (O/V)</div>
+                    <div class="card-value">{count_pre_alertes}</div>
+                    <div class="card-footer">Séries à R-1 ou R-2</div>
+                </div>
+                <div class="dashboard-card card-broken">
+                    <div class="card-title">Séries Brisées</div>
+                    <div class="card-value">{count_brisees}</div>
+                    <div class="card-footer">Depuis la dernière exécution</div>
+                </div>
+                <div class="dashboard-card card-api">
+                    <div class="card-title">Matchs Trouvés (API)</div>
+                    <div class="card-value">{len(odds_api_dict) // 2}</div>
+                    <div class="card-footer">Matchs avec cotes à venir</div>
+                </div>
+            </div>
+            
+            <h2 class="section-title" style="margin-top: 40px;">État de Forme (Toutes Ligues)</h2>
+            <p class="section-subtitle">Les 10 équipes les plus en forme et les 10 moins en forme.</p>
+            {form_table_html}
+
+        </div>
+        """
+        
+        # --- 7. Définir le Style CSS (MODIFIÉ V39) ---
         html_style = """
         <style>
             html { scroll-behavior: smooth; }
@@ -434,52 +550,48 @@ def sauvegarder_rapport_global_html(
             .main-header nav a.active {
                 background-color: #007bff; color: white;
             }
-            .main-header nav a.alert-button {
-                background-color: #ffc107; color: #333; font-weight: bold;
-            }
-            .main-header nav a.alert-button.active {
-                background-color: #e0a800; color: #000;
-            }
-            .main-header nav a.form-button {
-                background-color: #17a2b8; color: white; font-weight: bold;
-            }
-            .main-header nav a.form-button.active {
-                background-color: #117a8b;
-            }
-            .main-header nav a.team-button {
-                background-color: #6f42c1; color: white; font-weight: bold;
-            }
-            .main-header nav a.team-button.active {
-                background-color: #5a37a0;
-            }
-            .main-header nav a.broken-button {
-                background-color: #dc3545; color: white; font-weight: bold;
-            }
-            .main-header nav a.broken-button.active {
-                background-color: #c82333;
-            }
-            /* --- NOUVEAU V35 : Style bouton "Résultats Semaine" --- */
-            .main-header nav a.history-button {
-                background-color: #6c757d; color: white; font-weight: bold;
-            }
-            .main-header nav a.history-button.active {
-                background-color: #5a6268;
-            }
+            .main-header nav a.alert-button { background-color: #ffc107; color: #333; font-weight: bold; }
+            .main-header nav a.alert-button.active { background-color: #e0a800; color: #000; }
+            .main-header nav a.pre-alert-button { background-color: #f57c00; color: white; font-weight: bold; }
+            .main-header nav a.pre-alert-button.active { background-color: #e65100; }
+            .main-header nav a.team-button { background-color: #6f42c1; color: white; font-weight: bold; }
+            .main-header nav a.team-button.active { background-color: #5a37a0; }
+            .main-header nav a.broken-button { background-color: #dc3545; color: white; font-weight: bold; }
+            .main-header nav a.broken-button.active { background-color: #c82333; }
+            .main-header nav a.history-button { background-color: #6c757d; color: white; font-weight: bold; }
+            .main-header nav a.history-button.active { background-color: #5a6268; }
+            .main-header nav a.dashboard-button { background-color: #007bff; color: white; font-weight: bold; }
+            .main-header nav a.dashboard-button.active { background-color: #0056b3; }
             
             .main-content {
                 display: flex; justify-content: center; align-items: center;
                 flex-direction: column; width: 100%; padding-top: 20px; padding-bottom: 20px;
             }
+            /* --- NOUVEAU V37: Filtre de Ligue --- */
+            .league-filter-container {
+                width: 90%;
+                max-width: 1100px;
+                margin-bottom: 15px;
+                display: none; /* Caché par défaut, affiché par JS */
+            }
+            #league-filter {
+                width: 100%;
+                padding: 10px;
+                font-size: 1em;
+                border-radius: 8px;
+                border: 1px solid #ddd;
+                background-color: white;
+            }
+            
             .section-container.tab-content {
                 display: none; width: 90%; 
                 max-width: 1100px; 
                 margin-bottom: 20px;
             }
+            /* MODIFIÉ V37: Affiche le tableau de bord par défaut */
             .section-container.tab-content.active { display: block; }
-            #welcome-message {
-                text-align: center; color: #555;
-                font-size: 1.5em; margin-top: 100px;
-            }
+            #welcome-message { display: none; } 
+            
             .no-alerts {
                 text-align: center; color: #555;
                 font-size: 1.2em; margin-top: 50px;
@@ -492,6 +604,57 @@ def sauvegarder_rapport_global_html(
                 margin-top: -15px; margin-bottom: 20px;
             }
             
+            /* --- NOUVEAU V37 : Grille du Tableau de Bord --- */
+            .dashboard-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin-bottom: 30px;
+            }
+            .dashboard-card {
+                background-color: white;
+                border-radius: 8px;
+                padding: 20px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                text-align: center;
+            }
+            .dashboard-card .card-title {
+                font-size: 1.1em;
+                font-weight: bold;
+                color: #555;
+            }
+            .dashboard-card .card-value {
+                font-size: 3em;
+                font-weight: bold;
+                margin: 10px 0;
+            }
+            .dashboard-card .card-footer {
+                font-size: 0.9em;
+                color: #888;
+            }
+            .dashboard-card.card-red .card-value { color: #c82333; }
+            .dashboard-card.card-orange .card-value { color: #f57c00; }
+            .dashboard-card.card-broken .card-value { color: #dc3545; }
+            .dashboard-card.card-api .card-value { color: #007bff; }
+
+            /* --- NOUVEAU V37 : Pilules de Forme --- */
+            .form-pill {
+                display: inline-block;
+                width: 22px;
+                height: 22px;
+                line-height: 22px;
+                text-align: center;
+                border-radius: 4px;
+                color: white;
+                font-weight: bold;
+                font-size: 0.8em;
+                margin: 0 1px;
+            }
+            .form-pill.form-v { background-color: #28a745; }
+            .form-pill.form-n { background-color: #ffc107; color: #333; }
+            .form-pill.form-d { background-color: #dc3545; }
+
+
             .styled-table {
                 border-collapse: collapse; width: 100%; 
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -517,23 +680,22 @@ def sauvegarder_rapport_global_html(
             }
             
             .styled-table th, .styled-table td { padding: 12px 15px; }
-            /* Col 1 (Ligue) et 2 (Équipe) */
             .styled-table th:nth-child(1), .styled-table td:nth-child(1) { text-align: left; }
             .styled-table th:nth-child(2), .styled-table td:nth-child(2) { text-align: left; }
             
-            /* Col 3+ (Stats) */
+            /* (V39) Col 3+ (Stats) */
             .styled-table th:nth-child(n+3), .styled-table td:nth-child(n+3) {
                 text-align: center; font-weight: bold;
             }
-            /* Col 5 (5 Derniers) */
-            .styled-table th:nth-child(5), .styled-table td:nth-child(5) {
+            /* (V39) Col 6 (5 Derniers) */
+            .styled-table th:nth-child(6), .styled-table td:nth-child(6) {
                 font-weight: normal; color: #777; font-size: 0.9em;
             }
             
             /* Styles pour le tableau de FORME */
             .form-table td:nth-child(1), .form-table td:nth-child(2) { font-weight: bold; } /* Ligue, Equipe */
             .form-table th:nth-child(4), .form-table td:nth-child(4) { /* 5 Derniers (Détails) */
-                font-weight: normal; color: #777; font-size: 0.9em;
+                font-weight: normal; font-size: 0.9em;
             }
             .form-table th:nth-child(5), .form-table td:nth-child(5) { /* Prochain Match */
                 font-weight: normal; color: #17a2b8; font-size: 0.9em;
@@ -544,21 +706,25 @@ def sauvegarder_rapport_global_html(
             }
             .styled-table tbody tr:nth-of-type(even) { background-color: #f8f8f8; }
             
-            /* Styles pour le tableau d'ALERTES */
+            /* (V39) Styles pour le tableau d'ALERTES */
             .alerts-table td { font-weight: bold !important; }
             .alerts-table td:nth-child(1) { /* Ligue */
                 font-weight: normal !important; 
                 font-size: 0.9em; text-align: left;
             }
-            .alerts-table td:nth-child(6) { /* 5 Derniers Buts */
+            .alerts-table td:nth-child(5) { /* Année Record */
+                font-weight: normal !important; 
+                font-size: 0.9em; text-align: center;
+            }
+            .alerts-table td:nth-child(7) { /* 5 Derniers Buts */
                 font-weight: normal !important; 
                 font-size: 0.9em;
             }
-            .alerts-table td:nth-child(7) { /* Prochain Match */
+            .alerts-table td:nth-child(8) { /* Prochain Match */
                 font-weight: normal !important; 
                 color: #17a2b8; font-size: 0.9em;
             }
-            .alerts-table td:nth-child(8) { /* Cote (Pari Inverse) */
+            .alerts-table td:nth-child(9) { /* Cote (Pari Inverse) */
                 font-weight: bold !important; 
                 color: #0056b3; font-size: 1.05em; text-align: center;
             }
@@ -599,7 +765,7 @@ def sauvegarder_rapport_global_html(
                 margin: 5px 0;
             }
 
-            /* --- NOUVEAU V35 : Style pour le tableau "Résultats Semaine" --- */
+            /* Styles pour le tableau "Résultats Semaine" */
             .last-week-table td {
                 text-align: left;
                 font-weight: bold;
@@ -622,15 +788,30 @@ def sauvegarder_rapport_global_html(
                  color: #777;
             }
 
+            /* --- NOUVEAU V39 : Style pour les sélecteurs par équipe --- */
+            #league-team-selector {
+                width: 100%;
+                padding: 12px;
+                font-size: 1.1em;
+                border-radius: 8px;
+                border: 1px solid #ddd;
+                background-color: white;
+                margin-bottom: 10px; /* Ajout d'une marge */
+            }
             #team-selector {
                 width: 100%;
                 padding: 12px;
                 font-size: 1.1em;
                 border-radius: 8px;
                 border: 1px solid #ddd;
-                margin-bottom: 25px;
                 background-color: white;
+                margin-bottom: 25px;
             }
+            #team-selector:disabled {
+                background-color: #f8f8f8;
+                color: #999;
+            }
+            
             #team-alerts-output h3, #team-stats-output h3 {
                 color: #333;
                 border-bottom: 2px solid #eee;
@@ -670,6 +851,13 @@ def sauvegarder_rapport_global_html(
                 color: #555;
                 font-weight: normal;
             }
+            /* (V39) Style pour la nouvelle info Année Record */
+            .team-stats-table .annee-record {
+                font-size: 0.85em;
+                font-weight: normal;
+                color: #888;
+                margin-left: 5px;
+            }
             .team-stats-table td:last-child {
                 text-align: right;
                 font-weight: bold;
@@ -678,12 +866,25 @@ def sauvegarder_rapport_global_html(
         </style>
         """
 
-        # --- 8. Le SCRIPT JAVASCRIPT (Inchangé V29) ---
+        # --- 8. Le SCRIPT JAVASCRIPT (MODIFIÉ V39) ---
         javascript_code = """
         <script>
+            // --- NOUVEAU V37: Map pour les pilules de forme ---
+            const formPillMapping = {
+                'V': '<span class="form-pill form-v">V</span>',
+                'N': '<span class="form-pill form-n">N</span>',
+                'D': '<span class="form-pill form-d">D</span>',
+            };
+
             function showSection(sectionId, clickedLink) {
-                var welcomeMsg = document.getElementById('welcome-message');
-                if (welcomeMsg) { welcomeMsg.style.display = 'none'; }
+                // (MODIFIÉ V37) Gérer l'affichage du filtre de ligue
+                const filterContainer = document.getElementById('league-filter-container');
+                if (sectionId === 'team-view-section' || sectionId === 'dashboard-section') {
+                    filterContainer.style.display = 'none';
+                } else {
+                    filterContainer.style.display = 'block';
+                }
+                
                 var sections = document.getElementsByClassName('tab-content');
                 for (var i = 0; i < sections.length; i++) {
                     sections[i].classList.remove('active');
@@ -697,9 +898,79 @@ def sauvegarder_rapport_global_html(
                 if (clickedLink) { clickedLink.classList.add('active'); }
             }
 
-            function beautifyKey(key) {
-                return key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            // --- NOUVEAU V37: Fonction pour filtrer les tableaux par ligue (CORRIGÉ V38) ---
+            function filterTablesByLeague(selectedLeague) {
+                const tables = document.querySelectorAll('.filterable-table');
+                
+                tables.forEach(table => {
+                    const rows = table.querySelectorAll('tbody tr');
+
+                    // --- DEBUT DE LA CORRECTION V38 ---
+                    // On détermine quelle colonne contient la Ligue
+                    let colIndex = 0; // Par défaut, la 1ère colonne (index 0)
+                    
+                    if (table.classList.contains('last-week-table')) {
+                        colIndex = 1; // Pour "Résultats Semaine", c'est la 2ème colonne (index 1)
+                    }
+                    // --- FIN DE LA CORRECTION V38 ---
+
+                    rows.forEach(row => {
+                        const cells = row.querySelectorAll('td');
+                        if (cells.length <= colIndex) return; // Sécurité
+                        
+                        // On utilise le bon index de colonne
+                        const leagueCell = cells[colIndex]; 
+                        const leagueName = leagueCell.innerText;
+                        
+                        if (selectedLeague === 'Toutes' || leagueName === selectedLeague) {
+                            row.style.display = ''; // Afficher la ligne
+                        } else {
+                            row.style.display = 'none'; // Cacher la ligne
+                        }
+                    });
+                });
             }
+
+            // --- NOUVEAU V37: Helper JS pour convertir "V,D,N" en pilules ---
+            function formatFormString(formStr) {
+                if (!formStr || formStr === "N/A") return "N/A";
+                return formStr.split(',')
+                              .map(r => formPillMapping[r.trim()] || r)
+                              .join(' ');
+            }
+            
+            // --- NOUVEAU V39: Fonction pour peupler le sélecteur d'équipe ---
+            function populateTeamSelector(selectedLeague) {
+                const teamSelector = document.getElementById('team-selector');
+                const alertsContainer = document.getElementById('team-alerts-output');
+                const statsContainer = document.getElementById('team-stats-output');
+                
+                // Vider tout
+                teamSelector.innerHTML = '<option value="">-- Choisissez une équipe --</option>';
+                alertsContainer.innerHTML = "";
+                statsContainer.innerHTML = "";
+
+                if (!selectedLeague) {
+                    teamSelector.disabled = true;
+                    return;
+                }
+
+                const teamData = JSON.parse(document.getElementById('team-data-json').textContent);
+                let teamsInLeague = [];
+                for (const teamName in teamData) {
+                    if (teamData[teamName].Ligue === selectedLeague) {
+                        teamsInLeague.push(teamName);
+                    }
+                }
+
+                teamsInLeague.sort();
+                teamsInLeague.forEach(teamName => {
+                    teamSelector.innerHTML += `<option value="${teamName}">${teamName}</option>`;
+                });
+
+                teamSelector.disabled = false;
+            }
+
 
             function showTeamStats(teamName) {
                 const alertsContainer = document.getElementById('team-alerts-output');
@@ -749,23 +1020,28 @@ def sauvegarder_rapport_global_html(
                     alertsHtml += "<p>Aucune alerte active pour cette équipe.</p>";
                 }
                 alertsContainer.innerHTML = alertsHtml;
+                
+                // (MODIFIÉ V39) Appelle formatFormString et ajoute l'année record
                 let statsHtml = "<h3>Toutes les Caractéristiques</h3>";
                 statsHtml += '<table class="team-stats-table"><tbody>';
-                // (V32) La vue par équipe affiche aussi la Ligue
                 statsHtml += `<tr><td>Ligue</td><td>${stats.Ligue || 'N/A'}</td></tr>`;
                 statsHtml += `<tr><td>Prochain Match</td><td>${stats.Prochain_Match || 'N/A'}</td></tr>`;
                 statsHtml += `<tr><td>Score de Forme</td><td>${stats.Form_Score !== undefined ? stats.Form_Score.toFixed(1) : 'N/A'}</td></tr>`;
-                statsHtml += `<tr><td>Détails 5 Derniers</td><td>${stats.Form_Last_5_Str || 'N/A'}</td></tr>`;
+                statsHtml += `<tr><td>Détails 5 Derniers</td><td>${formatFormString(stats.Form_Last_5_Str)}</td></tr>`;
                 statsHtml += `<tr><td>5 Derniers Buts (FT)</td><td>${stats.Last_5_FT_Goals || 'N/A'}</td></tr>`;
                 statsHtml += `<tr><td>5 Derniers Buts (MT)</td><td>${stats.Last_5_MT_Goals || 'N/A'}</td></tr>`;
                 for (const statName in STATS_CONFIG) {
+                     const annee_record_val = stats[statName + '_Annee_Record'] || 'N/A';
+                     const record_val = stats[statName + '_Record'] || 'N/A';
+                     const annee_str = annee_record_val !== 'N/A' ? `(${annee_record_val})` : '';
+                     
+                     statsHtml += `<tr>
+                        <td>${statName} (Record)</td>
+                        <td>${record_val} <span class="annee-record">${annee_str}</span></td>
+                     </tr>`;
                      statsHtml += `<tr>
                         <td>${statName} (Série)</td>
                         <td>${stats[statName + '_EnCours']}</td>
-                     </tr>`;
-                     statsHtml += `<tr>
-                        <td>${statName} (Record)</td>
-                        <td>${stats[statName + '_Record']}</td>
                      </tr>`;
                 }
                 statsHtml += '</tbody></table>';
@@ -809,6 +1085,7 @@ def sauvegarder_rapport_global_html(
             }
 
             function makeTablesSortable() {
+                // (MODIFIÉ V37) Appliquer le tri à TOUS les tableaux
                 const tables = document.querySelectorAll(".styled-table");
                 tables.forEach((table, index) => {
                     const tableId = `sortable-table-${index}`;
@@ -825,7 +1102,7 @@ def sauvegarder_rapport_global_html(
         </script>
         """
 
-        # --- 9. Assembler le HTML Final (MODIFIÉ V35) ---
+        # --- 9. Assembler le HTML Final (MODIFIÉ V38) ---
         html_content = f"""
         <!DOCTYPE html>
         <html lang="fr">
@@ -842,9 +1119,12 @@ def sauvegarder_rapport_global_html(
             </header>
             
             <div class="main-content">
-                <div id="welcome-message">
-                    <h2>Veuillez sélectionner une catégorie dans la barre de navigation.</h2>
+            
+                <div class="league-filter-container" id="league-filter-container">
+                    {filtre_ligue_html}
                 </div>
+                
+                {dashboard_html}
                 
                 {last_week_html}
                 
@@ -852,14 +1132,14 @@ def sauvegarder_rapport_global_html(
                 
                 {team_view_html}
                 
-                <div class="section-container tab-content" id="form-section">
-                    <h2 class="section-title">ÉTAT DE FORME (Toutes Ligues)</h2>
-                    {form_table_html}
+                <div class="section-container tab-content" id="alert-section">
+                    <h2 class="section-title">TABLEAU DES ALERTES ROUGES (Toutes Ligues)</h2>
+                    {alert_table_html}
                 </div>
                 
-                <div class="section-container tab-content" id="alert-section">
-                    <h2 class="section-title">TABLEAU DES ALERTES (Toutes Ligues)</h2>
-                    {alert_table_html}
+                <div class="section-container tab-content" id="pre-alert-section">
+                    <h2 class="section-title">TABLEAU DES PRÉ-ALERTES (Orange/Vert)</h2>
+                    {pre_alert_table_html}
                 </div>
                 
                 {corps_html}
@@ -876,7 +1156,7 @@ def sauvegarder_rapport_global_html(
         with open(nom_fichier_html, "w", encoding="utf-8") as f:
             f.write(html_content)
         
-        print(f"\nSuccès ! Le rapport V35 pour {titre_rapport} a été généré ici : {os.path.abspath(nom_fichier_html)}")
+        print(f"\nSuccès ! Le rapport V39 pour {titre_rapport} a été généré ici : {os.path.abspath(nom_fichier_html)}")
 
     except Exception as e:
         print(f"\nErreur lors de la génération du fichier HTML : {e}")
@@ -989,13 +1269,14 @@ def charger_donnees(fichiers_csv):
     print("Toutes les données ont été préparées et les conditions pré-calculées.")
     return df
 
-# --- (NOUVEAU V31.1) Fonction Helper ---
+# --- (MODIFIÉ V39) Fonction Helper ---
 def trouver_max_serie_pour_colonne(df_equipe, nom_colonne_condition):
     """
     Helper: Calcule la série max pour une colonne de condition.
+    (V39) Renvoie (max_streak, annee_record)
     """
-    if nom_colonne_condition not in df_equipe.columns:
-        return 0 
+    if nom_colonne_condition not in df_equipe.columns or 'Date' not in df_equipe.columns:
+        return 0, "N/A" # Retourne un tuple
         
     df_equipe = df_equipe.sort_values(by='Date')
     df_equipe['streak_group'] = (df_equipe[nom_colonne_condition] != df_equipe[nom_colonne_condition].shift()).cumsum()
@@ -1003,10 +1284,34 @@ def trouver_max_serie_pour_colonne(df_equipe, nom_colonne_condition):
 
     if streaks_when_true.empty:
         max_streak = 0
+        annee_record = "N/A"
     else:
         streak_lengths = streaks_when_true.groupby('streak_group').size()
         max_streak = int(streak_lengths.max())
-    return max_streak
+        
+        # --- NOUVEAU V39: Trouver l'année ---
+        # 1. Trouver TOUS les groupes qui ont la longueur max
+        groupes_max = streak_lengths[streak_lengths == max_streak].index
+        
+        # 2. Pour chacun de ces groupes, trouver la date de fin
+        dates_de_fin = []
+        for group_id in groupes_max:
+            # S'assurer que le groupe existe dans le dataframe filtré
+            if group_id in streaks_when_true['streak_group'].values:
+                date_fin = streaks_when_true[streaks_when_true['streak_group'] == group_id]['Date'].max()
+                dates_de_fin.append(date_fin)
+        
+        # 3. Prendre la date la plus récente parmi ces records (filtrer les NaT)
+        dates_valides = [d for d in dates_de_fin if pd.notna(d)]
+        if not dates_valides:
+            annee_record = "N/A"
+        else:
+            date_fin_record_recente = max(dates_valides)
+            # 4. Extraire l'année
+            annee_record = date_fin_record_recente.year
+        # --- FIN NOUVEAU V39 ---
+            
+    return max_streak, annee_record # Retourne un tuple
 
 # --- (NOUVEAU V31.1) Fonction Helper ---
 def trouver_serie_en_cours_pour_colonne(df_equipe, nom_colonne_condition):
@@ -1076,14 +1381,10 @@ def calculer_score_de_forme(df_equipe, equipe):
     return total_score, details_complets
 
 
-# --- (MODIFIÉ V32) FONCTION DE CALCUL V32 ---
+# --- (MODIFIÉ V39) FONCTION DE CALCUL V39 ---
 def calculer_tous_les_records_et_series(df, ligues_a_analyser, odds_api_dict):
     """
-    Calcule le RECORD, la SÉRIE EN COURS, etc. pour TOUTES les équipes
-    et ajoute le nom de la Ligue.
-    
-    MODIFIÉ V32: Accepte 'ligues_a_analyser' (dict) au lieu de 'equipes' (liste)
-                 et ajoute la colonne 'Ligue'.
+    Calcule le RECORD, l'ANNÉE RECORD, la SÉRIE EN COURS, etc.
     """
     resultats = []
     conditions_a_tester = {
@@ -1163,8 +1464,11 @@ def calculer_tous_les_records_et_series(df, ligues_a_analyser, odds_api_dict):
             # --- FIN MODIFICATION V31 ---
                 
             for nom_base, nom_col_data in conditions_a_tester.items():
-                record = trouver_max_serie_pour_colonne(df_equipe, nom_col_data)
+                # --- MODIFIÉ V39: Récupérer (record, annee) ---
+                record, annee_record = trouver_max_serie_pour_colonne(df_equipe, nom_col_data)
                 record_equipe[f'{nom_base}_Record'] = record
+                record_equipe[f'{nom_base}_Annee_Record'] = annee_record # NOUVEAU V39
+                
                 en_cours = trouver_serie_en_cours_pour_colonne(df_equipe, nom_col_data)
                 record_equipe[f'{nom_base}_EnCours'] = en_cours
                 
@@ -1186,7 +1490,7 @@ def decouvrir_ligues_et_equipes(dossier_csv_principal):
             print(f"Erreur : Aucun dossier de saison (ex: 'data2010-2011') trouvé dans '{dossier_csv_principal}'")
             return {}
         dossier_le_plus_recent = dossiers_saison[-1]
-        print(f"Dossier de la saison la plus récente détecté : {os.path.basename(dossier_le_plus_recent)}")
+        print(f"Dossier de la saison la plus recente détecté : {os.path.basename(dossier_le_plus_recent)}")
     except Exception as e:
         print(f"Erreur lors de la recherche des dossiers de saison : {e}")
         return {}
@@ -1436,7 +1740,7 @@ def analyser_cache_series(df_actuel, df_cache):
         return pd.DataFrame(columns=['Ligue', 'Équipe', 'Statistique', 'Série Précédente']), 0, 0
 
 
-# --- POINT D'ENTRÉE DU SCRIPT (MODIFIÉ V35) ---
+# --- POINT D'ENTRÉE DU SCRIPT (MODIFIÉ V38) ---
 if __name__ == "__main__":
     
     SAISON_API = 2025 
@@ -1494,6 +1798,7 @@ if __name__ == "__main__":
         
         # 7. (NOUVEAU V35) Filtrer les résultats de la semaine passée
         print("Filtrage des résultats de la semaine passée...")
+        df_last_week = pd.DataFrame() # Initialiser
         if 'Date' in donnees_completes.columns and not donnees_completes.empty:
             date_max = donnees_completes['Date'].max()
             date_min = date_max - pd.Timedelta(days=7)
@@ -1502,8 +1807,6 @@ if __name__ == "__main__":
             # Ajouter le nom lisible de la ligue
             if not df_last_week.empty:
                 df_last_week['Ligue'] = df_last_week['LeagueCode'].map(LEAGUE_NAME_MAPPING).fillna(df_last_week['LeagueCode'])
-        else:
-            df_last_week = pd.DataFrame()
         
         # 8. (NOUVEAU V34) Charger l'ancien cache et comparer
         df_cache = pd.DataFrame() 
@@ -1519,13 +1822,13 @@ if __name__ == "__main__":
         nom_du_fichier_html = "index.html" # On sauvegarde directement en index.html
         titre_rapport = "Rapport Global des Ligues"
         
-        # (MODIFIÉ V35)
+        # (MODIFIÉ V38)
         sauvegarder_rapport_global_html(
             df_rapport_global, 
             df_series_brisees, 
             count_brisees,
             count_actives,
-            df_last_week,       # <-- NOUVEAU V35
+            df_last_week,
             nom_du_fichier_html, 
             titre_rapport,
             odds_api_dict 
