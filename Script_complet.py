@@ -44,13 +44,19 @@ STAT_TO_ODD_COLUMN_MAP = {
     'FT -0.5': 'API_Over_0_5', 'FT -1.5': 'API_Over_1_5', 'FT -2.5': 'API_Over_2_5',
     'FT -3.5': 'API_Over_3_5', 
     'FT CS': 'API_BTTS_Yes', 'FT No CS': 'API_BTTS_No', 'FT Nuls': 'API_12',
-    # Ajouts pour que les stats MT aient un mapping
     'MT +0.5': 'API_MT_Under_0_5', 'MT -0.5': 'API_MT_Over_0_5',
     'MT +1.5': 'API_MT_Under_1_5', 'MT -1.5': 'API_MT_Over_1_5',
-    'FT Marque': 'API_Team_Under_0_5', # Nom d'exemple
+    'FT Marque': 'API_Team_Under_0_5',
 }
 # ##########################################################################
 
+# (V33) Définir les noms de colonnes pour les stats
+STATS_COLUMNS_BASE = [
+    'FT Marque', 'FT CS', 'FT No CS',
+    'FT -0.5', 'FT +1.5', 'FT -1.5', 'FT +2.5', 'FT -2.5', 'FT +3.5', 'FT -3.5', 
+    'FT Nuls', 
+    'MT +0.5', 'MT -0.5', 'MT +1.5', 'MT -1.5'
+]
 
 # --- (MODIFIÉ V32) Helper 1: Style pour les tableaux (5 colonnes) ---
 def colorier_series_v19(row):
@@ -121,11 +127,20 @@ def colorier_forme_v22(row):
     return [style_ligue, style_equipe, style_score, style_details, style_prochain_match]
 
 
-# --- (MODIFIÉ V32) Helper 4: Génération de la page HTML ---
-def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_rapport, odds_api_dict):
+# --- (MODIFIÉ V34) Helper 4: Génération de la page HTML ---
+# --- (MODIFIÉ V35) Helper 4: Génération de la page HTML ---
+def sauvegarder_rapport_global_html(
+    df_rapport_complet, 
+    df_series_brisees, 
+    count_brisees,      # <-- NOUVEAU V34
+    count_actives,      # <-- NOUVEAU V34
+    nom_fichier_html, 
+    titre_rapport, 
+    odds_api_dict
+):
     """
     Sauvegarde le DataFrame GLOBAL en un seul fichier index.html.
-    Les onglets sont les caractéristiques. Les ligues sont dans les tableaux.
+    MODIFIÉ V35: Corrigé la logique d'affichage du résumé.
     """
     
     # 1. Définir les 14 statistiques de SÉRIE
@@ -158,6 +173,7 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
     try:
         # --- 2. Générer la Barre de Navigation (Inchangé) ---
         nav_links = ""
+        nav_links += '<a href="#" onclick="showSection(\'broken-series-section\', this); event.preventDefault();" class="broken-button">💥 Séries Brisées</a>\n'
         nav_links += '<a href="#" onclick="showSection(\'team-view-section\', this); event.preventDefault();" class="team-button">🔍 Par Équipe</a>\n'
         nav_links += '<a href="#" onclick="showSection(\'form-section\', this); event.preventDefault();" class="form-button">📈 Forme</a>\n'
         nav_links += '<a href="#" onclick="showSection(\'alert-section\', this); event.preventDefault();" class="alert-button">⚠️ Alertes</a>\n'
@@ -165,7 +181,7 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
             id_html = config[0]
             nav_links += f'<a href="#" onclick="showSection(\'{id_html}\', this); event.preventDefault();">{nom_base}</a>\n'
 
-        # --- 3. Générer le tableau d'alertes (MODIFIÉ V32) ---
+        # --- 3. Générer le tableau d'alertes (Inchangé) ---
         alertes_collectees = []
         for nom_base, config in stats_a_afficher.items():
             col_record = f'{nom_base}_Record'
@@ -174,7 +190,7 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
             
             for index, row in df_rapport_complet.iterrows():
                 equipe = row['Équipe'] 
-                ligue = row['Ligue'] # <-- NOUVEAU V32
+                ligue = row['Ligue']
                 if col_record not in row or pd.isna(row[col_record]): continue
                 record = row[col_record]
                 en_cours = row[col_en_cours]
@@ -206,7 +222,7 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
                     else: cote_pari = "(Stat?)"
                     
                     alertes_collectees.append({
-                        'Ligue': ligue, # <-- NOUVEAU V32
+                        'Ligue': ligue,
                         'Équipe': equipe, 'Statistique': nom_base, 'Record': record,
                         'Série en Cours': en_cours, '5 Derniers Buts': cinq_derniers_str, 
                         'Prochain Match': prochain_match_str, 'Cote (Pari Inverse)': cote_pari,
@@ -218,9 +234,9 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
         else:
             df_alertes = pd.DataFrame(alertes_collectees)
             df_alertes['Alerte'] = pd.Categorical(df_alertes['Alerte'], categories=["Rouge", "Orange", "Vert"], ordered=True)
-            df_alertes = df_alertes.sort_values(by=['Alerte', 'Ligue', 'Équipe']).reset_index(drop=True) # Trié par Alerte puis Ligue
+            df_alertes = df_alertes.sort_values(by=['Alerte', 'Ligue', 'Équipe']).reset_index(drop=True)
             colonnes_ordre = [
-                'Ligue', 'Équipe', 'Statistique', 'Record', 'Série en Cours', # <-- NOUVEAU V32
+                'Ligue', 'Équipe', 'Statistique', 'Record', 'Série en Cours',
                 '5 Derniers Buts', 'Prochain Match', 'Cote (Pari Inverse)', 'Alerte'
             ]
             df_alertes = df_alertes.reindex(columns=colonnes_ordre)
@@ -231,12 +247,12 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
                                         .hide(['Alerte'], axis=1) 
             alert_table_html = styler_alertes.to_html()
 
-        # --- 4. Générer le tableau de Forme (MODIFIÉ V32) ---
-        cols_forme = ['Ligue', 'Équipe', 'Form_Score', 'Form_Last_5_Str', 'Prochain_Match'] # <-- NOUVEAU V32
+        # --- 4. Générer le tableau de Forme (Inchangé) ---
+        cols_forme = ['Ligue', 'Équipe', 'Form_Score', 'Form_Last_5_Str', 'Prochain_Match']
         if 'Form_Score' in df_rapport_complet.columns:
             df_forme = df_rapport_complet[cols_forme].copy()
             df_forme = df_forme.rename(columns={
-                'Ligue': 'Ligue', # <-- NOUVEAU V32
+                'Ligue': 'Ligue',
                 'Form_Score': 'Score de Forme',
                 'Form_Last_5_Str': '5 Derniers (Détails)',
                 'Prochain_Match': 'Prochain Match'
@@ -250,7 +266,7 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
         else:
             form_table_html = "<h3 class='no-alerts'>Données 'FTR' non trouvées pour calculer la forme.</h3>"
         
-        # --- 5. Générer le Corps HTML (Onglets de stats - MODIFIÉ V32) ---
+        # --- 5. Générer le Corps HTML (Onglets de stats - Inchangé) ---
         corps_html = ""
         for nom_base, config in stats_a_afficher.items():
             id_html = config[0]
@@ -266,7 +282,6 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
             if col_5_derniers not in df_rapport_complet.columns:
                     df_rapport_complet[col_5_derniers] = "N/A"
             
-            # <-- NOUVEAU V32: Ajout de 'Ligue'
             df_stat = df_rapport_complet[['Ligue', 'Équipe', col_record, col_en_cours, col_5_derniers]].copy()
             df_stat = df_stat.rename(columns={
                 col_record: 'Record', col_en_cours: 'Série en Cours',
@@ -284,8 +299,50 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
             </div>
             """
 
+        # --- MODIFIÉ V35 : Logique du résumé ---
+        
+        # 1. Générer le tableau des séries brisées
+        if df_series_brisees.empty:
+            broken_table_html = "<h3 class='no-alerts'>Aucune série brisée depuis la dernière exécution.</h3>"
+        else:
+            styler_brisees = df_series_brisees.style \
+                                        .set_table_attributes('class="styled-table broken-table"') \
+                                        .hide(axis="index")
+            broken_table_html = styler_brisees.to_html()
+
+        # 2. Générer le résumé (TOUJOURS)
+        total_suivies = count_brisees + count_actives
+        
+        if total_suivies == 0:
+             summary_html = f"""
+            <div class="broken-summary">
+                <p>Aucune série (Rouge, Orange ou Vert) n'était active lors de la dernière exécution.</p>
+                <p>(Les données s'afficheront après la prochaine mise à jour de vos CSV)</p>
+            </div>
+            """
+        else:
+            summary_html = f"""
+            <div class="broken-summary">
+                <p>Sur les <strong>{total_suivies}</strong> séries suivies (Rouge, Orange ou Vert) depuis la dernière exécution :</p>
+                <ul>
+                    <li><strong style="color: #c82333;">{count_brisees}</strong> séries ont été brisées.</li>
+                    <li><strong style="color: #2e7d32;">{count_actives}</strong> séries sont toujours actives.</li>
+                </ul>
+            </div>
+            """
+        # --- FIN MODIFICATION V35 ---
+
+        # 3. Assembler le conteneur HTML
+        broken_series_html = f"""
+        <div class="section-container tab-content" id="broken-series-section">
+            <h2 class="section-title">Séries Brisées Récemment (Toutes Ligues)</h2>
+            <p class="section-subtitle">Affiche les séries qui étaient actives (Rouge, Orange, Vert) lors de la dernière exécution et qui sont maintenant terminées (retombées à 0).</p>
+            {broken_table_html}
+            {summary_html}
+        </div>
+        """
+
         # --- 6. Générer la Vue "Par Équipe" (Inchangé) ---
-        # Le sélecteur contiendra maintenant toutes les équipes de toutes les ligues
         team_list = sorted(df_rapport_complet['Équipe'].unique())
         team_selector_html = '<select id="team-selector" onchange="showTeamStats(this.value);"><option value="">-- Choisissez une équipe --</option>'
         for team in team_list:
@@ -314,7 +371,7 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
         </script>
         """
 
-        # --- 7. Définir le Style CSS (MODIFIÉ V32) ---
+        # --- 7. Définir le Style CSS (Inchangé V34) ---
         html_style = """
         <style>
             html { scroll-behavior: smooth; }
@@ -357,6 +414,13 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
             .main-header nav a.team-button.active {
                 background-color: #5a37a0;
             }
+            /* --- NOUVEAU V33 : Style bouton "Séries Brisées" --- */
+            .main-header nav a.broken-button {
+                background-color: #dc3545; color: white; font-weight: bold;
+            }
+            .main-header nav a.broken-button.active {
+                background-color: #c82333;
+            }
             
             .main-content {
                 display: flex; justify-content: center; align-items: center;
@@ -379,6 +443,12 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
             .section-title {
                 color: #333; text-align: center; font-size: 1.5em; margin-bottom: 20px;
             }
+            /* --- NOUVEAU V33: Style sous-titre --- */
+            .section-subtitle {
+                text-align: center; font-size: 0.9em; color: #666;
+                margin-top: -15px; margin-bottom: 20px;
+            }
+            
             .styled-table {
                 border-collapse: collapse; width: 100%; 
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -404,7 +474,6 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
             }
             
             .styled-table th, .styled-table td { padding: 12px 15px; }
-            /* --- MODIFIÉ V32 : Colonnes décalées --- */
             /* Col 1 (Ligue) et 2 (Équipe) */
             .styled-table th:nth-child(1), .styled-table td:nth-child(1) { text-align: left; }
             .styled-table th:nth-child(2), .styled-table td:nth-child(2) { text-align: left; }
@@ -450,8 +519,44 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
                 font-weight: bold !important; 
                 color: #0056b3; font-size: 1.05em; text-align: center;
             }
-            /* --- FIN MODIFIÉ V32 --- */
+
+            /* --- NOUVEAU V33 : Style pour le tableau "Séries Brisées" --- */
+            .broken-table td:nth-child(1), .broken-table td:nth-child(2) { /* Ligue, Equipe */
+                font-weight: bold;
+            }
+            .broken-table td:nth-child(3) { /* Statistique */
+                 font-weight: normal; color: #dc3545;
+            }
+            .broken-table td:nth-child(4) { /* Série Précédente */
+                font-weight: bold; text-align: center;
+            }
             
+            /* --- NOUVEAU V34 : Style pour le résumé des séries brisées --- */
+            .broken-summary {
+                margin-top: 25px;
+                padding: 20px;
+                background-color: #f8f9fa;
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                text-align: center;
+            }
+            .broken-summary p {
+                font-size: 1.1em;
+                font-weight: bold;
+                margin-top: 0;
+            }
+            .broken-summary ul {
+                list-style: none;
+                padding-left: 0;
+                margin-bottom: 0;
+                text-align: center;
+                font-size: 1em;
+            }
+            .broken-summary li {
+                margin: 5px 0;
+            }
+            /* --- FIN NOUVEAU V34 --- */
+
             #team-selector {
                 width: 100%;
                 padding: 12px;
@@ -655,7 +760,7 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
         </script>
         """
 
-        # --- 9. Assembler le HTML Final (Inchangé) ---
+        # --- 9. Assembler le HTML Final (MODIFIÉ V33) ---
         html_content = f"""
         <!DOCTYPE html>
         <html lang="fr">
@@ -675,6 +780,8 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
                 <div id="welcome-message">
                     <h2>Veuillez sélectionner une catégorie dans la barre de navigation.</h2>
                 </div>
+                
+                {broken_series_html}
                 
                 {team_view_html}
                 
@@ -702,7 +809,7 @@ def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_
         with open(nom_fichier_html, "w", encoding="utf-8") as f:
             f.write(html_content)
         
-        print(f"\nSuccès ! Le rapport V32 pour {titre_rapport} a été généré ici : {os.path.abspath(nom_fichier_html)}")
+        print(f"\nSuccès ! Le rapport V34 pour {titre_rapport} a été généré ici : {os.path.abspath(nom_fichier_html)}")
 
     except Exception as e:
         print(f"\nErreur lors de la génération du fichier HTML : {e}")
@@ -1183,13 +1290,93 @@ def charger_cotes_via_api(api_key, codes_ligues_utilisateur):
 # --- (SUPPRIMÉ V32) Ancienne fonction creer_page_hub ---
 
 
-# --- POINT D'ENTRÉE DU SCRIPT (MODIFIÉ V32) ---
+# --- (NOUVEAU V34) FONCTION POUR COMPARER LE CACHE ---
+def analyser_cache_series(df_actuel, df_cache):
+    """
+    Compare le rapport actuel au cache pour trouver les séries brisées
+    et les séries toujours actives.
+    Retourne : (df_brisees, count_brisees, count_actives)
+    """
+    print("Comparaison avec le cache pour trouver les séries brisées...")
+    if df_cache.empty:
+        print("  - Fichier cache non trouvé ou vide. Aucune série brisée ne peut être calculée.")
+        return pd.DataFrame(columns=['Ligue', 'Équipe', 'Statistique', 'Série Précédente']), 0, 0
+        
+    try:
+        # Fusionner les anciens et nouveaux résultats
+        df_merged = pd.merge(
+            df_actuel, 
+            df_cache, 
+            on=['Ligue', 'Équipe'], 
+            suffixes=('_actuel', '_cache'),
+            how='left' # Garder toutes les équipes actuelles
+        )
+        
+        brisees = []
+        actives_encore = [] # <-- NOUVEAU V34
+        
+        for stat in STATS_COLUMNS_BASE:
+            col_actuel = f'{stat}_EnCours_actuel'
+            col_cache = f'{stat}_EnCours_cache'
+            
+            # S'assurer que les colonnes existent (au cas où le cache est ancien/invalide)
+            if col_actuel not in df_merged.columns or col_cache not in df_merged.columns:
+                print(f"  - Avertissement: Colonne {stat} non trouvée dans le cache. Ignorée.")
+                continue
+
+            # Remplir les NaN (nouvelles équipes) avec 0 pour le cache
+            df_merged[col_cache] = df_merged[col_cache].fillna(0)
+
+            # Condition 1: Série est brisée
+            # (Était > 0, est maintenant == 0)
+            condition_brisee = (df_merged[col_cache] > 0) & (df_merged[col_actuel] == 0)
+            df_brisees_stat = df_merged[condition_brisee]
+            
+            for index, row in df_brisees_stat.iterrows():
+                brisees.append({
+                    'Ligue': row['Ligue'],
+                    'Équipe': row['Équipe'],
+                    'Statistique': stat,
+                    'Série Précédente': int(row[col_cache])
+                })
+                
+            # --- NOUVEAU V34 ---
+            # Condition 2: Série est toujours active
+            # (Était > 0, est toujours > 0)
+            condition_active = (df_merged[col_cache] > 0) & (df_merged[col_actuel] > 0)
+            df_actives_stat = df_merged[condition_active]
+            actives_encore.extend(df_actives_stat.to_dict('records'))
+            # --- FIN NOUVEAU V34 ---
+        
+        count_brisees = len(brisees)
+        count_actives = len(actives_encore)
+
+        if not brisees:
+            print("  - Aucune série brisée détectée.")
+            df_final_brisees = pd.DataFrame(columns=['Ligue', 'Équipe', 'Statistique', 'Série Précédente'])
+        else:
+            df_final_brisees = pd.DataFrame(brisees)
+            df_final_brisees = df_final_brisees.sort_values(by=['Ligue', 'Équipe', 'Série Précédente'], ascending=[True, True, False])
+        
+        print(f"  - {count_brisees} séries brisées trouvées.")
+        print(f"  - {count_actives} séries sont toujours actives.")
+        
+        return df_final_brisees, count_brisees, count_actives
+
+    except Exception as e:
+        print(f"  - ERREUR lors de la comparaison du cache : {e}")
+        print("  - Le cache est peut-être corrompu ou d'une ancienne version. Il sera écrasé.")
+        return pd.DataFrame(columns=['Ligue', 'Équipe', 'Statistique', 'Série Précédente']), 0, 0
+
+
+# --- POINT D'ENTRÉE DU SCRIPT (MODIFIÉ V34) ---
 if __name__ == "__main__":
     
-    # !! IMPORTANT !! 
-    SAISON_API = 2025 # (Inutilisé par The Odds API, mais gardé au cas où)
-    
+    SAISON_API = 2025 
     dossier_csv_principal = "CSV_Data" 
+    
+    # --- NOUVEAU V33: Définir le nom du fichier cache ---
+    fichier_cache = "rapport_cache.csv"
     
     # 1. Trouver TOUS les fichiers CSV (sauf fixtures.csv)
     tous_les_fichiers_csv = []
@@ -1211,7 +1398,7 @@ if __name__ == "__main__":
     # 3. Étape 1 : Chargement (tous les fichiers en une fois)
     donnees_completes = charger_donnees(tous_les_fichiers_csv)
     
-    # 4. (MODIFIÉ V31) Charger les COTES & MATCHS via 'The Odds API'
+    # 4. Charger les COTES & MATCHS via 'The Odds API'
     if not hasattr(config, 'API_KEY'):
         print("\nERREUR: 'API_KEY' non trouvée dans config.py. Arrêt.")
         print("Veuillez mettre votre clé 'The Odds API' dans config.py.")
@@ -1229,7 +1416,6 @@ if __name__ == "__main__":
         print(f"\n--- DÉBUT DU TRAITEMENT GLOBAL ---")
 
         # 6. Étape 3 : Calculer tous les records pour TOUTES les ligues en une fois
-        # (MODIFIÉ V32)
         df_rapport_global = calculer_tous_les_records_et_series(
             donnees_completes, 
             ligues_a_analyser,  # On passe le dict de ligues
@@ -1242,19 +1428,40 @@ if __name__ == "__main__":
         print(df_rapport_global)
         pd.reset_option('display.max_rows')
         
+        # --- NOUVEAU V34: Charger l'ancien cache et comparer ---
+        df_cache = pd.DataFrame() 
+        try:
+            if os.path.exists(fichier_cache):
+                df_cache = pd.read_csv(fichier_cache)
+        except Exception as e:
+            print(f"Avertissement: Impossible de lire le fichier cache '{fichier_cache}'. Il sera recréé. Erreur: {e}")
+
+        df_series_brisees, count_brisees, count_actives = analyser_cache_series(df_rapport_global, df_cache)
+        # --- FIN NOUVEAU V34 ---
+
+        
         # 8. ÉTAPE 5 : SAUVEGARDE EN UN SEUL FICHIER HTML
-        # (MODIFIÉ V32)
         nom_du_fichier_html = "index.html" # On sauvegarde directement en index.html
         titre_rapport = "Rapport Global des Ligues"
         
+        # (MODIFIÉ V34)
         sauvegarder_rapport_global_html(
             df_rapport_global, 
+            df_series_brisees, 
+            count_brisees,      # <-- NOUVEAU V34
+            count_actives,      # <-- NOUVEAU V34
             nom_du_fichier_html, 
             titre_rapport,
-            odds_api_dict # On passe le dictionnaire de cotes de l'API
+            odds_api_dict 
         )
         
-        # 9. (SUPPRIMÉ V32) La boucle par ligue et le hub n'existent plus.
+        # --- NOUVEAU V33: Sauvegarder les résultats actuels dans le cache pour la prochaine fois ---
+        try:
+            df_rapport_global.to_csv(fichier_cache, index=False)
+            print(f"Succès : Le cache des séries a été mis à jour dans '{fichier_cache}'.")
+        except Exception as e:
+            print(f"ERREUR: Impossible de sauvegarder le cache dans '{fichier_cache}'. Erreur: {e}")
+        # --- FIN NOUVEAU V33 ---
         
         print("\n--- TRAITEMENT TERMINÉ ---")
         print(f"Le rapport global '{nom_du_fichier_html}' a été créé.")
