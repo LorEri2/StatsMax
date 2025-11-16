@@ -23,85 +23,64 @@ LEAGUE_NAME_MAPPING = {
 }
 
 # ##########################################################################
-# --- (MODIFIÉ V31) Dictionnaire de Mapping (THE ODDS API) ---
+# --- Dictionnaire de Mapping (THE ODDS API) ---
 # ##########################################################################
-# C'est maintenant notre SEULE source de mapping
 ODDS_API_LEAGUE_MAP = {
-    'E0': 'soccer_epl',
-    'E1': 'soccer_england_championship',
-    'D1': 'soccer_germany_bundesliga',
-    'D2': 'soccer_germany_bundesliga_2',
-    'F1': 'soccer_france_ligue_1',
-    'F2': 'soccer_france_ligue_2', # Probablement non couvert par le forfait gratuit
-    'I1': 'soccer_italy_serie_a',
-    'I2': 'soccer_italy_serie_b', # Probablement non couvert
-    'SP1': 'soccer_spain_la_liga',
-    'SP2': 'soccer_spain_la_liga_2', # Probablement non couvert
-    'N1': 'soccer_netherlands_eredivisie',
-    'P1': 'soccer_portugal_primeira_liga',
-    'SC0': 'soccer_scotland_premiership',
-    'B1': 'soccer_belgium_first_div',
-    'T1': 'soccer_turkey_super_league',
-    'G1': 'soccer_greece_super_league_1',
+    'E0': 'soccer_epl', 'E1': 'soccer_england_championship',
+    'D1': 'soccer_germany_bundesliga', 'D2': 'soccer_germany_bundesliga_2',
+    'F1': 'soccer_france_ligue_1', 'F2': 'soccer_france_ligue_2',
+    'I1': 'soccer_italy_serie_a', 'I2': 'soccer_italy_serie_b',
+    'SP1': 'soccer_spain_la_liga', 'SP2': 'soccer_spain_la_liga_2',
+    'N1': 'soccer_netherlands_eredivisie', 'P1': 'soccer_portugal_primeira_liga',
+    'SC0': 'soccer_scotland_premiership', 'B1': 'soccer_belgium_first_div',
+    'T1': 'soccer_turkey_super_league', 'G1': 'soccer_greece_super_league_1',
 }
 
 # ##########################################################################
-# --- (MODIFIÉ V30) Dictionnaire de Mapping Cotes/Alertes ---
-# ##########################################################################
-# ##########################################################################
-# --- (MODIFIÉ V31.1) Dictionnaire de Mapping Cotes/Alertes ---
+# --- Dictionnaire de Mapping Cotes/Alertes ---
 # ##########################################################################
 STAT_TO_ODD_COLUMN_MAP = {
-    # Alerte sur "Plus de..." -> Parier sur "Moins de..."
-    'FT +1.5': 'API_Under_1_5',
-    'FT +2.5': 'API_Under_2_5',
-    'FT +3.5': 'API_Under_3_5',
-
-    # Alerte sur "Moins de..." -> Parier sur "Plus de..."
-    'FT -0.5': 'API_Over_0_5',
-    'FT -1.5': 'API_Over_1_5',
-    'FT -2.5': 'API_Over_2_5',
+    'FT +1.5': 'API_Under_1_5', 'FT +2.5': 'API_Under_2_5', 'FT +3.5': 'API_Under_3_5',
+    'FT -0.5': 'API_Over_0_5', 'FT -1.5': 'API_Over_1_5', 'FT -2.5': 'API_Over_2_5',
     'FT -3.5': 'API_Over_3_5', 
-
-    # Alerte "Clean Sheet" -> Parier sur "Les deux équipes marquent" (BTTS)
-    'FT CS': 'API_BTTS_Yes',
-    
-    # Alerte "Pas de Clean Sheet" -> Parier sur "BTTS Non"
-    'FT No CS': 'API_BTTS_No',
-    
-    # Alerte "Nuls" -> Parier sur "Pas Nul" (12)
-    'FT Nuls': 'API_12', # 1 ou 2 gagne
-    
-    # --- AJOUTS POUR CORRIGER LES (Stat?) ---
-    # L'API gratuite ne les fournit PAS, mais au moins le mapping existera.
-    'MT +0.5': 'API_MT_Over_0_5',
-    'MT -0.5': 'API_MT_Under_0_5',
-    'MT +1.5': 'API_MT_Over_1_5',
-    'MT -1.5': 'API_MT_Under_1_5',
-    'FT Marque': 'API_Team_Under_0_5', # (Nom d'exemple, très difficile à parser)
+    'FT CS': 'API_BTTS_Yes', 'FT No CS': 'API_BTTS_No', 'FT Nuls': 'API_12',
+    # Ajouts pour que les stats MT aient un mapping
+    'MT +0.5': 'API_MT_Under_0_5', 'MT -0.5': 'API_MT_Over_0_5',
+    'MT +1.5': 'API_MT_Under_1_5', 'MT -1.5': 'API_MT_Over_1_5',
+    'FT Marque': 'API_Team_Under_0_5', # Nom d'exemple
 }
 # ##########################################################################
-# ##########################################################################
 
 
-# --- Helper 1: Style pour les 13 tableaux de séries (4 colonnes) ---
+# --- (MODIFIÉ V32) Helper 1: Style pour les tableaux (5 colonnes) ---
 def colorier_series_v19(row):
+    """
+    Applique un style aux 5 colonnes (Ligue, Équipe, Record, Série, 5 Derniers).
+    """
     record = row['Record']
     en_cours = row['Série en Cours']
+    
+    style_ligue = 'font-weight: normal; color: #777; font-size: 0.9em; text-align: left;'
     style_equipe = '' 
     style_record = '' 
     style_en_cours = 'font-weight: normal; color: #555;' 
     style_5_derniers = 'font-weight: normal; color: #777; font-size: 0.9em;' 
+
     if en_cours > 0 and en_cours == record:
         style_en_cours = 'background-color: #ffebee; color: #c62828; font-weight: bold;'
     elif en_cours > 0 and en_cours == record - 1:
         style_en_cours = 'background-color: #fff3e0; color: #f57c00; font-weight: bold;'
     elif en_cours > 0 and en_cours == record - 2:
         style_en_cours = 'background-color: #e8f5e9; color: #2e7d32; font-weight: bold;'
-    return [style_equipe, style_record, style_en_cours, style_5_derniers] 
+    
+    return [style_ligue, style_equipe, style_record, style_en_cours, style_5_derniers] 
 
-# --- Helper 2: Style pour le tableau d'alertes (MODIFIÉ V26 pour 8 colonnes) ---
+# --- (MODIFIÉ V32) Helper 2: Style pour le tableau d'alertes (9 colonnes) ---
 def colorier_tableau_alertes_v22(row):
+    """
+    Applique un style à la ligne du tableau d'alertes (V32).
+    Gère 9 colonnes (avec 'Ligue')
+    """
     alerte_type = row['Alerte']
     style_base = ''
     if alerte_type == 'Rouge':
@@ -110,29 +89,43 @@ def colorier_tableau_alertes_v22(row):
         style_base = 'background-color: #fff3e0; color: #f57c00; font-weight: bold;'
     elif alerte_type == 'Vert':
         style_base = 'background-color: #e8f5e9; color: #2e7d32; font-weight: bold;'
+    
+    style_ligue = style_base + 'font-weight: normal; color: #333; font-size: 0.9em; text-align: left;'
     style_5_derniers = style_base + 'font-weight: normal; color: #333; font-size: 0.9em;'
     style_prochain_match = style_base + 'font-weight: normal; color: #17a2b8; font-size: 0.9em;'
-    return [style_base, style_base, style_base, style_base, style_5_derniers, style_prochain_match, style_base, style_base]
+    
+    # Ordre: Ligue, Équipe, Stat, Record, Série, 5 Derniers, Prochain Match, Cote, Alerte(cachée)
+    return [
+        style_ligue, style_base, style_base, style_base, style_base, 
+        style_5_derniers, style_prochain_match, style_base, style_base
+    ]
 
-# --- Helper 3: Style pour le tableau de Forme (4 colonnes) ---
+# --- (MODIFIÉ V32) Helper 3: Style pour le tableau de Forme (5 colonnes) ---
 def colorier_forme_v22(row):
+    """
+    Colore le Score de Forme. Gère 5 colonnes (avec 'Ligue').
+    """
     score = row['Score de Forme']
+    
+    style_ligue = 'font-weight: normal; color: #777; font-size: 0.9em; text-align: left;'
     style_equipe = ''
     style_score = ''
     style_details = 'font-weight: normal; color: #777; font-size: 0.9em;'
     style_prochain_match = 'font-weight: normal; color: #17a2b8; font-size: 0.9em;'
+    
     if score > 10: style_score = 'color: #2e7d32; font-weight: bold;'
     elif score > 0: style_score = 'color: #28a745;'
     elif score < -5: style_score = 'color: #c62828; font-weight: bold;'
     elif score < 0: style_score = 'color: #dc3545;'
-    return [style_equipe, style_score, style_details, style_prochain_match]
+    
+    return [style_ligue, style_equipe, style_score, style_details, style_prochain_match]
 
 
-# --- Helper 4: Génération de la page HTML (MODIFIÉ V30) ---
-def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport, odds_api_dict):
+# --- (MODIFIÉ V32) Helper 4: Génération de la page HTML ---
+def sauvegarder_rapport_global_html(df_rapport_complet, nom_fichier_html, titre_rapport, odds_api_dict):
     """
-    Sauvegarde le DataFrame en 14 onglets + 1 onglet "Alertes" + 1 onglet "Forme".
-    MODIFIÉ V30: Utilise 'odds_api_dict' et ajoute un fuzzy matching pour les cotes.
+    Sauvegarde le DataFrame GLOBAL en un seul fichier index.html.
+    Les onglets sont les caractéristiques. Les ligues sont dans les tableaux.
     """
     
     # 1. Définir les 14 statistiques de SÉRIE
@@ -172,7 +165,7 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
             id_html = config[0]
             nav_links += f'<a href="#" onclick="showSection(\'{id_html}\', this); event.preventDefault();">{nom_base}</a>\n'
 
-        # --- 3. Générer le tableau d'alertes (MODIFIÉ V30) ---
+        # --- 3. Générer le tableau d'alertes (MODIFIÉ V32) ---
         alertes_collectees = []
         for nom_base, config in stats_a_afficher.items():
             col_record = f'{nom_base}_Record'
@@ -180,7 +173,8 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
             col_5_derniers = 'Last_5_FT_Goals' if nom_base.startswith('FT') else 'Last_5_MT_Goals'
             
             for index, row in df_rapport_complet.iterrows():
-                equipe = row['Équipe'] # Nom CSV (ex: "Dortmund")
+                equipe = row['Équipe'] 
+                ligue = row['Ligue'] # <-- NOUVEAU V32
                 if col_record not in row or pd.isna(row[col_record]): continue
                 record = row[col_record]
                 en_cours = row[col_en_cours]
@@ -193,39 +187,26 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
                 elif en_cours > 0 and en_cours == record - 2: alerte_type = 'Vert'
                 
                 if alerte_type:
-                    
-                    # --- MODIFIÉ V30 : LOGIQUE DE COTE AVEC FUZZY MATCH ---
                     cote_pari = "N/A"
                     nom_col_cote = STAT_TO_ODD_COLUMN_MAP.get(nom_base)
                     
                     if nom_col_cote:
-                        # 1. Essayer un match exact
                         match_info = odds_api_dict.get(equipe)
-                        
-                        # 2. Essayer un match flou (NomCSV dans NomAPI)
                         if not match_info:
                             for api_nom, api_match_data in odds_api_dict.items():
-                                if equipe in api_nom:
-                                    match_info = api_match_data
-                                    break
-                        
-                        # 3. Essayer un match flou inversé (NomAPI dans NomCSV)
+                                if equipe in api_nom: match_info = api_match_data; break
                         if not match_info:
                             for api_nom, api_match_data in odds_api_dict.items():
-                                if api_nom in equipe:
-                                    match_info = api_match_data
-                                    break
-
-                        # 4. On a trouvé un match, chercher la cote
+                                if api_nom in equipe: match_info = api_match_data; break
                         if match_info:
                             cote = match_info['odds'].get(nom_col_cote)
                             if cote: cote_pari = f"{cote:.2f}"
-                            else: cote_pari = f"({nom_col_cote.split('_')[-1]}?)" # Affiche (3.5?) (BTTS_Yes?)
-                        else: cote_pari = "(Match?)" # Match non trouvé dans l'API de cotes
-                    else: cote_pari = "(Stat?)" # Stat non mappée (ex: FT Marque)
-                    # --- FIN MODIFICATION V30 ---
+                            else: cote_pari = f"({nom_col_cote.split('_')[-1]}?)"
+                        else: cote_pari = "(Match?)"
+                    else: cote_pari = "(Stat?)"
                     
                     alertes_collectees.append({
+                        'Ligue': ligue, # <-- NOUVEAU V32
                         'Équipe': equipe, 'Statistique': nom_base, 'Record': record,
                         'Série en Cours': en_cours, '5 Derniers Buts': cinq_derniers_str, 
                         'Prochain Match': prochain_match_str, 'Cote (Pari Inverse)': cote_pari,
@@ -237,9 +218,9 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
         else:
             df_alertes = pd.DataFrame(alertes_collectees)
             df_alertes['Alerte'] = pd.Categorical(df_alertes['Alerte'], categories=["Rouge", "Orange", "Vert"], ordered=True)
-            df_alertes = df_alertes.sort_values(by=['Alerte', 'Équipe']).reset_index(drop=True)
+            df_alertes = df_alertes.sort_values(by=['Alerte', 'Ligue', 'Équipe']).reset_index(drop=True) # Trié par Alerte puis Ligue
             colonnes_ordre = [
-                'Équipe', 'Statistique', 'Record', 'Série en Cours', 
+                'Ligue', 'Équipe', 'Statistique', 'Record', 'Série en Cours', # <-- NOUVEAU V32
                 '5 Derniers Buts', 'Prochain Match', 'Cote (Pari Inverse)', 'Alerte'
             ]
             df_alertes = df_alertes.reindex(columns=colonnes_ordre)
@@ -250,11 +231,12 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
                                         .hide(['Alerte'], axis=1) 
             alert_table_html = styler_alertes.to_html()
 
-        # --- 4. Générer le tableau de Forme (Inchangé) ---
-        cols_forme = ['Équipe', 'Form_Score', 'Form_Last_5_Str', 'Prochain_Match']
+        # --- 4. Générer le tableau de Forme (MODIFIÉ V32) ---
+        cols_forme = ['Ligue', 'Équipe', 'Form_Score', 'Form_Last_5_Str', 'Prochain_Match'] # <-- NOUVEAU V32
         if 'Form_Score' in df_rapport_complet.columns:
             df_forme = df_rapport_complet[cols_forme].copy()
             df_forme = df_forme.rename(columns={
+                'Ligue': 'Ligue', # <-- NOUVEAU V32
                 'Form_Score': 'Score de Forme',
                 'Form_Last_5_Str': '5 Derniers (Détails)',
                 'Prochain_Match': 'Prochain Match'
@@ -268,7 +250,7 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
         else:
             form_table_html = "<h3 class='no-alerts'>Données 'FTR' non trouvées pour calculer la forme.</h3>"
         
-        # --- 5. Générer le Corps HTML (Onglets de stats - Inchangé) ---
+        # --- 5. Générer le Corps HTML (Onglets de stats - MODIFIÉ V32) ---
         corps_html = ""
         for nom_base, config in stats_a_afficher.items():
             id_html = config[0]
@@ -284,7 +266,8 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
             if col_5_derniers not in df_rapport_complet.columns:
                     df_rapport_complet[col_5_derniers] = "N/A"
             
-            df_stat = df_rapport_complet[['Équipe', col_record, col_en_cours, col_5_derniers]].copy()
+            # <-- NOUVEAU V32: Ajout de 'Ligue'
+            df_stat = df_rapport_complet[['Ligue', 'Équipe', col_record, col_en_cours, col_5_derniers]].copy()
             df_stat = df_stat.rename(columns={
                 col_record: 'Record', col_en_cours: 'Série en Cours',
                 col_5_derniers: nom_col_5_derniers
@@ -296,12 +279,13 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
             table_html = styler.to_html()
             corps_html += f"""
             <div class="section-container tab-content" id="{id_html}">
-                <h2 class="section-title">{titre_section}</h2>
+                <h2 class="section-title">{titre_section} (Toutes Ligues)</h2>
                 {table_html}
             </div>
             """
 
         # --- 6. Générer la Vue "Par Équipe" (Inchangé) ---
+        # Le sélecteur contiendra maintenant toutes les équipes de toutes les ligues
         team_list = sorted(df_rapport_complet['Équipe'].unique())
         team_selector_html = '<select id="team-selector" onchange="showTeamStats(this.value);"><option value="">-- Choisissez une équipe --</option>'
         for team in team_list:
@@ -310,7 +294,7 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
         team_data_json = df_rapport_complet.set_index('Équipe').to_json(orient="index", force_ascii=False)
         team_view_html = f"""
         <div class="section-container tab-content" id="team-view-section">
-            <h2 class="section-title">Analyse par Équipe</h2>
+            <h2 class="section-title">Analyse par Équipe (Toutes Ligues)</h2>
             {team_selector_html}
             <div id="team-details-container">
                 <div id="team-alerts-output"></div>
@@ -330,7 +314,7 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
         </script>
         """
 
-        # --- 7. Définir le Style CSS (Inchangé V29) ---
+        # --- 7. Définir le Style CSS (MODIFIÉ V32) ---
         html_style = """
         <style>
             html { scroll-behavior: smooth; }
@@ -380,7 +364,7 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
             }
             .section-container.tab-content {
                 display: none; width: 90%; 
-                max-width: 1000px;
+                max-width: 1100px; /* Augmenté pour la colonne Ligue */
                 margin-bottom: 20px;
             }
             .section-container.tab-content.active { display: block; }
@@ -420,27 +404,53 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
             }
             
             .styled-table th, .styled-table td { padding: 12px 15px; }
+            /* --- MODIFIÉ V32 : Colonnes décalées --- */
+            /* Col 1 (Ligue) et 2 (Équipe) */
             .styled-table th:nth-child(1), .styled-table td:nth-child(1) { text-align: left; }
-            .styled-table th:nth-child(n+2), .styled-table td:nth-child(n+2) {
+            .styled-table th:nth-child(2), .styled-table td:nth-child(2) { text-align: left; }
+            
+            /* Col 3+ (Stats) */
+            .styled-table th:nth-child(n+3), .styled-table td:nth-child(n+3) {
                 text-align: center; font-weight: bold;
             }
-            .styled-table th:nth-child(4), .styled-table td:nth-child(4) {
+            /* Col 5 (5 Derniers) */
+            .styled-table th:nth-child(5), .styled-table td:nth-child(5) {
                 font-weight: normal; color: #777; font-size: 0.9em;
             }
-            .styled-table.form-table th:nth-child(3), .styled-table.form-table td:nth-child(3) {
+            
+            /* Styles pour le tableau de FORME */
+            .form-table td:nth-child(1), .form-table td:nth-child(2) { font-weight: bold; } /* Ligue, Equipe */
+            .form-table th:nth-child(4), .form-table td:nth-child(4) { /* 5 Derniers (Détails) */
                 font-weight: normal; color: #777; font-size: 0.9em;
             }
-            .styled-table.form-table th:nth-child(4), .styled-table.form-table td:nth-child(4) {
+            .form-table th:nth-child(5), .form-table td:nth-child(5) { /* Prochain Match */
                 font-weight: normal; color: #17a2b8; font-size: 0.9em;
             }
+            
             .styled-table tbody tr {
                 border-bottom: 1px solid #dddddd; background-color: #ffffff;
             }
             .styled-table tbody tr:nth-of-type(even) { background-color: #f8f8f8; }
+            
+            /* Styles pour le tableau d'ALERTES */
             .alerts-table td { font-weight: bold !important; }
-            .alerts-table td:nth-child(5) { font-weight: normal !important; font-size: 0.9em; }
-            .alerts-table td:nth-child(6) { font-weight: normal !important; color: #17a2b8; font-size: 0.9em; }
-            .alerts-table td:nth-child(7) { font-weight: bold !important; color: #0056b3; font-size: 1.05em; text-align: center; }
+            .alerts-table td:nth-child(1) { /* Ligue */
+                font-weight: normal !important; 
+                font-size: 0.9em; text-align: left;
+            }
+            .alerts-table td:nth-child(6) { /* 5 Derniers Buts */
+                font-weight: normal !important; 
+                font-size: 0.9em;
+            }
+            .alerts-table td:nth-child(7) { /* Prochain Match */
+                font-weight: normal !important; 
+                color: #17a2b8; font-size: 0.9em;
+            }
+            .alerts-table td:nth-child(8) { /* Cote (Pari Inverse) */
+                font-weight: bold !important; 
+                color: #0056b3; font-size: 1.05em; text-align: center;
+            }
+            /* --- FIN MODIFIÉ V32 --- */
             
             #team-selector {
                 width: 100%;
@@ -571,6 +581,8 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
                 alertsContainer.innerHTML = alertsHtml;
                 let statsHtml = "<h3>Toutes les Caractéristiques</h3>";
                 statsHtml += '<table class="team-stats-table"><tbody>';
+                // (V32) La vue par équipe affiche aussi la Ligue
+                statsHtml += `<tr><td>Ligue</td><td>${stats.Ligue || 'N/A'}</td></tr>`;
                 statsHtml += `<tr><td>Prochain Match</td><td>${stats.Prochain_Match || 'N/A'}</td></tr>`;
                 statsHtml += `<tr><td>Score de Forme</td><td>${stats.Form_Score !== undefined ? stats.Form_Score.toFixed(1) : 'N/A'}</td></tr>`;
                 statsHtml += `<tr><td>Détails 5 Derniers</td><td>${stats.Form_Last_5_Str || 'N/A'}</td></tr>`;
@@ -667,12 +679,12 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
                 {team_view_html}
                 
                 <div class="section-container tab-content" id="form-section">
-                    <h2 class="section-title">ÉTAT DE FORME ({titre_rapport})</h2>
+                    <h2 class="section-title">ÉTAT DE FORME (Toutes Ligues)</h2>
                     {form_table_html}
                 </div>
                 
                 <div class="section-container tab-content" id="alert-section">
-                    <h2 class="section-title">TABLEAU DES ALERTES ({titre_rapport})</h2>
+                    <h2 class="section-title">TABLEAU DES ALERTES (Toutes Ligues)</h2>
                     {alert_table_html}
                 </div>
                 
@@ -690,7 +702,7 @@ def sauvegarder_en_html_v22(df_rapport_complet, nom_fichier_html, titre_rapport,
         with open(nom_fichier_html, "w", encoding="utf-8") as f:
             f.write(html_content)
         
-        print(f"\nSuccès ! Le rapport V31 pour {titre_rapport} a été généré ici : {os.path.abspath(nom_fichier_html)}")
+        print(f"\nSuccès ! Le rapport V32 pour {titre_rapport} a été généré ici : {os.path.abspath(nom_fichier_html)}")
 
     except Exception as e:
         print(f"\nErreur lors de la génération du fichier HTML : {e}")
@@ -890,14 +902,14 @@ def calculer_score_de_forme(df_equipe, equipe):
     return total_score, details_complets
 
 
-# --- (MODIFIÉ V31) FONCTION DE CALCUL V31 ---
-def calculer_tous_les_records_et_series(df, equipes, odds_api_dict):
+# --- (MODIFIÉ V32) FONCTION DE CALCUL V32 ---
+def calculer_tous_les_records_et_series(df, ligues_a_analyser, odds_api_dict):
     """
-    Calcule le RECORD, la SÉRIE EN COURS, les 5 DERNIERS BUTS,
-    le SCORE DE FORME, et le PROCHAIN MATCH.
+    Calcule le RECORD, la SÉRIE EN COURS, etc. pour TOUTES les équipes
+    et ajoute le nom de la Ligue.
     
-    MODIFIÉ V31: Utilise 'odds_api_dict' comme SEULE source 
-                 pour le "Prochain Match".
+    MODIFIÉ V32: Accepte 'ligues_a_analyser' (dict) au lieu de 'equipes' (liste)
+                 et ajoute la colonne 'Ligue'.
     """
     resultats = []
     conditions_a_tester = {
@@ -909,78 +921,83 @@ def calculer_tous_les_records_et_series(df, equipes, odds_api_dict):
         'MT +0.5': 'Cond_Plus_0_5_HT', 'MT -0.5': 'Cond_Moins_0_5_HT',
         'MT +1.5': 'Cond_Plus_1_5_HT', 'MT -1.5': 'Cond_Moins_1_5_HT',
     }
+    
     print("Calcul des records, séries, 5 derniers buts et score de forme...")
-    for equipe in equipes:
-        df_equipe = df[
-            (df['HomeTeam'] == equipe) | (df['AwayTeam'] == equipe)
-        ].copy()
-        if df_equipe.empty: continue
-        record_equipe = {'Équipe': equipe}
-        df_equipe = df_equipe.sort_values(by='Date')
+    
+    # --- NOUVELLE BOUCLE V32 ---
+    for code_ligue, equipes in ligues_a_analyser.items():
+        nom_ligue_lisible = LEAGUE_NAME_MAPPING.get(code_ligue, code_ligue)
+        print(f"  -> Traitement de {nom_ligue_lisible}...")
         
-        if 'TotalGoals' in df_equipe.columns:
-            last_5_ft_goals = df_equipe['TotalGoals'].tail(5).astype(int).tolist()
-            record_equipe['Last_5_FT_Goals'] = ", ".join(map(str, last_5_ft_goals))
-        else: record_equipe['Last_5_FT_Goals'] = "N/A"
-        if 'TotalHTGoals' in df_equipe.columns:
-            last_5_mt_goals = df_equipe['TotalHTGoals'].tail(5).astype(int).tolist()
-            record_equipe['Last_5_MT_Goals'] = ", ".join(map(str, last_5_mt_goals))
-        else: record_equipe['Last_5_MT_Goals'] = "N/A"
+        for equipe in equipes:
+            df_equipe = df[
+                (df['HomeTeam'] == equipe) | (df['AwayTeam'] == equipe)
+            ].copy()
+            if df_equipe.empty: continue
             
-        score_forme, details_forme = calculer_score_de_forme(df_equipe, equipe)
-        record_equipe['Form_Score'] = score_forme
-        record_equipe['Form_Last_5_Str'] = details_forme
-        
-        if 'FTHG' in df_equipe.columns:
-            df_equipe['ButsMarques'] = np.where(df_equipe['HomeTeam'] == equipe, df_equipe['FTHG'], df_equipe['FTAG'])
-            df_equipe['ButsEncaisses'] = np.where(df_equipe['HomeTeam'] == equipe, df_equipe['FTAG'], df_equipe['FTHG'])
-            df_equipe['Cond_FT_Score'] = df_equipe['ButsMarques'] > 0
-            df_equipe['Cond_FT_CS'] = df_equipe['ButsEncaisses'] == 0
-            df_equipe['Cond_FT_No_CS'] = df_equipe['ButsEncaisses'] > 0
+            # --- NOUVEAU V32: Ajout de la Ligue ---
+            record_equipe = {'Équipe': equipe, 'Ligue': nom_ligue_lisible}
+            df_equipe = df_equipe.sort_values(by='Date')
             
-        # --- (MODIFIÉ V31) Récupérer le prochain match (API Cotes uniquement) ---
-        prochain = "N/A"
-        match_info = odds_api_dict.get(equipe) # 1. Match exact
-        if not match_info: # 2. Match flou (CSV in API)
-            for api_nom, api_match_data in odds_api_dict.items():
-                if equipe in api_nom:
-                    match_info = api_match_data
-                    break
-        if not match_info: # 3. Match flou (API in CSV)
-            for api_nom, api_match_data in odds_api_dict.items():
-                if api_nom in equipe:
-                    match_info = api_match_data
-                    break
-        
-        if match_info:
-            opponent = match_info.get('opponent', '?')
-            loc = match_info.get('loc', '?')
-            loc_str = "Dom" if loc == "Home" else "Ext"
-            
-            # Formater la date
-            start_time_iso = match_info.get('commence_time')
-            try:
-                # Convertir la date ISO UTC en objet datetime
-                utc_date = pd.to_datetime(start_time_iso)
-                # Formater en dd/mm HH:MM
-                date_str = utc_date.strftime('%d/%m %H:%M')
-            except:
-                date_str = "Date?" # Fallback
+            if 'TotalGoals' in df_equipe.columns:
+                last_5_ft_goals = df_equipe['TotalGoals'].tail(5).astype(int).tolist()
+                record_equipe['Last_5_FT_Goals'] = ", ".join(map(str, last_5_ft_goals))
+            else: record_equipe['Last_5_FT_Goals'] = "N/A"
+            if 'TotalHTGoals' in df_equipe.columns:
+                last_5_mt_goals = df_equipe['TotalHTGoals'].tail(5).astype(int).tolist()
+                record_equipe['Last_5_MT_Goals'] = ", ".join(map(str, last_5_mt_goals))
+            else: record_equipe['Last_5_MT_Goals'] = "N/A"
                 
-            prochain = f"{date_str} -> {opponent} ({loc_str})"
-        
-        record_equipe['Prochain_Match'] = prochain
-        # --- FIN MODIFICATION V31 ---
+            score_forme, details_forme = calculer_score_de_forme(df_equipe, equipe)
+            record_equipe['Form_Score'] = score_forme
+            record_equipe['Form_Last_5_Str'] = details_forme
             
-        for nom_base, nom_col_data in conditions_a_tester.items():
-            record = trouver_max_serie_pour_colonne(df_equipe, nom_col_data)
-            record_equipe[f'{nom_base}_Record'] = record
-            en_cours = trouver_serie_en_cours_pour_colonne(df_equipe, nom_col_data)
-            record_equipe[f'{nom_base}_EnCours'] = en_cours
+            if 'FTHG' in df_equipe.columns:
+                df_equipe['ButsMarques'] = np.where(df_equipe['HomeTeam'] == equipe, df_equipe['FTHG'], df_equipe['FTAG'])
+                df_equipe['ButsEncaisses'] = np.where(df_equipe['HomeTeam'] == equipe, df_equipe['FTAG'], df_equipe['FTHG'])
+                df_equipe['Cond_FT_Score'] = df_equipe['ButsMarques'] > 0
+                df_equipe['Cond_FT_CS'] = df_equipe['ButsEncaisses'] == 0
+                df_equipe['Cond_FT_No_CS'] = df_equipe['ButsEncaisses'] > 0
+                
+            # --- (MODIFIÉ V31) Récupérer le prochain match (API Cotes uniquement) ---
+            prochain = "N/A"
+            match_info = odds_api_dict.get(equipe) # 1. Match exact
+            if not match_info: # 2. Match flou (CSV in API)
+                for api_nom, api_match_data in odds_api_dict.items():
+                    if equipe in api_nom:
+                        match_info = api_match_data
+                        break
+            if not match_info: # 3. Match flou (API in CSV)
+                for api_nom, api_match_data in odds_api_dict.items():
+                    if api_nom in equipe:
+                        match_info = api_match_data
+                        break
             
-        resultats.append(record_equipe)
+            if match_info:
+                opponent = match_info.get('opponent', '?')
+                loc = match_info.get('loc', '?')
+                loc_str = "Dom" if loc == "Home" else "Ext"
+                start_time_iso = match_info.get('commence_time')
+                try:
+                    utc_date = pd.to_datetime(start_time_iso)
+                    date_str = utc_date.strftime('%d/%m %H:%M')
+                except:
+                    date_str = "Date?"
+                prochain = f"{date_str} -> {opponent} ({loc_str})"
+            
+            record_equipe['Prochain_Match'] = prochain
+            # --- FIN MODIFICATION V31 ---
+                
+            for nom_base, nom_col_data in conditions_a_tester.items():
+                record = trouver_max_serie_pour_colonne(df_equipe, nom_col_data)
+                record_equipe[f'{nom_base}_Record'] = record
+                en_cours = trouver_serie_en_cours_pour_colonne(df_equipe, nom_col_data)
+                record_equipe[f'{nom_base}_EnCours'] = en_cours
+                
+            resultats.append(record_equipe)
+            
     df_rapport_final = pd.DataFrame(resultats)
-    df_rapport_final = df_rapport_final.sort_values(by='Équipe').reset_index(drop=True)
+    df_rapport_final = df_rapport_final.sort_values(by=['Ligue', 'Équipe']).reset_index(drop=True)
     return df_rapport_final
 
 
@@ -1096,7 +1113,6 @@ def charger_cotes_via_api(api_key, codes_ligues_utilisateur):
         
         odds_data = {}
         
-        # Trouver un bookmaker (bet365 en priorité, sinon le premier)
         if not match.get('bookmakers'):
             print(f"  - Avertissement: Pas de bookmakers trouvés pour {home_team} vs {away_team}")
             continue
@@ -1147,8 +1163,6 @@ def charger_cotes_via_api(api_key, codes_ligues_utilisateur):
             except Exception as e_market:
                 print(f"    - Avertissement: Erreur parsing marché {market.get('key')} pour {home_team}: {e_market}")
 
-        # Stocker pour les deux équipes, en utilisant le nom de l'API
-        # On ajoute 'commence_time' (V31)
         if odds_data:
             match_data = {
                 'opponent': away_team, 'loc': 'Home', 
@@ -1166,63 +1180,10 @@ def charger_cotes_via_api(api_key, codes_ligues_utilisateur):
     return final_odds_dict
 
 
-# --- FONCTION HUB V15 ---
-def creer_page_hub(rapports):
-    nom_fichier = "index.html"
-    titre_page = "Hub d'Analyse des Ligues"
-    rapports = sorted(rapports, key=lambda x: x['nom_ligue'])
-    links_html = ""
-    for rapport in rapports:
-        links_html += f'<li><a href="{rapport["nom_fichier"]}">{rapport["nom_ligue"]}</a></li>\n'
-    html_content = f"""
-    <!DOCTYPE html>
-    <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{titre_page}</title>
-        <style>
-            body {{
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-                background-color: #f0f2f5; margin: 0; padding: 0;
-                display: flex; justify-content: center; align-items: center; min-height: 100vh;
-            }}
-            .container {{
-                background-color: #ffffff; padding: 40px; border-radius: 8px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); text-align: center;
-                max-width: 600px; width: 90%;
-            }}
-            h1 {{ color: #222; margin-top: 0; }}
-            p {{ color: #555; font-size: 1.1em; }}
-            ul {{ list-style-type: none; padding: 0; margin-top: 30px; }}
-            li {{ margin-bottom: 15px; }}
-            a {{
-                display: block; background-color: #007bff; color: white;
-                text-decoration: none; padding: 15px 20px; border-radius: 5px;
-                font-weight: bold; font-size: 1.1em;
-                transition: background-color 0.3s, transform 0.2s;
-            }}
-            a:hover {{ background-color: #0056b3; transform: translateY(-2px); }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>{titre_page}</h1>
-            <p>Veuillez sélectionner une ligue à analyser :</p>
-            <ul>{links_html}</ul>
-        </div>
-    </body>
-    </html>
-    """
-    try:
-        with open(nom_fichier, "w", encoding="utf-8") as f:
-            f.write(html_content)
-        print(f"\nSuccès ! La page d'accueil '{nom_fichier}' a été créée.")
-    except Exception as e:
-        print(f"\nErreur lors de la création de la page d'accueil '{nom_fichier}': {e}")
+# --- (SUPPRIMÉ V32) Ancienne fonction creer_page_hub ---
 
 
-# --- POINT D'ENTRÉE DU SCRIPT (MODIFIÉ V31) ---
+# --- POINT D'ENTRÉE DU SCRIPT (MODIFIÉ V32) ---
 if __name__ == "__main__":
     
     # !! IMPORTANT !! 
@@ -1263,53 +1224,40 @@ if __name__ == "__main__":
     
     # 5. (SUPPRIMÉ V31) L'appel à 'api-football.com' a été retiré.
     
-    rapports_generes_pour_hub = []
-    
     if donnees_completes is not None:
         
-        # 6. Boucle pour traiter CHAQUE ligue
-        for code_ligue, equipes_a_analyser in ligues_a_analyser.items():
-            
-            nom_ligue_lisible = LEAGUE_NAME_MAPPING.get(code_ligue, code_ligue)
-            print(f"\n--- DÉBUT DU TRAITEMENT : {nom_ligue_lisible} ({code_ligue}) ---")
-            print(f"Analyse de {len(equipes_a_analyser)} équipes...")
+        print(f"\n--- DÉBUT DU TRAITEMENT GLOBAL ---")
 
-            # 7. Étape 3 : Calculer tous les records ET séries en cours
-            # (MODIFIÉ V31)
-            df_rapport_ligue = calculer_tous_les_records_et_series(
-                donnees_completes, 
-                equipes_a_analyser, 
-                odds_api_dict           # Dico API Cotes (seule source)
-            )
+        # 6. Étape 3 : Calculer tous les records pour TOUTES les ligues en une fois
+        # (MODIFIÉ V32)
+        df_rapport_global = calculer_tous_les_records_et_series(
+            donnees_completes, 
+            ligues_a_analyser,  # On passe le dict de ligues
+            odds_api_dict       # Dico API Cotes (seule source)
+        )
 
-            # 8. Étape 4 (Affichage console)
-            print(f"\n--- RÉSULTAT ({nom_ligue_lisible}) ---")
-            pd.set_option('display.max_rows', 5) # Afficher un aperçu
-            print(df_rapport_ligue)
-            pd.reset_option('display.max_rows')
-            
-            # 9. ÉTAPE 5 : SAUVEGARDE EN HTML
-            nom_fichier_propre = nom_ligue_lisible.replace(' ', '_').replace('(', '').replace(')', '').replace('/', '')
-            nom_du_fichier_html = f"rapport_{nom_fichier_propre}.html"
-            titre_rapport = f"{nom_ligue_lisible}"
-            
-            sauvegarder_en_html_v22(
-                df_rapport_ligue, 
-                nom_du_fichier_html, 
-                titre_rapport,
-                odds_api_dict # On passe le dictionnaire de cotes de l'API
-            )
-            
-            rapports_generes_pour_hub.append({
-                'nom_ligue': nom_ligue_lisible,
-                'nom_fichier': nom_du_fichier_html
-            })
+        # 7. Étape 4 (Affichage console)
+        print(f"\n--- RÉSULTAT GLOBAL (Aperçu) ---")
+        pd.set_option('display.max_rows', 5) # Afficher un aperçu
+        print(df_rapport_global)
+        pd.reset_option('display.max_rows')
         
-        # 10. Créer la page d'accueil (index.html)
-        creer_page_hub(rapports_generes_pour_hub)
+        # 8. ÉTAPE 5 : SAUVEGARDE EN UN SEUL FICHIER HTML
+        # (MODIFIÉ V32)
+        nom_du_fichier_html = "index.html" # On sauvegarde directement en index.html
+        titre_rapport = "Rapport Global des Ligues"
+        
+        sauvegarder_rapport_global_html(
+            df_rapport_global, 
+            nom_du_fichier_html, 
+            titre_rapport,
+            odds_api_dict # On passe le dictionnaire de cotes de l'API
+        )
+        
+        # 9. (SUPPRIMÉ V32) La boucle par ligue et le hub n'existent plus.
         
         print("\n--- TRAITEMENT TERMINÉ ---")
-        print(f"La page d'accueil 'index.html' a été créée avec les liens vers {len(rapports_generes_pour_hub)} rapports.")
+        print(f"Le rapport global '{nom_du_fichier_html}' a été créé.")
         
     else:
         print("Erreur : Le chargement des données a échoué. Le script s'arrête.")
