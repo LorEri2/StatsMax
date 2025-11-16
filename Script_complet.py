@@ -127,20 +127,20 @@ def colorier_forme_v22(row):
     return [style_ligue, style_equipe, style_score, style_details, style_prochain_match]
 
 
-# --- (MODIFIÉ V34) Helper 4: Génération de la page HTML ---
 # --- (MODIFIÉ V35) Helper 4: Génération de la page HTML ---
 def sauvegarder_rapport_global_html(
     df_rapport_complet, 
     df_series_brisees, 
-    count_brisees,      # <-- NOUVEAU V34
-    count_actives,      # <-- NOUVEAU V34
+    count_brisees,      
+    count_actives,      
+    df_last_week,       # <-- NOUVEAU V35
     nom_fichier_html, 
     titre_rapport, 
     odds_api_dict
 ):
     """
     Sauvegarde le DataFrame GLOBAL en un seul fichier index.html.
-    MODIFIÉ V35: Corrigé la logique d'affichage du résumé.
+    MODIFIÉ V35: Ajout de l'onglet et du tableau "Résultats Semaine".
     """
     
     # 1. Définir les 14 statistiques de SÉRIE
@@ -171,8 +171,10 @@ def sauvegarder_rapport_global_html(
     }
     
     try:
-        # --- 2. Générer la Barre de Navigation (Inchangé) ---
+        # --- 2. Générer la Barre de Navigation (MODIFIÉ V35) ---
         nav_links = ""
+        # NOUVEAU Bouton "Résultats Semaine"
+        nav_links += '<a href="#" onclick="showSection(\'last-week-section\', this); event.preventDefault();" class="history-button">📅 Résultats Semaine</a>\n'
         nav_links += '<a href="#" onclick="showSection(\'broken-series-section\', this); event.preventDefault();" class="broken-button">💥 Séries Brisées</a>\n'
         nav_links += '<a href="#" onclick="showSection(\'team-view-section\', this); event.preventDefault();" class="team-button">🔍 Par Équipe</a>\n'
         nav_links += '<a href="#" onclick="showSection(\'form-section\', this); event.preventDefault();" class="form-button">📈 Forme</a>\n'
@@ -299,9 +301,45 @@ def sauvegarder_rapport_global_html(
             </div>
             """
 
-        # --- MODIFIÉ V35 : Logique du résumé ---
-        
-        # 1. Générer le tableau des séries brisées
+        # --- NOUVEAU V35: Générer le tableau "Résultats Semaine" ---
+        if df_last_week.empty:
+            last_week_table_html = "<h3 class='no-alerts'>Aucun match trouvé dans les 7 derniers jours de données.</h3>"
+        else:
+            # S'assurer que les colonnes de buts existent
+            if 'FTHG' not in df_last_week.columns: df_last_week['FTHG'] = '?'
+            if 'FTAG' not in df_last_week.columns: df_last_week['FTAG'] = '?'
+            if 'HTHG' not in df_last_week.columns: df_last_week['HTHG'] = '?'
+            if 'HTAG' not in df_last_week.columns: df_last_week['HTAG'] = '?'
+
+            # Formater les colonnes
+            df_last_week['Date_str'] = df_last_week['Date'].dt.strftime('%d/%m/%Y')
+            df_last_week['Score_FT'] = df_last_week['FTHG'].astype(str).str.split('.').str[0] + ' - ' + df_last_week['FTAG'].astype(str).str.split('.').str[0]
+            df_last_week['Score_HT'] = '(' + df_last_week['HTHG'].astype(str).str.split('.').str[0] + ' - ' + df_last_week['HTAG'].astype(str).str.split('.').str[0] + ')'
+            
+            cols_to_show = ['Date_str', 'Ligue', 'HomeTeam', 'AwayTeam', 'Score_FT', 'Score_HT']
+            df_week_display = df_last_week[cols_to_show].copy()
+            df_week_display = df_week_display.rename(columns={
+                'Date_str': 'Date', 'HomeTeam': 'Domicile', 'AwayTeam': 'Extérieur',
+                'Score_FT': 'Score Final', 'Score_HT': 'Score MT'
+            })
+            df_week_display = df_week_display.sort_values(by='Date', ascending=False)
+
+            styler_last_week = df_week_display.style \
+                                        .set_table_attributes('class="styled-table last-week-table"') \
+                                        .hide(axis="index")
+            last_week_table_html = styler_last_week.to_html()
+
+        # Conteneur HTML pour le nouveau tableau
+        last_week_html = f"""
+        <div class="section-container tab-content" id="last-week-section">
+            <h2 class="section-title">Résultats de la Semaine Passée</h2>
+            <p class="section-subtitle">Affiche tous les résultats des 7 derniers jours de données (selon les CSV).</p>
+            {last_week_table_html}
+        </div>
+        """
+        # --- FIN NOUVEAU V35 ---
+
+        # --- NOUVEAU V33 / MODIFIÉ V35 : Générer le tableau des Séries Brisées ---
         if df_series_brisees.empty:
             broken_table_html = "<h3 class='no-alerts'>Aucune série brisée depuis la dernière exécution.</h3>"
         else:
@@ -310,7 +348,7 @@ def sauvegarder_rapport_global_html(
                                         .hide(axis="index")
             broken_table_html = styler_brisees.to_html()
 
-        # 2. Générer le résumé (TOUJOURS)
+        # Générer le résumé (TOUJOURS)
         total_suivies = count_brisees + count_actives
         
         if total_suivies == 0:
@@ -325,14 +363,14 @@ def sauvegarder_rapport_global_html(
             <div class="broken-summary">
                 <p>Sur les <strong>{total_suivies}</strong> séries suivies (Rouge, Orange ou Vert) depuis la dernière exécution :</p>
                 <ul>
-                    <li><strong style="color: #c82333;">{count_brisees}</strong> séries ont été brisées.</li>
+                    <li><strong style="color: #c82333;">{count_brisees}</strong> séries ont été brisées (sont retombées à 0).</li>
                     <li><strong style="color: #2e7d32;">{count_actives}</strong> séries sont toujours actives.</li>
                 </ul>
             </div>
             """
         # --- FIN MODIFICATION V35 ---
 
-        # 3. Assembler le conteneur HTML
+        # Conteneur HTML pour le nouveau tableau
         broken_series_html = f"""
         <div class="section-container tab-content" id="broken-series-section">
             <h2 class="section-title">Séries Brisées Récemment (Toutes Ligues)</h2>
@@ -371,7 +409,7 @@ def sauvegarder_rapport_global_html(
         </script>
         """
 
-        # --- 7. Définir le Style CSS (Inchangé V34) ---
+        # --- 7. Définir le Style CSS (MODIFIÉ V35) ---
         html_style = """
         <style>
             html { scroll-behavior: smooth; }
@@ -414,12 +452,18 @@ def sauvegarder_rapport_global_html(
             .main-header nav a.team-button.active {
                 background-color: #5a37a0;
             }
-            /* --- NOUVEAU V33 : Style bouton "Séries Brisées" --- */
             .main-header nav a.broken-button {
                 background-color: #dc3545; color: white; font-weight: bold;
             }
             .main-header nav a.broken-button.active {
                 background-color: #c82333;
+            }
+            /* --- NOUVEAU V35 : Style bouton "Résultats Semaine" --- */
+            .main-header nav a.history-button {
+                background-color: #6c757d; color: white; font-weight: bold;
+            }
+            .main-header nav a.history-button.active {
+                background-color: #5a6268;
             }
             
             .main-content {
@@ -428,7 +472,7 @@ def sauvegarder_rapport_global_html(
             }
             .section-container.tab-content {
                 display: none; width: 90%; 
-                max-width: 1100px; /* Augmenté pour la colonne Ligue */
+                max-width: 1100px; 
                 margin-bottom: 20px;
             }
             .section-container.tab-content.active { display: block; }
@@ -443,7 +487,6 @@ def sauvegarder_rapport_global_html(
             .section-title {
                 color: #333; text-align: center; font-size: 1.5em; margin-bottom: 20px;
             }
-            /* --- NOUVEAU V33: Style sous-titre --- */
             .section-subtitle {
                 text-align: center; font-size: 0.9em; color: #666;
                 margin-top: -15px; margin-bottom: 20px;
@@ -520,7 +563,7 @@ def sauvegarder_rapport_global_html(
                 color: #0056b3; font-size: 1.05em; text-align: center;
             }
 
-            /* --- NOUVEAU V33 : Style pour le tableau "Séries Brisées" --- */
+            /* Styles pour le tableau "Séries Brisées" */
             .broken-table td:nth-child(1), .broken-table td:nth-child(2) { /* Ligue, Equipe */
                 font-weight: bold;
             }
@@ -531,7 +574,7 @@ def sauvegarder_rapport_global_html(
                 font-weight: bold; text-align: center;
             }
             
-            /* --- NOUVEAU V34 : Style pour le résumé des séries brisées --- */
+            /* Style pour le résumé des séries brisées */
             .broken-summary {
                 margin-top: 25px;
                 padding: 20px;
@@ -555,7 +598,29 @@ def sauvegarder_rapport_global_html(
             .broken-summary li {
                 margin: 5px 0;
             }
-            /* --- FIN NOUVEAU V34 --- */
+
+            /* --- NOUVEAU V35 : Style pour le tableau "Résultats Semaine" --- */
+            .last-week-table td {
+                text-align: left;
+                font-weight: bold;
+                font-size: 0.95em;
+            }
+            .last-week-table td:nth-child(1), .last-week-table td:nth-child(2) { /* Date, Ligue */
+                font-weight: normal;
+                font-size: 0.9em;
+                color: #555;
+            }
+            .last-week-table td:nth-child(5), .last-week-table td:nth-child(6) { /* Score FT, Score HT */
+                text-align: center;
+                font-family: "Courier New", Courier, monospace;
+            }
+            .last-week-table td:nth-child(5) { /* Score FT */
+                 font-size: 1.1em;
+            }
+             .last-week-table td:nth-child(6) { /* Score HT */
+                 font-size: 0.9em;
+                 color: #777;
+            }
 
             #team-selector {
                 width: 100%;
@@ -760,7 +825,7 @@ def sauvegarder_rapport_global_html(
         </script>
         """
 
-        # --- 9. Assembler le HTML Final (MODIFIÉ V33) ---
+        # --- 9. Assembler le HTML Final (MODIFIÉ V35) ---
         html_content = f"""
         <!DOCTYPE html>
         <html lang="fr">
@@ -780,6 +845,8 @@ def sauvegarder_rapport_global_html(
                 <div id="welcome-message">
                     <h2>Veuillez sélectionner une catégorie dans la barre de navigation.</h2>
                 </div>
+                
+                {last_week_html}
                 
                 {broken_series_html}
                 
@@ -809,7 +876,7 @@ def sauvegarder_rapport_global_html(
         with open(nom_fichier_html, "w", encoding="utf-8") as f:
             f.write(html_content)
         
-        print(f"\nSuccès ! Le rapport V34 pour {titre_rapport} a été généré ici : {os.path.abspath(nom_fichier_html)}")
+        print(f"\nSuccès ! Le rapport V35 pour {titre_rapport} a été généré ici : {os.path.abspath(nom_fichier_html)}")
 
     except Exception as e:
         print(f"\nErreur lors de la génération du fichier HTML : {e}")
@@ -1369,13 +1436,12 @@ def analyser_cache_series(df_actuel, df_cache):
         return pd.DataFrame(columns=['Ligue', 'Équipe', 'Statistique', 'Série Précédente']), 0, 0
 
 
-# --- POINT D'ENTRÉE DU SCRIPT (MODIFIÉ V34) ---
+# --- POINT D'ENTRÉE DU SCRIPT (MODIFIÉ V35) ---
 if __name__ == "__main__":
     
     SAISON_API = 2025 
     dossier_csv_principal = "CSV_Data" 
     
-    # --- NOUVEAU V33: Définir le nom du fichier cache ---
     fichier_cache = "rapport_cache.csv"
     
     # 1. Trouver TOUS les fichiers CSV (sauf fixtures.csv)
@@ -1409,26 +1475,37 @@ if __name__ == "__main__":
         ligues_a_analyser.keys()
     )
     
-    # 5. (SUPPRIMÉ V31) L'appel à 'api-football.com' a été retiré.
-    
     if donnees_completes is not None:
         
         print(f"\n--- DÉBUT DU TRAITEMENT GLOBAL ---")
 
-        # 6. Étape 3 : Calculer tous les records pour TOUTES les ligues en une fois
+        # 5. Calculer tous les records pour TOUTES les ligues en une fois
         df_rapport_global = calculer_tous_les_records_et_series(
             donnees_completes, 
             ligues_a_analyser,  # On passe le dict de ligues
             odds_api_dict       # Dico API Cotes (seule source)
         )
 
-        # 7. Étape 4 (Affichage console)
+        # 6. Étape (Affichage console)
         print(f"\n--- RÉSULTAT GLOBAL (Aperçu) ---")
         pd.set_option('display.max_rows', 5) # Afficher un aperçu
         print(df_rapport_global)
         pd.reset_option('display.max_rows')
         
-        # --- NOUVEAU V34: Charger l'ancien cache et comparer ---
+        # 7. (NOUVEAU V35) Filtrer les résultats de la semaine passée
+        print("Filtrage des résultats de la semaine passée...")
+        if 'Date' in donnees_completes.columns and not donnees_completes.empty:
+            date_max = donnees_completes['Date'].max()
+            date_min = date_max - pd.Timedelta(days=7)
+            df_last_week = donnees_completes[(donnees_completes['Date'] > date_min) & (donnees_completes['Date'] <= date_max)].copy()
+            
+            # Ajouter le nom lisible de la ligue
+            if not df_last_week.empty:
+                df_last_week['Ligue'] = df_last_week['LeagueCode'].map(LEAGUE_NAME_MAPPING).fillna(df_last_week['LeagueCode'])
+        else:
+            df_last_week = pd.DataFrame()
+        
+        # 8. (NOUVEAU V34) Charger l'ancien cache et comparer
         df_cache = pd.DataFrame() 
         try:
             if os.path.exists(fichier_cache):
@@ -1437,31 +1514,29 @@ if __name__ == "__main__":
             print(f"Avertissement: Impossible de lire le fichier cache '{fichier_cache}'. Il sera recréé. Erreur: {e}")
 
         df_series_brisees, count_brisees, count_actives = analyser_cache_series(df_rapport_global, df_cache)
-        # --- FIN NOUVEAU V34 ---
-
         
-        # 8. ÉTAPE 5 : SAUVEGARDE EN UN SEUL FICHIER HTML
+        # 9. ÉTAPE 5 : SAUVEGARDE EN UN SEUL FICHIER HTML
         nom_du_fichier_html = "index.html" # On sauvegarde directement en index.html
         titre_rapport = "Rapport Global des Ligues"
         
-        # (MODIFIÉ V34)
+        # (MODIFIÉ V35)
         sauvegarder_rapport_global_html(
             df_rapport_global, 
             df_series_brisees, 
-            count_brisees,      # <-- NOUVEAU V34
-            count_actives,      # <-- NOUVEAU V34
+            count_brisees,
+            count_actives,
+            df_last_week,       # <-- NOUVEAU V35
             nom_du_fichier_html, 
             titre_rapport,
             odds_api_dict 
         )
         
-        # --- NOUVEAU V33: Sauvegarder les résultats actuels dans le cache pour la prochaine fois ---
+        # 10. (NOUVEAU V33) Sauvegarder les résultats actuels dans le cache pour la prochaine fois
         try:
             df_rapport_global.to_csv(fichier_cache, index=False)
             print(f"Succès : Le cache des séries a été mis à jour dans '{fichier_cache}'.")
         except Exception as e:
             print(f"ERREUR: Impossible de sauvegarder le cache dans '{fichier_cache}'. Erreur: {e}")
-        # --- FIN NOUVEAU V33 ---
         
         print("\n--- TRAITEMENT TERMINÉ ---")
         print(f"Le rapport global '{nom_du_fichier_html}' a été créé.")
