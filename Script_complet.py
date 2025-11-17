@@ -160,7 +160,7 @@ def sauvegarder_rapport_global_html(
 ):
     """
     Sauvegarde le DataFrame GLOBAL en un seul fichier index.html.
-    MODIFIÉ V39.1: Corrige un bug de forme de colonne (6 vs 5) dans le tableau de Forme.
+    MODIFIÉ V39.1: Corrige un bug de formatage str/float sur 'Année Record'.
     """
     
     # 1. Définir les 14 statistiques de SÉRIE
@@ -281,6 +281,7 @@ def sauvegarder_rapport_global_html(
                 'Série en Cours', '5 Derniers Buts', 'Prochain Match', 'Cote (Pari Inverse)', 'Alerte'
             ]
             df_alertes = df_alertes.reindex(columns=colonnes_ordre)
+            # CORRIGÉ V39.1: 'Année Record' formaté en '{}' (texte)
             styler_alertes = df_alertes.style.apply(colorier_tableau_alertes_v22, axis=1) \
                                         .set_table_attributes('class="styled-table alerts-table filterable-table"') \
                                         .format({'Cote (Pari Inverse)': '{}', 'Année Record': '{}'}) \
@@ -300,6 +301,7 @@ def sauvegarder_rapport_global_html(
                 'Série en Cours', '5 Derniers Buts', 'Prochain Match', 'Cote (Pari Inverse)', 'Alerte'
             ]
             df_alertes_pre = df_alertes_pre.reindex(columns=colonnes_ordre)
+            # CORRIGÉ V39.1: 'Année Record' formaté en '{}' (texte)
             styler_pre_alertes = df_alertes_pre.style.apply(colorier_tableau_alertes_v22, axis=1) \
                                         .set_table_attributes('class="styled-table alerts-table filterable-table"') \
                                         .format({'Cote (Pari Inverse)': '{}', 'Année Record': '{}'}) \
@@ -326,17 +328,14 @@ def sauvegarder_rapport_global_html(
             df_forme = df_forme.sort_values(by='Score de Forme', ascending=False)
             
             # --- CORRECTION V39.1 ---
-            # On sélectionne SEULEMENT les colonnes à afficher, en enlevant la raw 'Form_Last_5_Str'
             cols_to_display = ['Ligue', 'Équipe', 'Score de Forme', '5 Derniers (Détails)', 'Prochain Match']
             df_forme_final = df_forme[cols_to_display] 
             
-            # Prendre les 10 meilleurs et 10 pires DEPUIS LE DF FILTRÉ
             df_top10 = df_forme_final.head(10)
             df_bottom10 = df_forme_final.tail(10).sort_values(by='Score de Forme', ascending=True)
             df_forme_display = pd.concat([df_top10, df_bottom10]).reset_index(drop=True)
             # --- FIN CORRECTION V39.1 ---
 
-            # Maintenant, df_forme_display a 5 colonnes, et colorier_forme_v22 renvoie 5 styles.
             styler_forme = df_forme_display.style.apply(colorier_forme_v22, axis=1) \
                                         .set_table_attributes('class="styled-table form-table filterable-table"') \
                                         .format({'Score de Forme': '{:+.1f}', '5 Derniers (Détails)': '{}'}) \
@@ -372,6 +371,7 @@ def sauvegarder_rapport_global_html(
                 col_5_derniers: nom_col_5_derniers
             })
             df_stat = df_stat.sort_values(by='Record', ascending=False).reset_index(drop=True)
+            # CORRIGÉ V39.1: 'Année Record' formaté en '{}' (texte)
             styler = df_stat.style.apply(colorier_series_v19, axis=1) \
                                 .set_table_attributes('class="styled-table filterable-table"') \
                                 .format({'Année Record': '{}'}) \
@@ -1031,7 +1031,7 @@ def sauvegarder_rapport_global_html(
                 for (const statName in STATS_CONFIG) {
                      const annee_record_val = stats[statName + '_Annee_Record'] || 'N/A';
                      const record_val = stats[statName + '_Record'] || 'N/A';
-                     const annee_str = annee_record_val !== 'N/A' ? `(${annee_record_val})` : '';
+                     const annee_str = (annee_record_val !== 'N/A' && annee_record_val !== null) ? `(${annee_record_val})` : '';
                      
                      statsHtml += `<tr>
                         <td>${statName} (Record)</td>
@@ -1154,16 +1154,20 @@ def sauvegarder_rapport_global_html(
         with open(nom_fichier_html, "w", encoding="utf-8") as f:
             f.write(html_content)
         
-        print(f"\nSuccès ! Le rapport V39 pour {titre_rapport} a été généré ici : {os.path.abspath(nom_fichier_html)}")
+        print(f"\nSuccès ! Le rapport V39.1 pour {titre_rapport} a été généré ici : {os.path.abspath(nom_fichier_html)}")
 
     except Exception as e:
         print(f"\nErreur lors de la génération du fichier HTML : {e}")
 
 
-# --- FONCTION DE CHARGEMENT V21 (ROBUSTE + LOGIQUE DE LIGUE) ---
+# --- (MODIFIÉ V41) FONCTION DE CHARGEMENT V41 ---
 def charger_donnees(fichiers_csv):
     """
     Charge et combine tous les fichiers CSV.
+    MODIFIÉ V41: Charge et parse les dates fichier par fichier avant de combiner,
+                 pour gérer les formats de date mixtes.
+                 Remplace .dropna() par .fillna() pour ne pas casser
+                 les séries en cas de données manquantes (scores OU FTR).
     """
     all_dfs = []
     print(f"Chargement de {len(fichiers_csv)} fichiers...")
@@ -1172,18 +1176,38 @@ def charger_donnees(fichiers_csv):
         league_code = os.path.basename(f).replace('.csv', '')
         try:
             df_temp = pd.read_csv(f, on_bad_lines='skip')
-            df_temp['LeagueCode'] = league_code 
-            all_dfs.append(df_temp)
         except UnicodeDecodeError:
             print(f"  Avertissement: Échec UTF-8 pour {os.path.basename(f)}. Tentative avec 'latin1'...")
             try:
                 df_temp = pd.read_csv(f, on_bad_lines='skip', encoding='latin1')
-                df_temp['LeagueCode'] = league_code 
-                all_dfs.append(df_temp)
             except Exception as e_latin:
                 print(f"  ERREUR: Impossible de charger {os.path.basename(f)} avec UTF-8 ou latin1. Erreur : {e_latin}")
+                continue # Passer au fichier suivant
         except Exception as e:
             print(f"  ERREUR: Impossible de charger {os.path.basename(f)}. Erreur : {e}")
+            continue # Passer au fichier suivant
+
+        # --- NOUVELLE LOGIQUE DE DATE V41 ---
+        # Essayer de parser la date avec 'dayfirst=True'
+        df_temp['Date'] = pd.to_datetime(df_temp['Date'], dayfirst=True, errors='coerce')
+        
+        # Si TOUTES les dates ont échoué, essayer avec 'dayfirst=False' (format US)
+        if df_temp['Date'].isna().all():
+            print(f"  - Info: Format de date 'dayfirst=True' a échoué pour {os.path.basename(f)}. Tentative avec format US.")
+            # Re-lire le fichier pour ne pas avoir de dates partielles
+            try:
+                df_temp = pd.read_csv(f, on_bad_lines='skip')
+            except: # Gérer les erreurs d'encodage à nouveau
+                try:
+                    df_temp = pd.read_csv(f, on_bad_lines='skip', encoding='latin1')
+                except:
+                    continue # Echec total
+            
+            df_temp['Date'] = pd.to_datetime(df_temp['Date'], dayfirst=False, errors='coerce')
+        # --- FIN LOGIQUE DE DATE V41 ---
+            
+        df_temp['LeagueCode'] = league_code 
+        all_dfs.append(df_temp)
             
     if not all_dfs:
         print("Erreur : Aucun fichier n'a pu être chargé.")
@@ -1206,39 +1230,20 @@ def charger_donnees(fichiers_csv):
     if 'FTR' not in df.columns:
         print("Avertissement: 'FTR' manquante. Les stats de Forme et Nuls seront ignorées.")
 
+    # (V41) On ne supprime que les lignes où les infos de base sont manquantes
     df = df.dropna(subset=colonnes_base) 
     
-    # Conversion des dates
-    df['Date'] = pd.to_datetime(df['Date'], dayfirst=True, errors='coerce')
-    if df['Date'].isna().all():
-        print("Avertissement : 'dayfirst=True' a échoué, nouvelle tentative (format US)...")
-        all_dfs_retry = []
-        for f in fichiers_csv:
-            league_code = os.path.basename(f).replace('.csv', '')
-            try:
-                df_temp = pd.read_csv(f, on_bad_lines='skip')
-                df_temp['LeagueCode'] = league_code
-                all_dfs_retry.append(df_temp)
-            except UnicodeDecodeError:
-                try:
-                    df_temp = pd.read_csv(f, on_bad_lines='skip', encoding='latin1')
-                    df_temp['LeagueCode'] = league_code
-                    all_dfs_retry.append(df_temp)
-                except: pass
-            except: pass
-        
-        df = pd.concat(all_dfs_retry, ignore_index=True)
-        df = df.dropna(subset=colonnes_base) 
-        df['Date'] = pd.to_datetime(df['Date'], errors='coerce') 
-
+    # (V41) On ne supprime que les lignes où la DATE est TOUJOURS invalide
     df = df.dropna(subset=['Date'])
     df = df.sort_values(by='Date')
     
-    # --- PRÉ-CALCUL DE TOUTES LES CONDITIONS (V21) ---
+    # --- PRÉ-CALCUL DE TOUTES LES CONDITIONS (CORRIGÉ V41) ---
+    # On remplace les NaN par 0 (pour les scores) ou 'NA' (pour FTR)
+    # au lieu de supprimer les lignes, pour préserver l'historique des séries.
+    
     if 'FTHG' in df.columns and 'FTAG' in df.columns:
-        df['FTHG'] = pd.to_numeric(df['FTHG'], errors='coerce')
-        df['FTAG'] = pd.to_numeric(df['FTAG'], errors='coerce')
-        df = df.dropna(subset=['FTHG', 'FTAG'])
+        df['FTHG'] = pd.to_numeric(df['FTHG'], errors='coerce').fillna(0)
+        df['FTAG'] = pd.to_numeric(df['FTAG'], errors='coerce').fillna(0)
         
         df['TotalGoals'] = df['FTHG'] + df['FTAG']
         df['Cond_Moins_0_5_FT'] = df['TotalGoals'] < 0.5   # 0
@@ -1250,9 +1255,8 @@ def charger_donnees(fichiers_csv):
         df['Cond_Moins_3_5_FT'] = df['TotalGoals'] < 3.5   # 0-3
     
     if 'HTHG' in df.columns and 'HTAG' in df.columns:
-        df['HTHG'] = pd.to_numeric(df['HTHG'], errors='coerce')
-        df['HTAG'] = pd.to_numeric(df['HTAG'], errors='coerce')
-        df = df.dropna(subset=['HTHG', 'HTAG'])
+        df['HTHG'] = pd.to_numeric(df['HTHG'], errors='coerce').fillna(0)
+        df['HTAG'] = pd.to_numeric(df['HTAG'], errors='coerce').fillna(0)
         
         df['TotalHTGoals'] = df['HTHG'] + df['HTAG']
         df['Cond_Plus_0_5_HT']  = df['TotalHTGoals'] > 0.5 # 1+ MT
@@ -1261,7 +1265,7 @@ def charger_donnees(fichiers_csv):
         df['Cond_Moins_1_5_HT'] = df['TotalHTGoals'] < 1.5 # 0-1 MT
         
     if 'FTR' in df.columns:
-        df = df.dropna(subset=['FTR'])
+        df['FTR'] = df['FTR'].fillna('NA') # Remplacer FTR manquant par 'NA'
         df['Cond_Draw_FT'] = df['FTR'] == 'D' 
     
     print("Toutes les données ont été préparées et les conditions pré-calculées.")
@@ -1288,24 +1292,18 @@ def trouver_max_serie_pour_colonne(df_equipe, nom_colonne_condition):
         max_streak = int(streak_lengths.max())
         
         # --- NOUVEAU V39: Trouver l'année ---
-        # 1. Trouver TOUS les groupes qui ont la longueur max
         groupes_max = streak_lengths[streak_lengths == max_streak].index
-        
-        # 2. Pour chacun de ces groupes, trouver la date de fin
         dates_de_fin = []
         for group_id in groupes_max:
-            # S'assurer que le groupe existe dans le dataframe filtré
             if group_id in streaks_when_true['streak_group'].values:
                 date_fin = streaks_when_true[streaks_when_true['streak_group'] == group_id]['Date'].max()
                 dates_de_fin.append(date_fin)
         
-        # 3. Prendre la date la plus récente parmi ces records (filtrer les NaT)
         dates_valides = [d for d in dates_de_fin if pd.notna(d)]
         if not dates_valides:
             annee_record = "N/A"
         else:
             date_fin_record_recente = max(dates_valides)
-            # 4. Extraire l'année
             annee_record = date_fin_record_recente.year
         # --- FIN NOUVEAU V39 ---
             
@@ -1332,16 +1330,20 @@ def trouver_serie_en_cours_pour_colonne(df_equipe, nom_colonne_condition):
     return serie_en_cours
 
 
-# --- FONCTION HELPER (V29 - Forme simplifiée) ---
+# --- (MODIFIÉ V41) FONCTION HELPER (V29 - Forme simplifiée) ---
 def calculer_score_de_forme(df_equipe, equipe):
     """
     Calcule le score de forme pondéré sur les 5 derniers matchs.
-    MODIFIÉ V29: Renvoie 'V, D, N' au lieu de 'V (2-1)'
+    MODIFIÉ V41: Ne plante pas si 'FTR' est manquant, filtre 'NA'.
     """
     if 'FTR' not in df_equipe.columns or 'FTHG' not in df_equipe.columns:
         return 0, "N/A" # Impossible de calculer
-    df_equipe = df_equipe.sort_values(by='Date')
-    last_5_games = df_equipe.tail(5)
+    
+    # V41: On ne peut pas utiliser les lignes avec FTR='NA'
+    df_equipe_forme = df_equipe[df_equipe['FTR'] != 'NA'].copy()
+    
+    df_equipe_forme = df_equipe_forme.sort_values(by='Date')
+    last_5_games = df_equipe_forme.tail(5)
     if len(last_5_games) < 5:
         return 0, "Pas assez de matchs"
     scores = []
@@ -1743,7 +1745,11 @@ def envoyer_notifications_discord(alertes_rouges, webhook_url):
     """
     Envoie un message Discord formaté avec toutes les alertes rouges.
     """
-    print("Envoi des notifications vers Discord...")
+    if not alertes_rouges:
+        print("  - Aucune alerte rouge à notifier.")
+        return
+        
+    print(f"Envoi de {len(alertes_rouges)} notifications vers Discord...")
     
     # Créer un message formaté
     message_description = ""
