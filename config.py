@@ -1,2 +1,4 @@
 
-API_KEY = "c22f6b929ac97df92910b7db40a7b429"
+API_KEY = "c22f6b929ac97df92910b7db40a7b429" 
+
+DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1439914810891305023/7OokyTryAuujArN3YKYRsH4DYplk5DmgcbjRYpNZV_lP826IUSLCk4edcrQsoAPqzDG-"

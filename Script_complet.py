@@ -69,7 +69,6 @@ def colorier_series_v19(row):
     style_ligue = 'font-weight: normal; color: #777; font-size: 0.9em; text-align: left;'
     style_equipe = '' 
     style_record = '' 
-    # NOUVEAU V39: Style pour l'année
     style_annee_record = 'font-weight: normal; color: #777; font-size: 0.9em; text-align: center;'
     style_en_cours = 'font-weight: normal; color: #555;' 
     style_5_derniers = 'font-weight: normal; color: #777; font-size: 0.9em;' 
@@ -149,7 +148,6 @@ def formater_forme_html(forme_string):
 
 
 # --- (MODIFIÉ V39.1) Helper 6: Génération de la page HTML ---
-# --- (MODIFIÉ V39.1) Helper 6: Génération de la page HTML ---
 def sauvegarder_rapport_global_html(
     df_rapport_complet, 
     df_series_brisees, 
@@ -162,7 +160,7 @@ def sauvegarder_rapport_global_html(
 ):
     """
     Sauvegarde le DataFrame GLOBAL en un seul fichier index.html.
-    MODIFIÉ V39.1: Corrige le bug de formatage str/float sur 'Année Record'.
+    MODIFIÉ V39.1: Corrige un bug de forme de colonne (6 vs 5) dans le tableau de Forme.
     """
     
     # 1. Définir les 14 statistiques de SÉRIE
@@ -1490,7 +1488,7 @@ def decouvrir_ligues_et_equipes(dossier_csv_principal):
             print(f"Erreur : Aucun dossier de saison (ex: 'data2010-2011') trouvé dans '{dossier_csv_principal}'")
             return {}
         dossier_le_plus_recent = dossiers_saison[-1]
-        print(f"Dossier de la saison la plus recente détecté : {os.path.basename(dossier_le_plus_recent)}")
+        print(f"Dossier de la saison la plus récente détecté : {os.path.basename(dossier_le_plus_recent)}")
     except Exception as e:
         print(f"Erreur lors de la recherche des dossiers de saison : {e}")
         return {}
@@ -1740,7 +1738,46 @@ def analyser_cache_series(df_actuel, df_cache):
         return pd.DataFrame(columns=['Ligue', 'Équipe', 'Statistique', 'Série Précédente']), 0, 0
 
 
-# --- POINT D'ENTRÉE DU SCRIPT (MODIFIÉ V38) ---
+# --- (NOUVEAU V40) FONCTION POUR NOTIFICATION DISCORD ---
+def envoyer_notifications_discord(alertes_rouges, webhook_url):
+    """
+    Envoie un message Discord formaté avec toutes les alertes rouges.
+    """
+    print("Envoi des notifications vers Discord...")
+    
+    # Créer un message formaté
+    message_description = ""
+    for alerte in alertes_rouges:
+        message_description += f"**{alerte['Équipe']}** ({alerte['Ligue']}) : **{alerte['Statistique']}** (Série: **{alerte['Série en Cours']}**)\n"
+
+    # Limiter la longueur du message (limite Discord de 2000 caractères)
+    if len(message_description) > 1900:
+        message_description = message_description[:1900] + "\n... et plus encore."
+
+    # Préparer le "payload" JSON pour Discord
+    data = {
+        "content": f"🚨 **{len(alertes_rouges)} Alertes Rouges Détectées !** 🚨", # Titre principal
+        "embeds": [
+            {
+                "title": "Rapport des Séries au Record",
+                "description": message_description,
+                "color": 15158332, # Couleur rouge
+                "footer": {
+                    "text": f"Analyse effectuée le {datetime.datetime.now().strftime('%d/%m/%Y %H:%M')}"
+                }
+            }
+        ]
+    }
+
+    try:
+        response = requests.post(webhook_url, json=data)
+        response.raise_for_status() # Lèvera une erreur si le code est 4xx ou 5xx
+        print("  - Notifications Discord envoyées avec succès.")
+    except requests.exceptions.RequestException as e:
+        print(f"  - ERREUR: Impossible d'envoyer la notification Discord. {e}")
+
+
+# --- POINT D'ENTRÉE DU SCRIPT (MODIFIÉ V40) ---
 if __name__ == "__main__":
     
     SAISON_API = 2025 
@@ -1795,6 +1832,37 @@ if __name__ == "__main__":
         pd.set_option('display.max_rows', 5) # Afficher un aperçu
         print(df_rapport_global)
         pd.reset_option('display.max_rows')
+        
+        # --- NOUVEAU V40: Filtrer les alertes rouges pour Discord ---
+        print("Filtrage des alertes rouges pour notification Discord...")
+        alertes_rouges_discord = []
+        for stat in STATS_COLUMNS_BASE:
+            col_record = f'{stat}_Record'
+            col_en_cours = f'{stat}_EnCours'
+            
+            # Condition: Série en cours > 0 ET Série en cours == Record
+            condition_rouge = (df_rapport_global[col_en_cours] > 0) & (df_rapport_global[col_en_cours] == df_rapport_global[col_record])
+            
+            df_alertes_stat = df_rapport_global[condition_rouge]
+            
+            for index, row in df_alertes_stat.iterrows():
+                alertes_rouges_discord.append({
+                    'Ligue': row['Ligue'],
+                    'Équipe': row['Équipe'],
+                    'Statistique': stat,
+                    'Série en Cours': int(row[col_en_cours])
+                })
+
+        if alertes_rouges_discord:
+            print(f"  - {len(alertes_rouges_discord)} alertes rouges trouvées.")
+            if hasattr(config, 'DISCORD_WEBHOOK_URL') and "VOTRE_URL" not in config.DISCORD_WEBHOOK_URL and config.DISCORD_WEBHOOK_URL != "":
+                envoyer_notifications_discord(alertes_rouges_discord, config.DISCORD_WEBHOOK_URL)
+            else:
+                print("  - Avertissement: 'DISCORD_WEBHOOK_URL' non configurée dans config.py. Notifications sautées.")
+        else:
+            print("  - Aucune alerte rouge à notifier.")
+        # --- FIN NOUVEAU V40 ---
+
         
         # 7. (NOUVEAU V35) Filtrer les résultats de la semaine passée
         print("Filtrage des résultats de la semaine passée...")
