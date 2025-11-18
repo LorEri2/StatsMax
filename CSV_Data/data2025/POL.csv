@@ -1,4 +1,4 @@
-﻿Country,League,Season,Date,Time,Home,Away,HG,AG,Res,PSCH,PSCD,PSCA,MaxCH,MaxCD,MaxCA,AvgCH,AvgCD,AvgCA,BFECH,BFECD,BFECA,B365CH,B365CD,B36CA
+﻿Country,League,Season,Date,Time,HomeTeam,AwayTeam,FTHG,FTAG,FTR,PSCH,PSCD,PSCA,MaxCH,MaxCD,MaxCA,AvgCH,AvgCD,AvgCA,BFECH,BFECD,BFECA,B365CH,B365CD,B36CA
 Poland,Ekstraklasa,2012/2013,17/08/2012,17:00,Pogon Szczecin,Zaglebie,4,0,H,3.23,3.21,2.47,3.3,3.3,2.5,3.01,3.11,2.34,,,,,,
 Poland,Ekstraklasa,2012/2013,17/08/2012,19:30,Piast Gliwice,Gornik Z.,1,2,A,2.72,3.12,2.98,2.78,3.25,3.3,2.56,3.05,2.78,,,,,,
 Poland,Ekstraklasa,2012/2013,18/08/2012,12:30,Jagiellonia,Podbeskidzie,2,1,H,1.74,3.6,5.63,1.85,3.6,5.63,1.74,3.42,4.72,,,,,,

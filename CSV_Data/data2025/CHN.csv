@@ -1,4 +1,4 @@
-﻿Country,League,Season,Date,Time,Home,Away,HG,AG,Res,PSCH,PSCD,PSCA,MaxCH,MaxCD,MaxCA,AvgCH,AvgCD,AvgCA,BFECH,BFECD,BFECA,B365CH,B365CD,B36CA
+﻿Country,League,Season,Date,HomeTeam,AwayTeam,FTHG,FTAG,FTR,PSCH,PSCD,PSCA,MaxCH,MaxCD,MaxCA,AvgCH,AvgCD,AvgCA,BFECH,BFECD,BFECA,B365CH,B365CD,B36CA
 China,Super League,2014,07/03/2014,11:00,Shandong Luneng,Zhejiang Yiteng,1,0,H,,,,1.3,6.5,13,1.21,5.72,9.77,,,,,,
 China,Super League,2014,08/03/2014,08:30,Guangzhou Evergrande,Henan Songshan Longmen,3,0,H,1.19,7.4,17.5,1.19,8.8,23,1.14,6.64,15.35,,,,,,
 China,Super League,2014,08/03/2014,11:30,Beijing Guoan,Changchun Yatai,1,0,H,1.39,4.7,9.7,1.45,4.8,9.7,1.39,4.27,7.18,,,,,,

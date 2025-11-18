@@ -1,4 +1,4 @@
-﻿Country,League,Season,Date,Time,Home,Away,HG,AG,Res,PSCH,PSCD,PSCA,MaxCH,MaxCD,MaxCA,AvgCH,AvgCD,AvgCA,BFECH,BFECD,BFECA
+﻿Country,League,Season,Date,Time,HomeTeam,AwayTeam,FTHG,FTAG,FTR,PSCH,PSCD,PSCA,MaxCH,MaxCD,MaxCA,AvgCH,AvgCD,AvgCA,BFECH,BFECD,BFECA
 Russia,Premier League,2012/2013,20/07/2012,16:00,M. Saransk,Lokomotiv Moscow,2,3,A,5.12,3.73,1.8,5.25,3.73,1.85,4.54,3.44,1.75,,,
 Russia,Premier League,2012/2013,21/07/2012,10:30,CSKA Moscow,FK Rostov,1,0,H,1.4,4.84,9.84,1.4,4.84,11.09,1.34,4.44,8.88,,,
 Russia,Premier League,2012/2013,21/07/2012,13:30,Volga N. Novgorod,Dynamo Moscow,1,0,H,4.55,3.58,1.9,4.62,3.6,2,3.96,3.35,1.88,,,

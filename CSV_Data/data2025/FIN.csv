@@ -1,4 +1,4 @@
-﻿Country,League,Season,Date,Time,Home,Away,HG,AG,Res,PSCH,PSCD,PSCA,MaxCH,MaxCD,MaxCA,AvgCH,AvgCD,AvgCA,BFECH,BFECD,BFECA,B365CH,B365CD,B36CA
+﻿Country,League,Season,Date,Time,HomeTeam,AwayTeam,FTHG,FTAG,FTR,PSCH,PSCD,PSCA,MaxCH,MaxCD,MaxCA,AvgCH,AvgCD,AvgCA,BFECH,BFECD,BFECA,B365CH,B365CD,B36CA
 Finland,Veikkausliiga,2012,15/04/2012,16:30,HJK,Mariehamn,3,1,H,1.4,4.79,9.77,1.4,4.79,10,1.35,4.47,8.46,,,,,,
 Finland,Veikkausliiga,2012,15/04/2012,16:30,Honka,VPS,1,1,D,1.76,3.67,5.42,1.9,3.67,5.42,1.8,3.38,4.4,,,,,,
 Finland,Veikkausliiga,2012,15/04/2012,16:30,KuPS,JJK Jyvaskyla,2,2,D,2.35,3.53,3.12,2.5,3.53,3.17,2.35,3.26,2.87,,,,,,
