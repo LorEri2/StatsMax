@@ -58,10 +58,11 @@ STATS_COLUMNS_BASE = [
     'MT +0.5', 'MT -0.5', 'MT +1.5', 'MT -1.5'
 ]
 
-# --- (MODIFIÉ V39) Helper 1: Style pour les tableaux (6 colonnes) ---
+# --- (MODIFIÉ V42) Helper 1: Style pour les tableaux (7 colonnes) ---
 def colorier_series_v19(row):
     """
-    Applique un style aux 6 colonnes (Ligue, Équipe, Record, Année Record, Série, 5 Derniers).
+    Applique un style aux 7 colonnes 
+    (Ligue, Équipe, Record, Année Record, Série, % Réussite, 5 Derniers).
     """
     record = row['Record']
     en_cours = row['Série en Cours']
@@ -70,7 +71,9 @@ def colorier_series_v19(row):
     style_equipe = '' 
     style_record = '' 
     style_annee_record = 'font-weight: normal; color: #777; font-size: 0.9em; text-align: center;'
-    style_en_cours = 'font-weight: normal; color: #555;' 
+    style_en_cours = 'font-weight: normal; color: #555;'
+    # NOUVEAU V42: Style pour le % de réussite
+    style_pct = 'font-weight: bold; color: #333; font-size: 0.95em; text-align: center;'
     style_5_derniers = 'font-weight: normal; color: #777; font-size: 0.9em;' 
 
     if en_cours > 0 and en_cours == record:
@@ -80,7 +83,7 @@ def colorier_series_v19(row):
     elif en_cours > 0 and en_cours == record - 2:
         style_en_cours = 'background-color: #e8f5e9; color: #2e7d32; font-weight: bold;'
     
-    return [style_ligue, style_equipe, style_record, style_annee_record, style_en_cours, style_5_derniers] 
+    return [style_ligue, style_equipe, style_record, style_annee_record, style_en_cours, style_pct, style_5_derniers] 
 
 # --- (MODIFIÉ V39) Helper 2: Style pour le tableau d'alertes (10 colonnes) ---
 def colorier_tableau_alertes_v22(row):
@@ -103,6 +106,7 @@ def colorier_tableau_alertes_v22(row):
     style_prochain_match = style_base + 'font-weight: normal; color: #17a2b8; font-size: 0.9em;'
     
     # Ordre: Ligue, Équipe, Stat, Record, Année Record, Série, 5 Derniers, Prochain Match, Cote, Alerte(cachée)
+    # (MODIFIÉ V42) Le % de réussite n'est PAS dans le tableau d'alertes, donc on garde 10 colonnes
     return [
         style_ligue, style_base, style_base, style_base, style_annee_record, style_base, 
         style_5_derniers, style_prochain_match, style_base, style_base
@@ -147,7 +151,7 @@ def formater_forme_html(forme_string):
     return " ".join(pills)
 
 
-# --- (MODIFIÉ V39.1) Helper 6: Génération de la page HTML ---
+# --- (MODIFIÉ V42) Helper 6: Génération de la page HTML ---
 def sauvegarder_rapport_global_html(
     df_rapport_complet, 
     df_series_brisees, 
@@ -160,7 +164,7 @@ def sauvegarder_rapport_global_html(
 ):
     """
     Sauvegarde le DataFrame GLOBAL en un seul fichier index.html.
-    MODIFIÉ V39.1: Corrige un bug de formatage str/float sur 'Année Record'.
+    MODIFIÉ V42: Ajout de "% Réussite" aux onglets de stats et à la vue par équipe.
     """
     
     # 1. Définir les 14 statistiques de SÉRIE
@@ -211,6 +215,7 @@ def sauvegarder_rapport_global_html(
         filtre_ligue_html += '</select>'
 
         # --- 3. Générer les tableaux d'alertes (MODIFIÉ V39) ---
+        # (V42: On n'ajoute PAS le % de réussite aux tableaux d'alertes, trop d'infos)
         alertes_collectees_rouges = []
         alertes_collectees_pre = [] 
         count_pre_alertes = 0
@@ -281,7 +286,6 @@ def sauvegarder_rapport_global_html(
                 'Série en Cours', '5 Derniers Buts', 'Prochain Match', 'Cote (Pari Inverse)', 'Alerte'
             ]
             df_alertes = df_alertes.reindex(columns=colonnes_ordre)
-            # CORRIGÉ V39.1: 'Année Record' formaté en '{}' (texte)
             styler_alertes = df_alertes.style.apply(colorier_tableau_alertes_v22, axis=1) \
                                         .set_table_attributes('class="styled-table alerts-table filterable-table"') \
                                         .format({'Cote (Pari Inverse)': '{}', 'Année Record': '{}'}) \
@@ -301,7 +305,6 @@ def sauvegarder_rapport_global_html(
                 'Série en Cours', '5 Derniers Buts', 'Prochain Match', 'Cote (Pari Inverse)', 'Alerte'
             ]
             df_alertes_pre = df_alertes_pre.reindex(columns=colonnes_ordre)
-            # CORRIGÉ V39.1: 'Année Record' formaté en '{}' (texte)
             styler_pre_alertes = df_alertes_pre.style.apply(colorier_tableau_alertes_v22, axis=1) \
                                         .set_table_attributes('class="styled-table alerts-table filterable-table"') \
                                         .format({'Cote (Pari Inverse)': '{}', 'Année Record': '{}'}) \
@@ -316,26 +319,18 @@ def sauvegarder_rapport_global_html(
         cols_forme = ['Ligue', 'Équipe', 'Form_Score', 'Form_Last_5_Str', 'Prochain_Match']
         if 'Form_Score' in df_rapport_complet.columns:
             df_forme = df_rapport_complet[cols_forme].copy()
-            
-            # --- NOUVEAU V37: Formater les pilules de forme ---
             df_forme['5 Derniers (Détails)'] = df_forme['Form_Last_5_Str'].apply(formater_forme_html) # NOUVELLE COLONNE
-            
             df_forme = df_forme.rename(columns={
                 'Ligue': 'Ligue',
                 'Form_Score': 'Score de Forme',
                 'Prochain_Match': 'Prochain Match'
             })
             df_forme = df_forme.sort_values(by='Score de Forme', ascending=False)
-            
-            # --- CORRECTION V39.1 ---
             cols_to_display = ['Ligue', 'Équipe', 'Score de Forme', '5 Derniers (Détails)', 'Prochain Match']
             df_forme_final = df_forme[cols_to_display] 
-            
             df_top10 = df_forme_final.head(10)
             df_bottom10 = df_forme_final.tail(10).sort_values(by='Score de Forme', ascending=True)
             df_forme_display = pd.concat([df_top10, df_bottom10]).reset_index(drop=True)
-            # --- FIN CORRECTION V39.1 ---
-
             styler_forme = df_forme_display.style.apply(colorier_forme_v22, axis=1) \
                                         .set_table_attributes('class="styled-table form-table filterable-table"') \
                                         .format({'Score de Forme': '{:+.1f}', '5 Derniers (Détails)': '{}'}) \
@@ -344,14 +339,15 @@ def sauvegarder_rapport_global_html(
         else:
             form_table_html = "<h3 class='no-alerts'>Données 'FTR' non trouvées pour calculer la forme.</h3>"
         
-        # --- 5. Générer le Corps HTML (Onglets de stats - MODIFIÉ V39) ---
+        # --- 5. Générer le Corps HTML (Onglets de stats - MODIFIÉ V42) ---
         corps_html = ""
         for nom_base, config in stats_a_afficher.items():
             id_html = config[0]
             titre_section = config[1]
             col_record = f'{nom_base}_Record'
-            col_annee = f'{nom_base}_Annee_Record' # NOUVEAU V39
+            col_annee = f'{nom_base}_Annee_Record' 
             col_en_cours = f'{nom_base}_EnCours'
+            col_pct = f'{nom_base}_Pct' # NOUVEAU V42
             col_5_derniers = 'Last_5_FT_Goals' if nom_base.startswith('FT') else 'Last_5_MT_Goals'
             nom_col_5_derniers = '5 Derniers (FT)' if nom_base.startswith('FT') else '5 Derniers (MT)'
             
@@ -362,19 +358,22 @@ def sauvegarder_rapport_global_html(
                     df_rapport_complet[col_5_derniers] = "N/A"
             if col_annee not in df_rapport_complet.columns:
                     df_rapport_complet[col_annee] = "N/A"
+            if col_pct not in df_rapport_complet.columns: # V42
+                    df_rapport_complet[col_pct] = 0.0
             
-            df_stat = df_rapport_complet[['Ligue', 'Équipe', col_record, col_annee, col_en_cours, col_5_derniers]].copy() # V39
+            # (MODIFIÉ V42) Ajout de 'col_pct'
+            df_stat = df_rapport_complet[['Ligue', 'Équipe', col_record, col_annee, col_en_cours, col_pct, col_5_derniers]].copy() 
             df_stat = df_stat.rename(columns={
                 col_record: 'Record', 
-                col_annee: 'Année Record', # NOUVEAU V39
+                col_annee: 'Année Record',
                 col_en_cours: 'Série en Cours',
+                col_pct: '% Réussite', # NOUVEAU V42
                 col_5_derniers: nom_col_5_derniers
             })
             df_stat = df_stat.sort_values(by='Record', ascending=False).reset_index(drop=True)
-            # CORRIGÉ V39.1: 'Année Record' formaté en '{}' (texte)
             styler = df_stat.style.apply(colorier_series_v19, axis=1) \
                                 .set_table_attributes('class="styled-table filterable-table"') \
-                                .format({'Année Record': '{}'}) \
+                                .format({'Année Record': '{}', '% Réussite': '{:.1f}%'}) \
                                 .hide(axis="index") 
             table_html = styler.to_html()
             corps_html += f"""
@@ -523,7 +522,7 @@ def sauvegarder_rapport_global_html(
         </div>
         """
         
-        # --- 7. Définir le Style CSS (MODIFIÉ V39) ---
+        # --- 7. Définir le Style CSS (MODIFIÉ V42) ---
         html_style = """
         <style>
             html { scroll-behavior: smooth; }
@@ -681,12 +680,16 @@ def sauvegarder_rapport_global_html(
             .styled-table th:nth-child(1), .styled-table td:nth-child(1) { text-align: left; }
             .styled-table th:nth-child(2), .styled-table td:nth-child(2) { text-align: left; }
             
-            /* (V39) Col 3+ (Stats) */
+            /* (V42) Col 3+ (Stats) */
             .styled-table th:nth-child(n+3), .styled-table td:nth-child(n+3) {
                 text-align: center; font-weight: bold;
             }
-            /* (V39) Col 6 (5 Derniers) */
+            /* (V42) Col 6 (% Réussite) */
             .styled-table th:nth-child(6), .styled-table td:nth-child(6) {
+                font-weight: bold; color: #333; font-size: 0.95em;
+            }
+            /* (V42) Col 7 (5 Derniers) */
+            .styled-table th:nth-child(7), .styled-table td:nth-child(7) {
                 font-weight: normal; color: #777; font-size: 0.9em;
             }
             
@@ -864,7 +867,7 @@ def sauvegarder_rapport_global_html(
         </style>
         """
 
-        # --- 8. Le SCRIPT JAVASCRIPT (MODIFIÉ V39) ---
+        # --- 8. Le SCRIPT JAVASCRIPT (MODIFIÉ V42) ---
         javascript_code = """
         <script>
             // --- NOUVEAU V37: Map pour les pilules de forme ---
@@ -1019,7 +1022,7 @@ def sauvegarder_rapport_global_html(
                 }
                 alertsContainer.innerHTML = alertsHtml;
                 
-                // (MODIFIÉ V39) Appelle formatFormString et ajoute l'année record
+                // (MODIFIÉ V42) Appelle formatFormString et ajoute l'année record + %
                 let statsHtml = "<h3>Toutes les Caractéristiques</h3>";
                 statsHtml += '<table class="team-stats-table"><tbody>';
                 statsHtml += `<tr><td>Ligue</td><td>${stats.Ligue || 'N/A'}</td></tr>`;
@@ -1032,6 +1035,7 @@ def sauvegarder_rapport_global_html(
                      const annee_record_val = stats[statName + '_Annee_Record'] || 'N/A';
                      const record_val = stats[statName + '_Record'] || 'N/A';
                      const annee_str = (annee_record_val !== 'N/A' && annee_record_val !== null) ? `(${annee_record_val})` : '';
+                     const pct_val = stats[statName + '_Pct'] !== undefined ? stats[statName + '_Pct'].toFixed(1) + '%' : 'N/A';
                      
                      statsHtml += `<tr>
                         <td>${statName} (Record)</td>
@@ -1040,6 +1044,11 @@ def sauvegarder_rapport_global_html(
                      statsHtml += `<tr>
                         <td>${statName} (Série)</td>
                         <td>${stats[statName + '_EnCours']}</td>
+                     </tr>`;
+                     // NOUVELLE LIGNE V42
+                     statsHtml += `<tr>
+                        <td>${statName} (% Réussite)</td>
+                        <td>${pct_val}</td>
                      </tr>`;
                 }
                 statsHtml += '</tbody></table>';
@@ -1154,7 +1163,7 @@ def sauvegarder_rapport_global_html(
         with open(nom_fichier_html, "w", encoding="utf-8") as f:
             f.write(html_content)
         
-        print(f"\nSuccès ! Le rapport V39.1 pour {titre_rapport} a été généré ici : {os.path.abspath(nom_fichier_html)}")
+        print(f"\nSuccès ! Le rapport V42 pour {titre_rapport} a été généré ici : {os.path.abspath(nom_fichier_html)}")
 
     except Exception as e:
         print(f"\nErreur lors de la génération du fichier HTML : {e}")
@@ -1329,6 +1338,26 @@ def trouver_serie_en_cours_pour_colonne(df_equipe, nom_colonne_condition):
             break
     return serie_en_cours
 
+# --- (NOUVEAU V42) Fonction Helper ---
+def calculer_pourcentage_reussite(df_equipe, nom_colonne_condition):
+    """
+    Helper: Calcule le pourcentage de réussite global pour une condition.
+    """
+    if nom_colonne_condition not in df_equipe.columns or df_equipe.empty:
+        return 0.0
+        
+    try:
+        count_true = df_equipe[nom_colonne_condition].sum()
+        total_rows = len(df_equipe)
+        
+        if total_rows == 0:
+            return 0.0
+            
+        return (count_true / total_rows) * 100
+    except Exception as e:
+        print(f"  - Avertissement: Erreur calcul pourcentage pour {nom_colonne_condition}: {e}")
+        return 0.0
+
 
 # --- (MODIFIÉ V41) FONCTION HELPER (V29 - Forme simplifiée) ---
 def calculer_score_de_forme(df_equipe, equipe):
@@ -1381,10 +1410,10 @@ def calculer_score_de_forme(df_equipe, equipe):
     return total_score, details_complets
 
 
-# --- (MODIFIÉ V39) FONCTION DE CALCUL V39 ---
+# --- (MODIFIÉ V42) FONCTION DE CALCUL V42 ---
 def calculer_tous_les_records_et_series(df, ligues_a_analyser, odds_api_dict):
     """
-    Calcule le RECORD, l'ANNÉE RECORD, la SÉRIE EN COURS, etc.
+    Calcule le RECORD, l'ANNÉE RECORD, la SÉRIE EN COURS, et le % DE RÉUSSITE.
     """
     resultats = []
     conditions_a_tester = {
@@ -1471,6 +1500,10 @@ def calculer_tous_les_records_et_series(df, ligues_a_analyser, odds_api_dict):
                 
                 en_cours = trouver_serie_en_cours_pour_colonne(df_equipe, nom_col_data)
                 record_equipe[f'{nom_base}_EnCours'] = en_cours
+                
+                # --- NOUVEAU V42: Calculer le pourcentage de réussite ---
+                pct_reussite = calculer_pourcentage_reussite(df_equipe, nom_col_data)
+                record_equipe[f'{nom_base}_Pct'] = pct_reussite
                 
             resultats.append(record_equipe)
             
