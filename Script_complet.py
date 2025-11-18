@@ -12,20 +12,45 @@ import json     # Pour le JS
 # ##########################################################################
 # --- Dictionnaire de Traduction des Ligues ---
 # ##########################################################################
+# ##########################################################################
+# --- Dictionnaire de Traduction des Ligues ---
+# ##########################################################################
 LEAGUE_NAME_MAPPING = {
+    # --- Ligues Existantes ---
     'E0': 'Premier League', 'E1': 'Championship', 'D1': 'Bundesliga',
     'D2': 'Bundesliga 2', 'F1': 'Ligue 1', 'F2': 'Ligue 2',
     'I1': 'Serie A', 'I2': 'Serie B', 'SP1': 'La Liga',
     'SP2': 'La Liga 2', 'N1': 'Eredivisie (Pays-Bas)',
     'P1': 'Liga (Portugal)', 'T1': 'Süper Lig (Turquie)',
     'G1': 'Super League (Grèce)', 'SC0': 'Scottish Premiership',
-    'B1': 'Jupiler Pro League (Belgique)', 'X0': 'NomParDefaut' 
+    'B1': 'Jupiler Pro League (Belgique)', 
+    'X0': 'NomParDefaut',
+    'ARG': 'Liga Profesional (Argentine)',
+    'AUT': 'Bundesliga (Autriche)',
+    'BRA': 'Série A (Brésil)',
+    'CHN': 'Super League (Chine)',
+    'DNK': 'Superliga (Danemark)',
+    'FIN': 'Veikkausliiga (Finlande)',
+    'IRL': 'Premier Division (Irlande)',
+    'JPN': 'J1 League (Japon)',
+    'MEX': 'Liga MX (Mexique)',
+    'NOR': 'Eliteserien (Norvège)',
+    'POL': 'Ekstraklasa (Pologne)',
+    'ROU': 'Liga I (Roumanie)',
+    'RUS': 'Premier League (Russie)',
+    'SWE': 'Allsvenskan (Suède)',
+    'SWZ': 'Super League (Suisse)',
+    'USA': 'MLS (USA)'
 }
 
 # ##########################################################################
 # --- Dictionnaire de Mapping (THE ODDS API) ---
 # ##########################################################################
+# ##########################################################################
+# --- Dictionnaire de Mapping (THE ODDS API) ---
+# ##########################################################################
 ODDS_API_LEAGUE_MAP = {
+    # --- Ligues Existantes ---
     'E0': 'soccer_epl', 'E1': 'soccer_england_championship',
     'D1': 'soccer_germany_bundesliga', 'D2': 'soccer_germany_bundesliga_2',
     'F1': 'soccer_france_ligue_1', 'F2': 'soccer_france_ligue_2',
@@ -34,6 +59,24 @@ ODDS_API_LEAGUE_MAP = {
     'N1': 'soccer_netherlands_eredivisie', 'P1': 'soccer_portugal_primeira_liga',
     'SC0': 'soccer_scotland_premiership', 'B1': 'soccer_belgium_first_div',
     'T1': 'soccer_turkey_super_league', 'G1': 'soccer_greece_super_league_1',
+
+    # --- NOUVELLES LIGUES (Clés API) ---
+    'ARG': 'soccer_argentina_primera_division',
+    'AUT': 'soccer_austria_bundesliga',
+    'BRA': 'soccer_brazil_campeonato',
+    'CHN': 'soccer_china_superleague',
+    'DNK': 'soccer_denmark_superliga',
+    'FIN': 'soccer_finland_veikkausliiga',
+    'IRL': 'soccer_ireland_premier_division',
+    'JPN': 'soccer_japan_j_league',
+    'MEX': 'soccer_mexico_ligamx',
+    'NOR': 'soccer_norway_eliteserien',
+    'POL': 'soccer_poland_ekstraklasa',
+    'ROU': 'soccer_romania_liga_1', 
+    'RUS': 'soccer_russia_premier_league', 
+    'SWE': 'soccer_sweden_allsvenskan',
+    'SWZ': 'soccer_switzerland_superleague',
+    'USA': 'soccer_usa_mls'
 }
 
 # ##########################################################################
