@@ -14,12 +14,12 @@ LIGUES_A_ANALYSER = {
     'I1': 'Serie A',
     'E0': 'Premier League',
     'E1': 'Championship'
-    # Vous pouvez ajouter 'E0': '🇬🇧 Premier League' ici si vous voulez tout regrouper
+
 }
 
 DOSSIER_PRINCIPAL = "CSV_Data"
 FICHIER_SORTIE = "rapport_over15_multi.html"
-SAISON_ACTUELLE_DOSSIER = "data2025" # Dossier pour identifier les équipes actuelles
+SAISON_ACTUELLE_DOSSIER = "data2025" 
 
 def standardiser_colonnes(df):
     """Assure que les colonnes ont les bons noms."""

@@ -1,0 +1,560 @@
+
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Séries Sans Match Nul</title>
+        <style>
+            body { font-family: 'Segoe UI', sans-serif; background-color: #f4f6f9; padding: 20px; color: #333; }
+            .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+            h1 { text-align: center; color: #2c3e50; margin-bottom: 10px; }
+            .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 30px; }
+            
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th { background-color: #34495e; color: white; padding: 12px 15px; text-align: left; font-weight: 600; }
+            td { padding: 12px 15px; border-bottom: 1px solid #eee; }
+            tr:hover { background-color: #f8f9fa; }
+            
+            .serie-val { font-weight: bold; font-size: 1.1em; color: #e67e22; }
+            .ligue-badge { font-size: 0.85em; color: #7f8c8d; }
+            .team-name { font-weight: 600; color: #2c3e50; }
+            
+            /* Highlight pour les très grosses séries */
+            .fire { color: #c0392b; font-weight: bold; }
+            tr.top-serie td { background-color: #fff8e1; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🚫 Séries "Sans Match Nul"</h1>
+            <p class="subtitle">Équipes n'ayant pas fait de match nul depuis au moins <strong>3 matchs</strong>.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ligue</th>
+                        <th>Équipe</th>
+                        <th style="text-align:center">Série en cours</th>
+                        <th>Derniers Résultats</th>
+                    </tr>
+                </thead>
+                <tbody>
+    
+        <tr class="top-serie">
+            <td class="ligue-badge">🇩🇪 Bundesliga 2</td>
+            <td class="team-name">Schalke 04</td>
+            <td style="text-align:center"><span class="serie-val">🔥 12</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, A, A...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇬🇧 Premier League</td>
+            <td class="team-name">Liverpool</td>
+            <td style="text-align:center"><span class="serie-val">🔥 11</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, A, H...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇮🇹 Serie A</td>
+            <td class="team-name">Inter</td>
+            <td style="text-align:center"><span class="serie-val">🔥 11</span></td>
+            <td style="color:#666; font-size:0.9em;">H, A, H, H, A...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇮🇹 Serie A</td>
+            <td class="team-name">Roma</td>
+            <td style="text-align:center"><span class="serie-val">🔥 11</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, A, A...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇩🇪 Bundesliga</td>
+            <td class="team-name">Stuttgart</td>
+            <td style="text-align:center"><span class="serie-val">🔥 10</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, A, H...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇫🇷 Ligue 2</td>
+            <td class="team-name">St Etienne</td>
+            <td style="text-align:center"><span class="serie-val">🔥 10</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, H, H, A...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇩🇪 Bundesliga</td>
+            <td class="team-name">St Pauli</td>
+            <td style="text-align:center"><span class="serie-val">🔥 9</span></td>
+            <td style="color:#666; font-size:0.9em;">H, A, H, A, H...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇩🇪 Bundesliga 2</td>
+            <td class="team-name">Hertha</td>
+            <td style="text-align:center"><span class="serie-val">🔥 9</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, H, H, H...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇪🇸 La Liga</td>
+            <td class="team-name">Barcelona</td>
+            <td style="text-align:center"><span class="serie-val">🔥 9</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, H, H, H...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇪🇸 La Liga 2</td>
+            <td class="team-name">Zaragoza</td>
+            <td style="text-align:center"><span class="serie-val">🔥 9</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, A, H, A...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇫🇷 Ligue 2</td>
+            <td class="team-name">Amiens</td>
+            <td style="text-align:center"><span class="serie-val">🔥 9</span></td>
+            <td style="color:#666; font-size:0.9em;">H, A, H, H, A...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇬🇧 Championship</td>
+            <td class="team-name">Coventry</td>
+            <td style="text-align:center"><span class="serie-val">🔥 9</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, H, H, A...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇬🇧 Premier League</td>
+            <td class="team-name">Fulham</td>
+            <td style="text-align:center"><span class="serie-val">🔥 9</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, A, H...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇩🇪 Bundesliga 2</td>
+            <td class="team-name">Braunschweig</td>
+            <td style="text-align:center"><span class="serie-val">🔥 8</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, A, A, A...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇩🇪 Bundesliga 2</td>
+            <td class="team-name">Paderborn</td>
+            <td style="text-align:center"><span class="serie-val">🔥 8</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, A, H, A...</td>
+        </tr>
+        
+        <tr class="top-serie">
+            <td class="ligue-badge">🇪🇸 La Liga</td>
+            <td class="team-name">Sevilla</td>
+            <td style="text-align:center"><span class="serie-val">🔥 8</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, A, H...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇩🇪 Bundesliga</td>
+            <td class="team-name">Wolfsburg</td>
+            <td style="text-align:center"><span class="serie-val">7</span></td>
+            <td style="color:#666; font-size:0.9em;">H, A, A, A, H...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga 2</td>
+            <td class="team-name">Sociedad B</td>
+            <td style="text-align:center"><span class="serie-val">7</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, H, H...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Premier League</td>
+            <td class="team-name">Brentford</td>
+            <td style="text-align:center"><span class="serie-val">7</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, A, A...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Premier League</td>
+            <td class="team-name">Chelsea</td>
+            <td style="text-align:center"><span class="serie-val">7</span></td>
+            <td style="color:#666; font-size:0.9em;">H, A, A, A, H...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇩🇪 Bundesliga</td>
+            <td class="team-name">Leverkusen</td>
+            <td style="text-align:center"><span class="serie-val">6</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, A, H...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga 2</td>
+            <td class="team-name">Cultural Leonesa</td>
+            <td style="text-align:center"><span class="serie-val">6</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, A, A...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇫🇷 Ligue 1</td>
+            <td class="team-name">Lens</td>
+            <td style="text-align:center"><span class="serie-val">6</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, H, H, H...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇫🇷 Ligue 1</td>
+            <td class="team-name">Metz</td>
+            <td style="text-align:center"><span class="serie-val">6</span></td>
+            <td style="color:#666; font-size:0.9em;">H, A, H, H, H...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Championship</td>
+            <td class="team-name">Birmingham</td>
+            <td style="text-align:center"><span class="serie-val">6</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, H, A...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Championship</td>
+            <td class="team-name">Blackburn</td>
+            <td style="text-align:center"><span class="serie-val">6</span></td>
+            <td style="color:#666; font-size:0.9em;">A, A, A, H, A...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Championship</td>
+            <td class="team-name">Derby</td>
+            <td style="text-align:center"><span class="serie-val">6</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, A, H, H...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Championship</td>
+            <td class="team-name">Stoke</td>
+            <td style="text-align:center"><span class="serie-val">6</span></td>
+            <td style="color:#666; font-size:0.9em;">A, A, H, A, H...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Premier League</td>
+            <td class="team-name">Aston Villa</td>
+            <td style="text-align:center"><span class="serie-val">6</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, A, H...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Premier League</td>
+            <td class="team-name">Burnley</td>
+            <td style="text-align:center"><span class="serie-val">6</span></td>
+            <td style="color:#666; font-size:0.9em;">H, A, A, H, H...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Premier League</td>
+            <td class="team-name">Man City</td>
+            <td style="text-align:center"><span class="serie-val">6</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, H, A...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Premier League</td>
+            <td class="team-name">Newcastle</td>
+            <td style="text-align:center"><span class="serie-val">6</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, H, H...</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇩🇪 Bundesliga</td>
+            <td class="team-name">Hoffenheim</td>
+            <td style="text-align:center"><span class="serie-val">5</span></td>
+            <td style="color:#666; font-size:0.9em;">H, A, H, A, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga</td>
+            <td class="team-name">Espanol</td>
+            <td style="text-align:center"><span class="serie-val">5</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, H, A, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga</td>
+            <td class="team-name">Getafe</td>
+            <td style="text-align:center"><span class="serie-val">5</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, A, A, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga 2</td>
+            <td class="team-name">Albacete</td>
+            <td style="text-align:center"><span class="serie-val">5</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, A, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga 2</td>
+            <td class="team-name">Mirandes</td>
+            <td style="text-align:center"><span class="serie-val">5</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, H, A, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇫🇷 Ligue 1</td>
+            <td class="team-name">Lille</td>
+            <td style="text-align:center"><span class="serie-val">5</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, H, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇫🇷 Ligue 1</td>
+            <td class="team-name">Nice</td>
+            <td style="text-align:center"><span class="serie-val">5</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, A, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇫🇷 Ligue 2</td>
+            <td class="team-name">Nancy</td>
+            <td style="text-align:center"><span class="serie-val">5</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, H, H, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Championship</td>
+            <td class="team-name">Southampton</td>
+            <td style="text-align:center"><span class="serie-val">5</span></td>
+            <td style="color:#666; font-size:0.9em;">H, A, A, H, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Premier League</td>
+            <td class="team-name">Leeds</td>
+            <td style="text-align:center"><span class="serie-val">5</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, H, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Premier League</td>
+            <td class="team-name">West Ham</td>
+            <td style="text-align:center"><span class="serie-val">5</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, A, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇩🇪 Bundesliga</td>
+            <td class="team-name">M'gladbach</td>
+            <td style="text-align:center"><span class="serie-val">4</span></td>
+            <td style="color:#666; font-size:0.9em;">H, A, A, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇩🇪 Bundesliga</td>
+            <td class="team-name">RB Leipzig</td>
+            <td style="text-align:center"><span class="serie-val">4</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, A, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇩🇪 Bundesliga 2</td>
+            <td class="team-name">Greuther Furth</td>
+            <td style="text-align:center"><span class="serie-val">4</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, A, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇩🇪 Bundesliga 2</td>
+            <td class="team-name">Karlsruhe</td>
+            <td style="text-align:center"><span class="serie-val">4</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, A, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga</td>
+            <td class="team-name">Ath Madrid</td>
+            <td style="text-align:center"><span class="serie-val">4</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, A, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga 2</td>
+            <td class="team-name">Ceuta</td>
+            <td style="text-align:center"><span class="serie-val">4</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, A, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇫🇷 Ligue 1</td>
+            <td class="team-name">Auxerre</td>
+            <td style="text-align:center"><span class="serie-val">4</span></td>
+            <td style="color:#666; font-size:0.9em;">H, A, H, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇫🇷 Ligue 1</td>
+            <td class="team-name">Monaco</td>
+            <td style="text-align:center"><span class="serie-val">4</span></td>
+            <td style="color:#666; font-size:0.9em;">A, A, A, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇫🇷 Ligue 1</td>
+            <td class="team-name">Strasbourg</td>
+            <td style="text-align:center"><span class="serie-val">4</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇫🇷 Ligue 2</td>
+            <td class="team-name">Bastia</td>
+            <td style="text-align:center"><span class="serie-val">4</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, H, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇫🇷 Ligue 2</td>
+            <td class="team-name">Rodez</td>
+            <td style="text-align:center"><span class="serie-val">4</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Premier League</td>
+            <td class="team-name">Wolves</td>
+            <td style="text-align:center"><span class="serie-val">4</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, A, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇮🇹 Serie A</td>
+            <td class="team-name">Sassuolo</td>
+            <td style="text-align:center"><span class="serie-val">4</span></td>
+            <td style="color:#666; font-size:0.9em;">A, A, A, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇮🇹 Serie A</td>
+            <td class="team-name">Udinese</td>
+            <td style="text-align:center"><span class="serie-val">4</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇩🇪 Bundesliga</td>
+            <td class="team-name">Augsburg</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">H, A, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇩🇪 Bundesliga</td>
+            <td class="team-name">FC Koln</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇩🇪 Bundesliga 2</td>
+            <td class="team-name">Dresden</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇩🇪 Bundesliga 2</td>
+            <td class="team-name">Magdeburg</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇩🇪 Bundesliga 2</td>
+            <td class="team-name">Preußen Münster</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga</td>
+            <td class="team-name">Alaves</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga</td>
+            <td class="team-name">Ath Bilbao</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga</td>
+            <td class="team-name">Celta</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">A, A, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga</td>
+            <td class="team-name">Villarreal</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga 2</td>
+            <td class="team-name">Almeria</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga 2</td>
+            <td class="team-name">La Coruna</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇪🇸 La Liga 2</td>
+            <td class="team-name">Leganes</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">A, H, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇫🇷 Ligue 2</td>
+            <td class="team-name">Reims</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">A, A, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Championship</td>
+            <td class="team-name">Hull</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, A</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇬🇧 Premier League</td>
+            <td class="team-name">Bournemouth</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">H, H, H</td>
+        </tr>
+        
+        <tr class="">
+            <td class="ligue-badge">🇮🇹 Serie A</td>
+            <td class="team-name">Cremonese</td>
+            <td style="text-align:center"><span class="serie-val">3</span></td>
+            <td style="color:#666; font-size:0.9em;">H, A, A</td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+    </body>
+    </html>
+    
