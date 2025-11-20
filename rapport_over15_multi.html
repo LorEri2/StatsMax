@@ -1,0 +1,1585 @@
+
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Analyse Over 1.5 Multi-Ligues</title>
+        <style>
+            body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
+            .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+            h1 { text-align: center; color: #2c3e50; margin-top: 0; }
+            
+            select { width: 100%; padding: 15px; font-size: 1.1em; border: 2px solid #ddd; border-radius: 8px; margin-bottom: 20px; background: #fff; cursor: pointer; }
+            select:focus { border-color: #3498db; outline: none; }
+            
+            .stats-box { background-color: #e8f4f8; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; border-left: 5px solid #3498db; color: #2c3e50; }
+            
+            table { width: 100%; border-collapse: collapse; }
+            th { background-color: #34495e; color: white; padding: 12px; text-align: left; }
+            td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+            tr:hover { background-color: #f8f9fa; }
+            
+            .rank { font-weight: bold; color: #7f8c8d; text-align: center; width: 40px; }
+            .team { font-weight: 600; }
+            .pct { font-weight: bold; color: #27ae60; }
+            .diff-pos { color: #27ae60; font-weight: bold; font-size: 0.9em; }
+            .diff-neg { color: #c0392b; font-weight: bold; font-size: 0.9em; }
+            
+            tr:nth-child(1) td { background-color: #fff9c4; }
+        </style>
+        <script>
+            function changeLeague(selectObject) {
+                var value = selectObject.value;
+                var sections = document.getElementsByClassName('league-section');
+                for (var i = 0; i < sections.length; i++) {
+                    sections[i].style.display = 'none';
+                }
+                document.getElementById('section-' + value).style.display = 'block';
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>⚽ Historique Over 1.5 Buts</h1>
+            
+            <select onchange="changeLeague(this)">
+                <option value="F1">Ligue 1</option><option value="F2">Ligue 2</option><option value="D1">Bundesliga</option><option value="D2">Bundesliga 2</option><option value="SP1">La Liga</option><option value="SP2">La Liga 2</option><option value="I1">Serie A</option><option value="E0">Premier League</option><option value="E1">Championship</option>
+            </select>
+            
+            
+        <div id="section-F1" class="league-section" style="display: block;">
+            <div class="stats-box">
+                Moyenne historique <strong>Ligue 1</strong> : <strong>74.33%</strong> de matchs +1.5 buts
+            </div>
+            <table>
+                <thead>
+                    <tr><th style="text-align:center">#</th><th>Équipe</th><th>% Réussite</th><th>Matchs</th><th>Écart / Moy.</th></tr>
+                </thead>
+                <tbody>
+            <tr>
+                <td class="rank">🏆</td>
+                <td class="team">Paris SG</td>
+                <td class="pct">82.77%</td>
+                <td class="matchs">563</td>
+                <td class="diff-pos">+8.44%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">2</td>
+                <td class="team">Lyon</td>
+                <td class="pct">80.32%</td>
+                <td class="matchs">564</td>
+                <td class="diff-pos">+5.99%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">3</td>
+                <td class="team">Strasbourg</td>
+                <td class="pct">79.46%</td>
+                <td class="matchs">297</td>
+                <td class="diff-pos">+5.13%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">4</td>
+                <td class="team">Monaco</td>
+                <td class="pct">78.89%</td>
+                <td class="matchs">488</td>
+                <td class="diff-pos">+4.56%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">5</td>
+                <td class="team">Auxerre</td>
+                <td class="pct">78.12%</td>
+                <td class="matchs">160</td>
+                <td class="diff-pos">+3.80%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">6</td>
+                <td class="team">Marseille</td>
+                <td class="pct">76.60%</td>
+                <td class="matchs">564</td>
+                <td class="diff-pos">+2.27%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">7</td>
+                <td class="team">Lorient</td>
+                <td class="pct">76.29%</td>
+                <td class="matchs">426</td>
+                <td class="diff-pos">+1.96%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">8</td>
+                <td class="team">Rennes</td>
+                <td class="pct">75.53%</td>
+                <td class="matchs">564</td>
+                <td class="diff-pos">+1.20%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">9</td>
+                <td class="team">Paris FC</td>
+                <td class="pct">75.00%</td>
+                <td class="matchs">12</td>
+                <td class="diff-pos">+0.67%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">10</td>
+                <td class="team">Lens</td>
+                <td class="pct">74.44%</td>
+                <td class="matchs">270</td>
+                <td class="diff-pos">+0.11%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">11</td>
+                <td class="team">Brest</td>
+                <td class="pct">73.81%</td>
+                <td class="matchs">336</td>
+                <td class="diff-neg">-0.52%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">12</td>
+                <td class="team">Le Havre</td>
+                <td class="pct">73.75%</td>
+                <td class="matchs">80</td>
+                <td class="diff-neg">-0.58%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">13</td>
+                <td class="team">Metz</td>
+                <td class="pct">73.11%</td>
+                <td class="matchs">264</td>
+                <td class="diff-neg">-1.22%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">14</td>
+                <td class="team">Toulouse</td>
+                <td class="pct">72.54%</td>
+                <td class="matchs">488</td>
+                <td class="diff-neg">-1.79%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">15</td>
+                <td class="team">Lille</td>
+                <td class="pct">71.45%</td>
+                <td class="matchs">564</td>
+                <td class="diff-neg">-2.88%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">16</td>
+                <td class="team">Angers</td>
+                <td class="pct">70.88%</td>
+                <td class="matchs">340</td>
+                <td class="diff-neg">-3.45%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">17</td>
+                <td class="team">Nice</td>
+                <td class="pct">70.21%</td>
+                <td class="matchs">564</td>
+                <td class="diff-neg">-4.12%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">18</td>
+                <td class="team">Nantes</td>
+                <td class="pct">68.67%</td>
+                <td class="matchs">450</td>
+                <td class="diff-neg">-5.66%</td>
+            </tr>
+            </tbody>
+            </table>
+        </div>
+        
+        <div id="section-F2" class="league-section" style="display: none;">
+            <div class="stats-box">
+                Moyenne historique <strong>Ligue 2</strong> : <strong>68.62%</strong> de matchs +1.5 buts
+            </div>
+            <table>
+                <thead>
+                    <tr><th style="text-align:center">#</th><th>Équipe</th><th>% Réussite</th><th>Matchs</th><th>Écart / Moy.</th></tr>
+                </thead>
+                <tbody>
+            <tr>
+                <td class="rank">🏆</td>
+                <td class="team">St Etienne</td>
+                <td class="pct">75.56%</td>
+                <td class="matchs">90</td>
+                <td class="diff-pos">+6.94%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">2</td>
+                <td class="team">Rodez</td>
+                <td class="pct">73.57%</td>
+                <td class="matchs">227</td>
+                <td class="diff-pos">+4.95%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">3</td>
+                <td class="team">Reims</td>
+                <td class="pct">73.49%</td>
+                <td class="matchs">166</td>
+                <td class="diff-pos">+4.87%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">4</td>
+                <td class="team">Pau FC</td>
+                <td class="pct">73.00%</td>
+                <td class="matchs">200</td>
+                <td class="diff-pos">+4.38%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">5</td>
+                <td class="team">Annecy</td>
+                <td class="pct">70.97%</td>
+                <td class="matchs">124</td>
+                <td class="diff-pos">+2.35%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">6</td>
+                <td class="team">Guingamp</td>
+                <td class="pct">69.41%</td>
+                <td class="matchs">304</td>
+                <td class="diff-pos">+0.79%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">7</td>
+                <td class="team">Nancy</td>
+                <td class="pct">69.16%</td>
+                <td class="matchs">308</td>
+                <td class="diff-pos">+0.54%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">8</td>
+                <td class="team">Laval</td>
+                <td class="pct">68.38%</td>
+                <td class="matchs">389</td>
+                <td class="diff-neg">-0.24%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">9</td>
+                <td class="team">Bastia</td>
+                <td class="pct">68.34%</td>
+                <td class="matchs">199</td>
+                <td class="diff-neg">-0.28%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">10</td>
+                <td class="team">Clermont</td>
+                <td class="pct">68.20%</td>
+                <td class="matchs">456</td>
+                <td class="diff-neg">-0.42%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">11</td>
+                <td class="team">Troyes</td>
+                <td class="pct">67.63%</td>
+                <td class="matchs">380</td>
+                <td class="diff-neg">-0.99%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">12</td>
+                <td class="team">Amiens</td>
+                <td class="pct">67.39%</td>
+                <td class="matchs">276</td>
+                <td class="diff-neg">-1.23%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">13</td>
+                <td class="team">Dunkerque</td>
+                <td class="pct">66.67%</td>
+                <td class="matchs">162</td>
+                <td class="diff-neg">-1.95%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">14</td>
+                <td class="team">Red Star</td>
+                <td class="pct">66.67%</td>
+                <td class="matchs">162</td>
+                <td class="diff-neg">-1.95%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">15</td>
+                <td class="team">Le Mans</td>
+                <td class="pct">66.03%</td>
+                <td class="matchs">156</td>
+                <td class="diff-neg">-2.59%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">16</td>
+                <td class="team">Boulogne</td>
+                <td class="pct">65.56%</td>
+                <td class="matchs">90</td>
+                <td class="diff-neg">-3.06%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">17</td>
+                <td class="team">Grenoble</td>
+                <td class="pct">65.13%</td>
+                <td class="matchs">304</td>
+                <td class="diff-neg">-3.49%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">18</td>
+                <td class="team">Montpellier</td>
+                <td class="pct">64.29%</td>
+                <td class="matchs">14</td>
+                <td class="diff-neg">-4.33%</td>
+            </tr>
+            </tbody>
+            </table>
+        </div>
+        
+        <div id="section-D1" class="league-section" style="display: none;">
+            <div class="stats-box">
+                Moyenne historique <strong>Bundesliga</strong> : <strong>81.26%</strong> de matchs +1.5 buts
+            </div>
+            <table>
+                <thead>
+                    <tr><th style="text-align:center">#</th><th>Équipe</th><th>% Réussite</th><th>Matchs</th><th>Écart / Moy.</th></tr>
+                </thead>
+                <tbody>
+            <tr>
+                <td class="rank">🏆</td>
+                <td class="team">Bayern Munich</td>
+                <td class="pct">87.31%</td>
+                <td class="matchs">520</td>
+                <td class="diff-pos">+6.05%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">2</td>
+                <td class="team">Hoffenheim</td>
+                <td class="pct">86.35%</td>
+                <td class="matchs">520</td>
+                <td class="diff-pos">+5.09%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">3</td>
+                <td class="team">Dortmund</td>
+                <td class="pct">85.96%</td>
+                <td class="matchs">520</td>
+                <td class="diff-pos">+4.70%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">4</td>
+                <td class="team">Werder Bremen</td>
+                <td class="pct">84.16%</td>
+                <td class="matchs">486</td>
+                <td class="diff-pos">+2.90%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">5</td>
+                <td class="team">Stuttgart</td>
+                <td class="pct">83.19%</td>
+                <td class="matchs">452</td>
+                <td class="diff-pos">+1.93%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">6</td>
+                <td class="team">Ein Frankfurt</td>
+                <td class="pct">82.10%</td>
+                <td class="matchs">486</td>
+                <td class="diff-pos">+0.84%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">7</td>
+                <td class="team">Wolfsburg</td>
+                <td class="pct">81.73%</td>
+                <td class="matchs">520</td>
+                <td class="diff-pos">+0.47%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">8</td>
+                <td class="team">RB Leipzig</td>
+                <td class="pct">81.65%</td>
+                <td class="matchs">316</td>
+                <td class="diff-pos">+0.38%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">9</td>
+                <td class="team">Leverkusen</td>
+                <td class="pct">80.96%</td>
+                <td class="matchs">520</td>
+                <td class="diff-neg">-0.30%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">10</td>
+                <td class="team">Heidenheim</td>
+                <td class="pct">80.77%</td>
+                <td class="matchs">78</td>
+                <td class="diff-neg">-0.49%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">11</td>
+                <td class="team">M'gladbach</td>
+                <td class="pct">79.23%</td>
+                <td class="matchs">520</td>
+                <td class="diff-neg">-2.03%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">12</td>
+                <td class="team">Mainz</td>
+                <td class="pct">79.04%</td>
+                <td class="matchs">520</td>
+                <td class="diff-neg">-2.22%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">13</td>
+                <td class="team">Freiburg</td>
+                <td class="pct">78.81%</td>
+                <td class="matchs">486</td>
+                <td class="diff-neg">-2.45%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">14</td>
+                <td class="team">Augsburg</td>
+                <td class="pct">78.19%</td>
+                <td class="matchs">486</td>
+                <td class="diff-neg">-3.07%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">15</td>
+                <td class="team">FC Koln</td>
+                <td class="pct">78.12%</td>
+                <td class="matchs">384</td>
+                <td class="diff-neg">-3.14%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">16</td>
+                <td class="team">Union Berlin</td>
+                <td class="pct">78.04%</td>
+                <td class="matchs">214</td>
+                <td class="diff-neg">-3.22%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">17</td>
+                <td class="team">St Pauli</td>
+                <td class="pct">75.64%</td>
+                <td class="matchs">78</td>
+                <td class="diff-neg">-5.62%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">18</td>
+                <td class="team">Hamburg</td>
+                <td class="pct">74.11%</td>
+                <td class="matchs">282</td>
+                <td class="diff-neg">-7.15%</td>
+            </tr>
+            </tbody>
+            </table>
+        </div>
+        
+        <div id="section-D2" class="league-section" style="display: none;">
+            <div class="stats-box">
+                Moyenne historique <strong>Bundesliga 2</strong> : <strong>77.50%</strong> de matchs +1.5 buts
+            </div>
+            <table>
+                <thead>
+                    <tr><th style="text-align:center">#</th><th>Équipe</th><th>% Réussite</th><th>Matchs</th><th>Écart / Moy.</th></tr>
+                </thead>
+                <tbody>
+            <tr>
+                <td class="rank">🏆</td>
+                <td class="team">Holstein Kiel</td>
+                <td class="pct">86.40%</td>
+                <td class="matchs">250</td>
+                <td class="diff-pos">+8.90%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">2</td>
+                <td class="team">Schalke 04</td>
+                <td class="pct">83.33%</td>
+                <td class="matchs">114</td>
+                <td class="diff-pos">+5.83%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">3</td>
+                <td class="team">Elversberg</td>
+                <td class="pct">81.25%</td>
+                <td class="matchs">80</td>
+                <td class="diff-pos">+3.75%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">4</td>
+                <td class="team">Hertha</td>
+                <td class="pct">80.41%</td>
+                <td class="matchs">148</td>
+                <td class="diff-pos">+2.90%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">5</td>
+                <td class="team">Bielefeld</td>
+                <td class="pct">79.23%</td>
+                <td class="matchs">284</td>
+                <td class="diff-pos">+1.72%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">6</td>
+                <td class="team">Nurnberg</td>
+                <td class="pct">78.98%</td>
+                <td class="matchs">352</td>
+                <td class="diff-pos">+1.48%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">7</td>
+                <td class="team">Karlsruhe</td>
+                <td class="pct">78.81%</td>
+                <td class="matchs">420</td>
+                <td class="diff-pos">+1.31%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">8</td>
+                <td class="team">Darmstadt</td>
+                <td class="pct">78.52%</td>
+                <td class="matchs">284</td>
+                <td class="diff-pos">+1.02%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">9</td>
+                <td class="team">Hannover</td>
+                <td class="pct">78.00%</td>
+                <td class="matchs">250</td>
+                <td class="diff-pos">+0.50%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">10</td>
+                <td class="team">Paderborn</td>
+                <td class="pct">77.98%</td>
+                <td class="matchs">386</td>
+                <td class="diff-pos">+0.48%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">11</td>
+                <td class="team">Greuther Furth</td>
+                <td class="pct">77.75%</td>
+                <td class="matchs">454</td>
+                <td class="diff-pos">+0.25%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">12</td>
+                <td class="team">Bochum</td>
+                <td class="pct">77.72%</td>
+                <td class="matchs">386</td>
+                <td class="diff-pos">+0.22%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">13</td>
+                <td class="team">Fortuna Dusseldorf</td>
+                <td class="pct">77.38%</td>
+                <td class="matchs">420</td>
+                <td class="diff-neg">-0.12%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">14</td>
+                <td class="team">Dresden</td>
+                <td class="pct">76.76%</td>
+                <td class="matchs">284</td>
+                <td class="diff-neg">-0.74%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">15</td>
+                <td class="team">Kaiserslautern</td>
+                <td class="pct">76.73%</td>
+                <td class="matchs">318</td>
+                <td class="diff-neg">-0.77%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">16</td>
+                <td class="team">Preußen Münster</td>
+                <td class="pct">76.09%</td>
+                <td class="matchs">46</td>
+                <td class="diff-neg">-1.41%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">17</td>
+                <td class="team">Braunschweig</td>
+                <td class="pct">75.57%</td>
+                <td class="matchs">352</td>
+                <td class="diff-neg">-1.93%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">18</td>
+                <td class="team">Magdeburg</td>
+                <td class="pct">75.00%</td>
+                <td class="matchs">148</td>
+                <td class="diff-neg">-2.50%</td>
+            </tr>
+            </tbody>
+            </table>
+        </div>
+        
+        <div id="section-SP1" class="league-section" style="display: none;">
+            <div class="stats-box">
+                Moyenne historique <strong>La Liga</strong> : <strong>73.37%</strong> de matchs +1.5 buts
+            </div>
+            <table>
+                <thead>
+                    <tr><th style="text-align:center">#</th><th>Équipe</th><th>% Réussite</th><th>Matchs</th><th>Écart / Moy.</th></tr>
+                </thead>
+                <tbody>
+            <tr>
+                <td class="rank">🏆</td>
+                <td class="team">Real Madrid</td>
+                <td class="pct">83.33%</td>
+                <td class="matchs">582</td>
+                <td class="diff-pos">+9.97%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">2</td>
+                <td class="team">Barcelona</td>
+                <td class="pct">81.96%</td>
+                <td class="matchs">582</td>
+                <td class="diff-pos">+8.59%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">3</td>
+                <td class="team">Levante</td>
+                <td class="pct">76.05%</td>
+                <td class="matchs">430</td>
+                <td class="diff-pos">+2.68%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">4</td>
+                <td class="team">Girona</td>
+                <td class="pct">75.74%</td>
+                <td class="matchs">202</td>
+                <td class="diff-pos">+2.37%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">5</td>
+                <td class="team">Sevilla</td>
+                <td class="pct">75.60%</td>
+                <td class="matchs">582</td>
+                <td class="diff-pos">+2.23%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">6</td>
+                <td class="team">Villarreal</td>
+                <td class="pct">75.55%</td>
+                <td class="matchs">544</td>
+                <td class="diff-pos">+2.18%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">7</td>
+                <td class="team">Vallecano</td>
+                <td class="pct">75.00%</td>
+                <td class="matchs">392</td>
+                <td class="diff-pos">+1.63%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">8</td>
+                <td class="team">Valencia</td>
+                <td class="pct">74.40%</td>
+                <td class="matchs">582</td>
+                <td class="diff-pos">+1.03%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">9</td>
+                <td class="team">Celta</td>
+                <td class="pct">74.31%</td>
+                <td class="matchs">506</td>
+                <td class="diff-pos">+0.94%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">10</td>
+                <td class="team">Betis</td>
+                <td class="pct">73.12%</td>
+                <td class="matchs">506</td>
+                <td class="diff-neg">-0.25%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">11</td>
+                <td class="team">Sociedad</td>
+                <td class="pct">73.02%</td>
+                <td class="matchs">582</td>
+                <td class="diff-neg">-0.34%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">12</td>
+                <td class="team">Osasuna</td>
+                <td class="pct">72.56%</td>
+                <td class="matchs">430</td>
+                <td class="diff-neg">-0.81%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">13</td>
+                <td class="team">Ath Madrid</td>
+                <td class="pct">72.16%</td>
+                <td class="matchs">582</td>
+                <td class="diff-neg">-1.20%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">14</td>
+                <td class="team">Elche</td>
+                <td class="pct">71.78%</td>
+                <td class="matchs">202</td>
+                <td class="diff-neg">-1.59%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">15</td>
+                <td class="team">Ath Bilbao</td>
+                <td class="pct">71.48%</td>
+                <td class="matchs">582</td>
+                <td class="diff-neg">-1.89%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">16</td>
+                <td class="team">Espanol</td>
+                <td class="pct">70.95%</td>
+                <td class="matchs">506</td>
+                <td class="diff-neg">-2.42%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">17</td>
+                <td class="team">Oviedo</td>
+                <td class="pct">66.67%</td>
+                <td class="matchs">12</td>
+                <td class="diff-neg">-6.70%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">18</td>
+                <td class="team">Getafe</td>
+                <td class="pct">66.54%</td>
+                <td class="matchs">544</td>
+                <td class="diff-neg">-6.82%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">19</td>
+                <td class="team">Alaves</td>
+                <td class="pct">66.46%</td>
+                <td class="matchs">316</td>
+                <td class="diff-neg">-6.91%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">20</td>
+                <td class="team">Mallorca</td>
+                <td class="pct">66.46%</td>
+                <td class="matchs">316</td>
+                <td class="diff-neg">-6.91%</td>
+            </tr>
+            </tbody>
+            </table>
+        </div>
+        
+        <div id="section-SP2" class="league-section" style="display: none;">
+            <div class="stats-box">
+                Moyenne historique <strong>La Liga 2</strong> : <strong>67.44%</strong> de matchs +1.5 buts
+            </div>
+            <table>
+                <thead>
+                    <tr><th style="text-align:center">#</th><th>Équipe</th><th>% Réussite</th><th>Matchs</th><th>Écart / Moy.</th></tr>
+                </thead>
+                <tbody>
+            <tr>
+                <td class="rank">🏆</td>
+                <td class="team">Cordoba</td>
+                <td class="pct">74.49%</td>
+                <td class="matchs">392</td>
+                <td class="diff-pos">+7.05%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">2</td>
+                <td class="team">Sociedad B</td>
+                <td class="pct">73.21%</td>
+                <td class="matchs">56</td>
+                <td class="diff-pos">+5.77%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">3</td>
+                <td class="team">Granada</td>
+                <td class="pct">71.43%</td>
+                <td class="matchs">224</td>
+                <td class="diff-pos">+3.99%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">4</td>
+                <td class="team">Las Palmas</td>
+                <td class="pct">70.74%</td>
+                <td class="matchs">434</td>
+                <td class="diff-pos">+3.29%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">5</td>
+                <td class="team">Santander</td>
+                <td class="pct">70.68%</td>
+                <td class="matchs">266</td>
+                <td class="diff-pos">+3.23%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">6</td>
+                <td class="team">Valladolid</td>
+                <td class="pct">70.57%</td>
+                <td class="matchs">350</td>
+                <td class="diff-pos">+3.13%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">7</td>
+                <td class="team">Castellon</td>
+                <td class="pct">70.41%</td>
+                <td class="matchs">98</td>
+                <td class="diff-pos">+2.96%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">8</td>
+                <td class="team">Almeria</td>
+                <td class="pct">69.75%</td>
+                <td class="matchs">433</td>
+                <td class="diff-pos">+2.30%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">9</td>
+                <td class="team">Mirandes</td>
+                <td class="pct">68.28%</td>
+                <td class="matchs">476</td>
+                <td class="diff-pos">+0.83%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">10</td>
+                <td class="team">Albacete</td>
+                <td class="pct">68.20%</td>
+                <td class="matchs">434</td>
+                <td class="diff-pos">+0.76%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">11</td>
+                <td class="team">La Coruna</td>
+                <td class="pct">67.86%</td>
+                <td class="matchs">224</td>
+                <td class="diff-pos">+0.41%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">12</td>
+                <td class="team">Zaragoza</td>
+                <td class="pct">67.57%</td>
+                <td class="matchs">518</td>
+                <td class="diff-pos">+0.12%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">13</td>
+                <td class="team">Sp Gijon</td>
+                <td class="pct">67.02%</td>
+                <td class="matchs">476</td>
+                <td class="diff-neg">-0.43%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">14</td>
+                <td class="team">Huesca</td>
+                <td class="pct">66.18%</td>
+                <td class="matchs">476</td>
+                <td class="diff-neg">-1.27%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">15</td>
+                <td class="team">Eibar</td>
+                <td class="pct">62.95%</td>
+                <td class="matchs">224</td>
+                <td class="diff-neg">-4.50%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">16</td>
+                <td class="team">Leganes</td>
+                <td class="pct">62.78%</td>
+                <td class="matchs">266</td>
+                <td class="diff-neg">-4.66%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">17</td>
+                <td class="team">Cadiz</td>
+                <td class="pct">61.61%</td>
+                <td class="matchs">224</td>
+                <td class="diff-neg">-5.84%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">18</td>
+                <td class="team">Malaga</td>
+                <td class="pct">60.15%</td>
+                <td class="matchs">266</td>
+                <td class="diff-neg">-7.29%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">19</td>
+                <td class="team">Burgos</td>
+                <td class="pct">58.24%</td>
+                <td class="matchs">182</td>
+                <td class="diff-neg">-9.20%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">20</td>
+                <td class="team">Andorra</td>
+                <td class="pct">56.12%</td>
+                <td class="matchs">98</td>
+                <td class="diff-neg">-11.32%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">21</td>
+                <td class="team">Ceuta</td>
+                <td class="pct">53.85%</td>
+                <td class="matchs">13</td>
+                <td class="diff-neg">-13.60%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">22</td>
+                <td class="team">Cultural Leonesa</td>
+                <td class="pct">42.86%</td>
+                <td class="matchs">14</td>
+                <td class="diff-neg">-24.59%</td>
+            </tr>
+            </tbody>
+            </table>
+        </div>
+        
+        <div id="section-I1" class="league-section" style="display: none;">
+            <div class="stats-box">
+                Moyenne historique <strong>Serie A</strong> : <strong>75.47%</strong> de matchs +1.5 buts
+            </div>
+            <table>
+                <thead>
+                    <tr><th style="text-align:center">#</th><th>Équipe</th><th>% Réussite</th><th>Matchs</th><th>Écart / Moy.</th></tr>
+                </thead>
+                <tbody>
+            <tr>
+                <td class="rank">🏆</td>
+                <td class="team">Lazio</td>
+                <td class="pct">79.69%</td>
+                <td class="matchs">581</td>
+                <td class="diff-pos">+4.22%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">2</td>
+                <td class="team">Napoli</td>
+                <td class="pct">79.69%</td>
+                <td class="matchs">581</td>
+                <td class="diff-pos">+4.22%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">3</td>
+                <td class="team">Cremonese</td>
+                <td class="pct">79.59%</td>
+                <td class="matchs">49</td>
+                <td class="diff-pos">+4.12%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">4</td>
+                <td class="team">Como</td>
+                <td class="pct">79.59%</td>
+                <td class="matchs">49</td>
+                <td class="diff-pos">+4.12%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">5</td>
+                <td class="team">Atalanta</td>
+                <td class="pct">79.37%</td>
+                <td class="matchs">543</td>
+                <td class="diff-pos">+3.90%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">6</td>
+                <td class="team">Sassuolo</td>
+                <td class="pct">77.62%</td>
+                <td class="matchs">429</td>
+                <td class="diff-pos">+2.15%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">7</td>
+                <td class="team">Inter</td>
+                <td class="pct">77.11%</td>
+                <td class="matchs">581</td>
+                <td class="diff-pos">+1.64%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">8</td>
+                <td class="team">Roma</td>
+                <td class="pct">76.76%</td>
+                <td class="matchs">581</td>
+                <td class="diff-pos">+1.29%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">9</td>
+                <td class="team">Verona</td>
+                <td class="pct">76.47%</td>
+                <td class="matchs">391</td>
+                <td class="diff-pos">+1.00%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">10</td>
+                <td class="team">Juventus</td>
+                <td class="pct">76.25%</td>
+                <td class="matchs">581</td>
+                <td class="diff-pos">+0.77%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">11</td>
+                <td class="team">Milan</td>
+                <td class="pct">76.25%</td>
+                <td class="matchs">581</td>
+                <td class="diff-pos">+0.77%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">12</td>
+                <td class="team">Cagliari</td>
+                <td class="pct">75.64%</td>
+                <td class="matchs">505</td>
+                <td class="diff-pos">+0.17%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">13</td>
+                <td class="team">Parma</td>
+                <td class="pct">74.50%</td>
+                <td class="matchs">353</td>
+                <td class="diff-neg">-0.97%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">14</td>
+                <td class="team">Fiorentina</td>
+                <td class="pct">74.01%</td>
+                <td class="matchs">581</td>
+                <td class="diff-neg">-1.46%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">15</td>
+                <td class="team">Udinese</td>
+                <td class="pct">73.49%</td>
+                <td class="matchs">581</td>
+                <td class="diff-neg">-1.98%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">16</td>
+                <td class="team">Bologna</td>
+                <td class="pct">73.48%</td>
+                <td class="matchs">543</td>
+                <td class="diff-neg">-1.99%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">17</td>
+                <td class="team">Torino</td>
+                <td class="pct">72.08%</td>
+                <td class="matchs">505</td>
+                <td class="diff-neg">-3.39%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">18</td>
+                <td class="team">Lecce</td>
+                <td class="pct">71.13%</td>
+                <td class="matchs">239</td>
+                <td class="diff-neg">-4.34%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">19</td>
+                <td class="team">Genoa</td>
+                <td class="pct">69.43%</td>
+                <td class="matchs">543</td>
+                <td class="diff-neg">-6.04%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">20</td>
+                <td class="team">Pisa</td>
+                <td class="pct">45.45%</td>
+                <td class="matchs">11</td>
+                <td class="diff-neg">-30.02%</td>
+            </tr>
+            </tbody>
+            </table>
+        </div>
+        
+        <div id="section-E0" class="league-section" style="display: none;">
+            <div class="stats-box">
+                Moyenne historique <strong>Premier League</strong> : <strong>77.07%</strong> de matchs +1.5 buts
+            </div>
+            <table>
+                <thead>
+                    <tr><th style="text-align:center">#</th><th>Équipe</th><th>% Réussite</th><th>Matchs</th><th>Écart / Moy.</th></tr>
+                </thead>
+                <tbody>
+            <tr>
+                <td class="rank">🏆</td>
+                <td class="team">Brentford</td>
+                <td class="pct">82.21%</td>
+                <td class="matchs">163</td>
+                <td class="diff-pos">+5.13%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">2</td>
+                <td class="team">Man City</td>
+                <td class="pct">81.58%</td>
+                <td class="matchs">581</td>
+                <td class="diff-pos">+4.51%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">3</td>
+                <td class="team">Liverpool</td>
+                <td class="pct">81.41%</td>
+                <td class="matchs">581</td>
+                <td class="diff-pos">+4.34%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">4</td>
+                <td class="team">West Ham</td>
+                <td class="pct">80.11%</td>
+                <td class="matchs">543</td>
+                <td class="diff-pos">+3.04%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">5</td>
+                <td class="team">Bournemouth</td>
+                <td class="pct">80.00%</td>
+                <td class="matchs">315</td>
+                <td class="diff-pos">+2.93%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">6</td>
+                <td class="team">Nott'm Forest</td>
+                <td class="pct">80.00%</td>
+                <td class="matchs">125</td>
+                <td class="diff-pos">+2.93%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">7</td>
+                <td class="team">Tottenham</td>
+                <td class="pct">79.35%</td>
+                <td class="matchs">581</td>
+                <td class="diff-pos">+2.27%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">8</td>
+                <td class="team">Arsenal</td>
+                <td class="pct">79.17%</td>
+                <td class="matchs">581</td>
+                <td class="diff-pos">+2.10%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">9</td>
+                <td class="team">Fulham</td>
+                <td class="pct">78.47%</td>
+                <td class="matchs">353</td>
+                <td class="diff-pos">+1.40%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">10</td>
+                <td class="team">Brighton</td>
+                <td class="pct">78.41%</td>
+                <td class="matchs">315</td>
+                <td class="diff-pos">+1.34%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">11</td>
+                <td class="team">Wolves</td>
+                <td class="pct">77.90%</td>
+                <td class="matchs">353</td>
+                <td class="diff-pos">+0.83%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">12</td>
+                <td class="team">Chelsea</td>
+                <td class="pct">77.80%</td>
+                <td class="matchs">581</td>
+                <td class="diff-pos">+0.72%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">13</td>
+                <td class="team">Man United</td>
+                <td class="pct">76.94%</td>
+                <td class="matchs">581</td>
+                <td class="diff-neg">-0.14%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">14</td>
+                <td class="team">Leeds</td>
+                <td class="pct">76.80%</td>
+                <td class="matchs">125</td>
+                <td class="diff-neg">-0.27%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">15</td>
+                <td class="team">Aston Villa</td>
+                <td class="pct">76.02%</td>
+                <td class="matchs">467</td>
+                <td class="diff-neg">-1.06%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">16</td>
+                <td class="team">Newcastle</td>
+                <td class="pct">75.32%</td>
+                <td class="matchs">543</td>
+                <td class="diff-neg">-1.75%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">17</td>
+                <td class="team">Everton</td>
+                <td class="pct">74.01%</td>
+                <td class="matchs">581</td>
+                <td class="diff-neg">-3.06%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">18</td>
+                <td class="team">Crystal Palace</td>
+                <td class="pct">72.38%</td>
+                <td class="matchs">467</td>
+                <td class="diff-neg">-4.70%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">19</td>
+                <td class="team">Burnley</td>
+                <td class="pct">72.06%</td>
+                <td class="matchs">315</td>
+                <td class="diff-neg">-5.01%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">20</td>
+                <td class="team">Sunderland</td>
+                <td class="pct">70.40%</td>
+                <td class="matchs">277</td>
+                <td class="diff-neg">-6.68%</td>
+            </tr>
+            </tbody>
+            </table>
+        </div>
+        
+        <div id="section-E1" class="league-section" style="display: none;">
+            <div class="stats-box">
+                Moyenne historique <strong>Championship</strong> : <strong>72.95%</strong> de matchs +1.5 buts
+            </div>
+            <table>
+                <thead>
+                    <tr><th style="text-align:center">#</th><th>Équipe</th><th>% Réussite</th><th>Matchs</th><th>Écart / Moy.</th></tr>
+                </thead>
+                <tbody>
+            <tr>
+                <td class="rank">🏆</td>
+                <td class="team">Southampton</td>
+                <td class="pct">85.05%</td>
+                <td class="matchs">107</td>
+                <td class="diff-pos">+12.09%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">2</td>
+                <td class="team">Leicester</td>
+                <td class="pct">78.37%</td>
+                <td class="matchs">245</td>
+                <td class="diff-pos">+5.42%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">3</td>
+                <td class="team">Norwich</td>
+                <td class="pct">76.69%</td>
+                <td class="matchs">429</td>
+                <td class="diff-pos">+3.74%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">4</td>
+                <td class="team">Ipswich</td>
+                <td class="pct">76.37%</td>
+                <td class="matchs">474</td>
+                <td class="diff-pos">+3.42%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">5</td>
+                <td class="team">Bristol City</td>
+                <td class="pct">75.53%</td>
+                <td class="matchs">613</td>
+                <td class="diff-pos">+2.58%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">6</td>
+                <td class="team">Coventry</td>
+                <td class="pct">75.37%</td>
+                <td class="matchs">337</td>
+                <td class="diff-pos">+2.42%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">7</td>
+                <td class="team">QPR</td>
+                <td class="pct">74.25%</td>
+                <td class="matchs">567</td>
+                <td class="diff-pos">+1.30%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">8</td>
+                <td class="team">Watford</td>
+                <td class="pct">73.89%</td>
+                <td class="matchs">429</td>
+                <td class="diff-pos">+0.94%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">9</td>
+                <td class="team">West Brom</td>
+                <td class="pct">73.88%</td>
+                <td class="matchs">291</td>
+                <td class="diff-pos">+0.93%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">10</td>
+                <td class="team">Wrexham</td>
+                <td class="pct">73.33%</td>
+                <td class="matchs">15</td>
+                <td class="diff-pos">+0.38%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">11</td>
+                <td class="team">Sheffield Weds</td>
+                <td class="pct">73.32%</td>
+                <td class="matchs">521</td>
+                <td class="diff-pos">+0.37%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">12</td>
+                <td class="team">Derby</td>
+                <td class="pct">73.25%</td>
+                <td class="matchs">613</td>
+                <td class="diff-pos">+0.29%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">13</td>
+                <td class="team">Middlesbrough</td>
+                <td class="pct">71.78%</td>
+                <td class="matchs">659</td>
+                <td class="diff-neg">-1.18%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">14</td>
+                <td class="team">Preston</td>
+                <td class="pct">71.40%</td>
+                <td class="matchs">521</td>
+                <td class="diff-neg">-1.55%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">15</td>
+                <td class="team">Blackburn</td>
+                <td class="pct">71.38%</td>
+                <td class="matchs">566</td>
+                <td class="diff-neg">-1.57%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">16</td>
+                <td class="team">Birmingham</td>
+                <td class="pct">71.29%</td>
+                <td class="matchs">613</td>
+                <td class="diff-neg">-1.66%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">17</td>
+                <td class="team">Charlton</td>
+                <td class="pct">71.02%</td>
+                <td class="matchs">245</td>
+                <td class="diff-neg">-1.93%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">18</td>
+                <td class="team">Hull</td>
+                <td class="pct">70.63%</td>
+                <td class="matchs">521</td>
+                <td class="diff-neg">-2.32%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">19</td>
+                <td class="team">Swansea</td>
+                <td class="pct">69.45%</td>
+                <td class="matchs">383</td>
+                <td class="diff-neg">-3.50%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">20</td>
+                <td class="team">Portsmouth</td>
+                <td class="pct">69.28%</td>
+                <td class="matchs">153</td>
+                <td class="diff-neg">-3.67%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">21</td>
+                <td class="team">Oxford</td>
+                <td class="pct">68.85%</td>
+                <td class="matchs">61</td>
+                <td class="diff-neg">-4.10%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">22</td>
+                <td class="team">Stoke</td>
+                <td class="pct">67.66%</td>
+                <td class="matchs">337</td>
+                <td class="diff-neg">-5.30%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">23</td>
+                <td class="team">Millwall</td>
+                <td class="pct">66.23%</td>
+                <td class="matchs">613</td>
+                <td class="diff-neg">-6.72%</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">24</td>
+                <td class="team">Sheffield United</td>
+                <td class="pct">65.29%</td>
+                <td class="matchs">291</td>
+                <td class="diff-neg">-7.66%</td>
+            </tr>
+            </tbody>
+            </table>
+        </div>
+        
+        </div>
+    </body>
+    </html>
+    
