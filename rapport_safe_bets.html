@@ -1,0 +1,1161 @@
+
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Analyse Safe Bets (>75%)</title>
+        <style>
+            body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; padding: 20px; color: #333; }
+            .container { max-width: 1100px; margin: 0 auto; }
+            h1 { text-align: center; color: #2c3e50; }
+            .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 40px; }
+            
+            .section { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 40px; }
+            h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+            
+            table { width: 100%; border-collapse: collapse; }
+            th { background: #34495e; color: white; padding: 10px; text-align: left; }
+            td { padding: 10px; border-bottom: 1px solid #eee; }
+            tr:hover { background: #f8f9fa; }
+            
+            .rank { font-weight: bold; color: #bbb; width: 30px; }
+            .team { font-weight: 600; }
+            .pct { font-weight: bold; color: #27ae60; font-size: 1.1em; }
+            .league { font-size: 0.85em; color: #7f8c8d; text-transform: uppercase; }
+            
+            .card-header-score { color: #2980b9; border-color: #2980b9; }
+            .card-header-noloss { color: #8e44ad; border-color: #8e44ad; }
+            .card-header-over { color: #e67e22; border-color: #e67e22; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🎯 Les "Safe Bets" (Hautes Fréquences)</h1>
+            <p class="subtitle">Statistiques historiques basées sur les équipes actuelles (Seuil: 75.0%)</p>
+
+            <div class="section">
+                <h2 class="card-header-score" style="border-bottom: 3px solid #2980b9;">⚽ La Machine à Buts (Marque > 0.5)</h2>
+                <p>Équipes qui marquent au moins un but dans presque tous leurs matchs.</p>
+                <table>
+                    <thead><tr><th>#</th><th>Ligue</th><th>Équipe</th><th>% Marque</th><th>Historique</th></tr></thead>
+                    <tbody>
+            <tr>
+                <td class="rank">41</td>
+                <td class="league">D1</td>
+                <td class="team">Bayern Munich</td>
+                <td class="pct">92.9%</td>
+                <td class="details">483/520 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">15</td>
+                <td class="league">P1</td>
+                <td class="team">Benfica</td>
+                <td class="pct">92.3%</td>
+                <td class="details">466/505 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">50</td>
+                <td class="league">N1</td>
+                <td class="team">PSV Eindhoven</td>
+                <td class="pct">91.8%</td>
+                <td class="details">472/514 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">74</td>
+                <td class="league">SP1</td>
+                <td class="team">Barcelona</td>
+                <td class="pct">91.6%</td>
+                <td class="details">533/582 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">40</td>
+                <td class="league">N1</td>
+                <td class="team">Ajax</td>
+                <td class="pct">90.6%</td>
+                <td class="details">464/512 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">103</td>
+                <td class="league">SC0</td>
+                <td class="team">Rangers</td>
+                <td class="pct">90.4%</td>
+                <td class="details">510/564 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">27</td>
+                <td class="league">P1</td>
+                <td class="team">Porto</td>
+                <td class="pct">90.3%</td>
+                <td class="details">456/505 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">9</td>
+                <td class="league">F1</td>
+                <td class="team">Paris SG</td>
+                <td class="pct">90.1%</td>
+                <td class="details">507/563 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">45</td>
+                <td class="league">SC0</td>
+                <td class="team">Celtic</td>
+                <td class="pct">89.5%</td>
+                <td class="details">513/573 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">90</td>
+                <td class="league">G1</td>
+                <td class="team">Olympiakos</td>
+                <td class="pct">89.2%</td>
+                <td class="details">445/499 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">73</td>
+                <td class="league">SP1</td>
+                <td class="team">Real Madrid</td>
+                <td class="pct">88.7%</td>
+                <td class="details">516/582 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">76</td>
+                <td class="league">D1</td>
+                <td class="team">Dortmund</td>
+                <td class="pct">88.7%</td>
+                <td class="details">461/520 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">37</td>
+                <td class="league">E0</td>
+                <td class="team">Man City</td>
+                <td class="pct">88.1%</td>
+                <td class="details">512/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">96</td>
+                <td class="league">B1</td>
+                <td class="team">Club Brugge</td>
+                <td class="pct">88.1%</td>
+                <td class="details">436/495 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">52</td>
+                <td class="league">P1</td>
+                <td class="team">Sp Lisbon</td>
+                <td class="pct">87.7%</td>
+                <td class="details">443/505 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">84</td>
+                <td class="league">I1</td>
+                <td class="team">Juventus</td>
+                <td class="pct">87.1%</td>
+                <td class="details">506/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">72</td>
+                <td class="league">B1</td>
+                <td class="team">St. Gilloise</td>
+                <td class="pct">87.0%</td>
+                <td class="details">141/162 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">105</td>
+                <td class="league">T1</td>
+                <td class="team">Fenerbahce</td>
+                <td class="pct">86.9%</td>
+                <td class="details">469/540 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">101</td>
+                <td class="league">N1</td>
+                <td class="team">Feyenoord</td>
+                <td class="pct">86.7%</td>
+                <td class="details">444/512 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">17</td>
+                <td class="league">D2</td>
+                <td class="team">Holstein Kiel</td>
+                <td class="pct">85.9%</td>
+                <td class="details">244/284 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">86</td>
+                <td class="league">N1</td>
+                <td class="team">AZ Alkmaar</td>
+                <td class="pct">85.8%</td>
+                <td class="details">440/513 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">51</td>
+                <td class="league">E0</td>
+                <td class="team">Liverpool</td>
+                <td class="pct">85.0%</td>
+                <td class="details">494/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">61</td>
+                <td class="league">T1</td>
+                <td class="team">Besiktas</td>
+                <td class="pct">84.6%</td>
+                <td class="details">457/540 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">83</td>
+                <td class="league">T1</td>
+                <td class="team">Galatasaray</td>
+                <td class="pct">84.4%</td>
+                <td class="details">456/540 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">28</td>
+                <td class="league">I1</td>
+                <td class="team">Inter</td>
+                <td class="pct">84.2%</td>
+                <td class="details">489/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">8</td>
+                <td class="league">I1</td>
+                <td class="team">Roma</td>
+                <td class="pct">83.6%</td>
+                <td class="details">486/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">91</td>
+                <td class="league">E0</td>
+                <td class="team">Arsenal</td>
+                <td class="pct">83.5%</td>
+                <td class="details">485/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">70</td>
+                <td class="league">I1</td>
+                <td class="team">Napoli</td>
+                <td class="pct">83.5%</td>
+                <td class="details">485/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">75</td>
+                <td class="league">I1</td>
+                <td class="team">Milan</td>
+                <td class="pct">83.1%</td>
+                <td class="details">483/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">24</td>
+                <td class="league">D1</td>
+                <td class="team">Leverkusen</td>
+                <td class="pct">83.1%</td>
+                <td class="details">432/520 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">98</td>
+                <td class="league">F1</td>
+                <td class="team">Lyon</td>
+                <td class="pct">82.8%</td>
+                <td class="details">467/564 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">34</td>
+                <td class="league">E0</td>
+                <td class="team">Tottenham</td>
+                <td class="pct">82.4%</td>
+                <td class="details">479/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">82</td>
+                <td class="league">N1</td>
+                <td class="team">Twente</td>
+                <td class="pct">82.3%</td>
+                <td class="details">395/480 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">79</td>
+                <td class="league">F1</td>
+                <td class="team">Monaco</td>
+                <td class="pct">81.6%</td>
+                <td class="details">460/564 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">69</td>
+                <td class="league">SP1</td>
+                <td class="team">Ath Madrid</td>
+                <td class="pct">81.3%</td>
+                <td class="details">473/582 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">97</td>
+                <td class="league">B1</td>
+                <td class="team">Genk</td>
+                <td class="pct">81.2%</td>
+                <td class="details">403/496 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">81</td>
+                <td class="league">D1</td>
+                <td class="team">Hoffenheim</td>
+                <td class="pct">81.2%</td>
+                <td class="details">422/520 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">20</td>
+                <td class="league">B1</td>
+                <td class="team">Gent</td>
+                <td class="pct">81.0%</td>
+                <td class="details">402/496 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">19</td>
+                <td class="league">E0</td>
+                <td class="team">Chelsea</td>
+                <td class="pct">80.9%</td>
+                <td class="details">470/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">78</td>
+                <td class="league">N1</td>
+                <td class="team">Utrecht</td>
+                <td class="pct">80.9%</td>
+                <td class="details">414/512 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">12</td>
+                <td class="league">D1</td>
+                <td class="team">RB Leipzig</td>
+                <td class="pct">80.7%</td>
+                <td class="details">310/384 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">10</td>
+                <td class="league">B1</td>
+                <td class="team">Anderlecht</td>
+                <td class="pct">80.6%</td>
+                <td class="details">399/495 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">25</td>
+                <td class="league">G1</td>
+                <td class="team">PAOK</td>
+                <td class="pct">80.6%</td>
+                <td class="details">403/500 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">99</td>
+                <td class="league">T1</td>
+                <td class="team">Trabzonspor</td>
+                <td class="pct">80.6%</td>
+                <td class="details">435/540 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">104</td>
+                <td class="league">P1</td>
+                <td class="team">Sp Braga</td>
+                <td class="pct">80.4%</td>
+                <td class="details">406/505 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">5</td>
+                <td class="league">SC2</td>
+                <td class="team">Cove Rangers</td>
+                <td class="pct">80.3%</td>
+                <td class="details">167/208 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">100</td>
+                <td class="league">F1</td>
+                <td class="team">Marseille</td>
+                <td class="pct">80.1%</td>
+                <td class="details">452/564 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">2</td>
+                <td class="league">SC3</td>
+                <td class="team">Spartans</td>
+                <td class="pct">80.0%</td>
+                <td class="details">68/85 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">3</td>
+                <td class="league">N1</td>
+                <td class="team">Heerenveen</td>
+                <td class="pct">80.0%</td>
+                <td class="details">411/514 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">14</td>
+                <td class="league">I1</td>
+                <td class="team">Lazio</td>
+                <td class="pct">79.9%</td>
+                <td class="details">464/581 matchs</td>
+            </tr>
+            </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2 class="card-header-noloss" style="border-bottom: 3px solid #8e44ad;">🛡️ L'Invincible (Ne perd pas / 1X2)</h2>
+                <p>Équipes qui font très rarement une défaite (Victoire ou Nul).</p>
+                <table>
+                    <thead><tr><th>#</th><th>Ligue</th><th>Équipe</th><th>% Invaincu</th><th>Historique</th></tr></thead>
+                    <tbody>
+            <tr>
+                <td class="rank">10</td>
+                <td class="league">P1</td>
+                <td class="team">Porto</td>
+                <td class="pct">90.7%</td>
+                <td class="details">458/505 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">15</td>
+                <td class="league">SC0</td>
+                <td class="team">Celtic</td>
+                <td class="pct">90.2%</td>
+                <td class="details">517/573 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">6</td>
+                <td class="league">P1</td>
+                <td class="team">Benfica</td>
+                <td class="pct">89.3%</td>
+                <td class="details">451/505 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">32</td>
+                <td class="league">G1</td>
+                <td class="team">Olympiakos</td>
+                <td class="pct">89.0%</td>
+                <td class="details">444/499 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">26</td>
+                <td class="league">SP1</td>
+                <td class="team">Barcelona</td>
+                <td class="pct">88.3%</td>
+                <td class="details">514/582 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">3</td>
+                <td class="league">F1</td>
+                <td class="team">Paris SG</td>
+                <td class="pct">88.3%</td>
+                <td class="details">497/563 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">14</td>
+                <td class="league">D1</td>
+                <td class="team">Bayern Munich</td>
+                <td class="pct">88.1%</td>
+                <td class="details">458/520 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">13</td>
+                <td class="league">N1</td>
+                <td class="team">Ajax</td>
+                <td class="pct">87.9%</td>
+                <td class="details">450/512 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">25</td>
+                <td class="league">SP1</td>
+                <td class="team">Real Madrid</td>
+                <td class="pct">87.3%</td>
+                <td class="details">508/582 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">24</td>
+                <td class="league">B1</td>
+                <td class="team">St. Gilloise</td>
+                <td class="pct">86.4%</td>
+                <td class="details">140/162 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">31</td>
+                <td class="league">I1</td>
+                <td class="team">Juventus</td>
+                <td class="pct">86.4%</td>
+                <td class="details">502/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">36</td>
+                <td class="league">SC0</td>
+                <td class="team">Rangers</td>
+                <td class="pct">86.2%</td>
+                <td class="details">486/564 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">16</td>
+                <td class="league">N1</td>
+                <td class="team">PSV Eindhoven</td>
+                <td class="pct">86.0%</td>
+                <td class="details">442/514 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">18</td>
+                <td class="league">P1</td>
+                <td class="team">Sp Lisbon</td>
+                <td class="pct">85.5%</td>
+                <td class="details">432/505 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">12</td>
+                <td class="league">E0</td>
+                <td class="team">Man City</td>
+                <td class="pct">84.0%</td>
+                <td class="details">488/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">37</td>
+                <td class="league">T1</td>
+                <td class="team">Fenerbahce</td>
+                <td class="pct">83.3%</td>
+                <td class="details">450/540 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">34</td>
+                <td class="league">B1</td>
+                <td class="team">Club Brugge</td>
+                <td class="pct">82.2%</td>
+                <td class="details">407/495 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">22</td>
+                <td class="league">SP1</td>
+                <td class="team">Ath Madrid</td>
+                <td class="pct">81.4%</td>
+                <td class="details">474/582 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">30</td>
+                <td class="league">T1</td>
+                <td class="team">Galatasaray</td>
+                <td class="pct">80.9%</td>
+                <td class="details">437/540 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">23</td>
+                <td class="league">I1</td>
+                <td class="team">Napoli</td>
+                <td class="pct">80.7%</td>
+                <td class="details">469/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">17</td>
+                <td class="league">E0</td>
+                <td class="team">Liverpool</td>
+                <td class="pct">80.6%</td>
+                <td class="details">468/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">35</td>
+                <td class="league">N1</td>
+                <td class="team">Feyenoord</td>
+                <td class="pct">80.1%</td>
+                <td class="details">410/512 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">8</td>
+                <td class="league">G1</td>
+                <td class="team">PAOK</td>
+                <td class="pct">79.2%</td>
+                <td class="details">396/500 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">28</td>
+                <td class="league">D1</td>
+                <td class="team">Dortmund</td>
+                <td class="pct">78.8%</td>
+                <td class="details">410/520 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">19</td>
+                <td class="league">T1</td>
+                <td class="team">Besiktas</td>
+                <td class="pct">78.3%</td>
+                <td class="details">423/540 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">4</td>
+                <td class="league">B1</td>
+                <td class="team">Anderlecht</td>
+                <td class="pct">78.2%</td>
+                <td class="details">387/495 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">11</td>
+                <td class="league">I1</td>
+                <td class="team">Inter</td>
+                <td class="pct">77.6%</td>
+                <td class="details">451/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">33</td>
+                <td class="league">E0</td>
+                <td class="team">Arsenal</td>
+                <td class="pct">77.6%</td>
+                <td class="details">451/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">27</td>
+                <td class="league">I1</td>
+                <td class="team">Milan</td>
+                <td class="pct">77.5%</td>
+                <td class="details">450/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">5</td>
+                <td class="league">D1</td>
+                <td class="team">RB Leipzig</td>
+                <td class="pct">77.1%</td>
+                <td class="details">296/384 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">29</td>
+                <td class="league">F1</td>
+                <td class="team">Monaco</td>
+                <td class="pct">76.8%</td>
+                <td class="details">433/564 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">9</td>
+                <td class="league">G1</td>
+                <td class="team">Panathinaikos</td>
+                <td class="pct">76.7%</td>
+                <td class="details">382/498 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">7</td>
+                <td class="league">E0</td>
+                <td class="team">Chelsea</td>
+                <td class="pct">76.6%</td>
+                <td class="details">445/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">21</td>
+                <td class="league">E0</td>
+                <td class="team">Man United</td>
+                <td class="pct">76.6%</td>
+                <td class="details">445/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">2</td>
+                <td class="league">I1</td>
+                <td class="team">Roma</td>
+                <td class="pct">75.9%</td>
+                <td class="details">441/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">1</td>
+                <td class="league">G1</td>
+                <td class="team">AEK</td>
+                <td class="pct">75.7%</td>
+                <td class="details">327/432 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">20</td>
+                <td class="league">I2</td>
+                <td class="team">Catanzaro</td>
+                <td class="pct">75.0%</td>
+                <td class="details">66/88 matchs</td>
+            </tr>
+            </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2 class="card-header-over" style="border-bottom: 3px solid #e67e22;">🔥 Le Match Ouvert (Over 1.5 Global)</h2>
+                <p>Matchs de cette équipe où il y a au moins 2 buts (peu importe qui marque).</p>
+                <table>
+                    <thead><tr><th>#</th><th>Ligue</th><th>Équipe</th><th>% +1.5 Buts</th><th>Historique</th></tr></thead>
+                    <tbody>
+            <tr>
+                <td class="rank">163</td>
+                <td class="league">N1</td>
+                <td class="team">Volendam</td>
+                <td class="pct">90.0%</td>
+                <td class="details">72/80 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">97</td>
+                <td class="league">N1</td>
+                <td class="team">PSV Eindhoven</td>
+                <td class="pct">89.3%</td>
+                <td class="details">459/514 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">34</td>
+                <td class="league">D2</td>
+                <td class="team">Holstein Kiel</td>
+                <td class="pct">87.3%</td>
+                <td class="details">248/284 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">76</td>
+                <td class="league">D1</td>
+                <td class="team">Bayern Munich</td>
+                <td class="pct">87.3%</td>
+                <td class="details">454/520 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">75</td>
+                <td class="league">N1</td>
+                <td class="team">Ajax</td>
+                <td class="pct">87.3%</td>
+                <td class="details">447/512 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">152</td>
+                <td class="league">N1</td>
+                <td class="team">Heracles</td>
+                <td class="pct">86.4%</td>
+                <td class="details">414/479 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">145</td>
+                <td class="league">D1</td>
+                <td class="team">Hoffenheim</td>
+                <td class="pct">86.3%</td>
+                <td class="details">449/520 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">4</td>
+                <td class="league">N1</td>
+                <td class="team">Heerenveen</td>
+                <td class="pct">86.2%</td>
+                <td class="details">443/514 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">137</td>
+                <td class="league">D1</td>
+                <td class="team">Dortmund</td>
+                <td class="pct">86.0%</td>
+                <td class="details">447/520 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">101</td>
+                <td class="league">B1</td>
+                <td class="team">Waregem</td>
+                <td class="pct">85.3%</td>
+                <td class="details">354/415 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">154</td>
+                <td class="league">N1</td>
+                <td class="team">AZ Alkmaar</td>
+                <td class="pct">85.0%</td>
+                <td class="details">436/513 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">77</td>
+                <td class="league">D1</td>
+                <td class="team">Werder Bremen</td>
+                <td class="pct">84.8%</td>
+                <td class="details">441/520 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">179</td>
+                <td class="league">N1</td>
+                <td class="team">Feyenoord</td>
+                <td class="pct">84.8%</td>
+                <td class="details">434/512 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">156</td>
+                <td class="league">N1</td>
+                <td class="team">Excelsior</td>
+                <td class="pct">84.3%</td>
+                <td class="details">268/318 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">52</td>
+                <td class="league">G1</td>
+                <td class="team">Kifisia</td>
+                <td class="pct">83.7%</td>
+                <td class="details">36/43 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">147</td>
+                <td class="league">N1</td>
+                <td class="team">Twente</td>
+                <td class="pct">83.5%</td>
+                <td class="details">401/480 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">10</td>
+                <td class="league">B1</td>
+                <td class="team">Westerlo</td>
+                <td class="pct">83.4%</td>
+                <td class="details">231/277 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">129</td>
+                <td class="league">SP1</td>
+                <td class="team">Real Madrid</td>
+                <td class="pct">83.3%</td>
+                <td class="details">485/582 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">167</td>
+                <td class="league">D1</td>
+                <td class="team">Stuttgart</td>
+                <td class="pct">83.3%</td>
+                <td class="details">433/520 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">8</td>
+                <td class="league">N1</td>
+                <td class="team">Zwolle</td>
+                <td class="pct">83.3%</td>
+                <td class="details">343/412 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">122</td>
+                <td class="league">SC3</td>
+                <td class="team">Elgin</td>
+                <td class="pct">83.1%</td>
+                <td class="details">441/531 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">158</td>
+                <td class="league">SC3</td>
+                <td class="team">Annan Athletic</td>
+                <td class="pct">83.0%</td>
+                <td class="details">440/530 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">182</td>
+                <td class="league">SC0</td>
+                <td class="team">Rangers</td>
+                <td class="pct">83.0%</td>
+                <td class="details">468/564 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">18</td>
+                <td class="league">F1</td>
+                <td class="team">Paris SG</td>
+                <td class="pct">82.8%</td>
+                <td class="details">466/563 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">32</td>
+                <td class="league">P1</td>
+                <td class="team">Benfica</td>
+                <td class="pct">82.6%</td>
+                <td class="details">417/505 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">71</td>
+                <td class="league">D1</td>
+                <td class="team">Ein Frankfurt</td>
+                <td class="pct">82.5%</td>
+                <td class="details">429/520 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">73</td>
+                <td class="league">T1</td>
+                <td class="team">Kasimpasa</td>
+                <td class="pct">82.2%</td>
+                <td class="details">416/506 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">132</td>
+                <td class="league">SP1</td>
+                <td class="team">Barcelona</td>
+                <td class="pct">82.0%</td>
+                <td class="details">477/582 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">125</td>
+                <td class="league">N1</td>
+                <td class="team">Nijmegen</td>
+                <td class="pct">81.8%</td>
+                <td class="details">288/352 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">24</td>
+                <td class="league">D2</td>
+                <td class="team">Schalke 04</td>
+                <td class="pct">81.8%</td>
+                <td class="details">427/522 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">168</td>
+                <td class="league">D1</td>
+                <td class="team">Wolfsburg</td>
+                <td class="pct">81.7%</td>
+                <td class="details">425/520 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">82</td>
+                <td class="league">SC0</td>
+                <td class="team">Celtic</td>
+                <td class="pct">81.7%</td>
+                <td class="details">468/573 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">72</td>
+                <td class="league">E0</td>
+                <td class="team">Man City</td>
+                <td class="pct">81.6%</td>
+                <td class="details">474/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">128</td>
+                <td class="league">B1</td>
+                <td class="team">St. Gilloise</td>
+                <td class="pct">81.5%</td>
+                <td class="details">132/162 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">98</td>
+                <td class="league">E0</td>
+                <td class="team">Liverpool</td>
+                <td class="pct">81.4%</td>
+                <td class="details">473/581 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">58</td>
+                <td class="league">D2</td>
+                <td class="team">Elversberg</td>
+                <td class="pct">81.2%</td>
+                <td class="details">65/80 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">26</td>
+                <td class="league">T1</td>
+                <td class="team">Gaziantep</td>
+                <td class="pct">81.2%</td>
+                <td class="details">190/234 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">94</td>
+                <td class="league">B1</td>
+                <td class="team">Oud-Heverlee Leuven</td>
+                <td class="pct">81.0%</td>
+                <td class="details">256/316 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">170</td>
+                <td class="league">B1</td>
+                <td class="team">Club Brugge</td>
+                <td class="pct">81.0%</td>
+                <td class="details">401/495 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">173</td>
+                <td class="league">N1</td>
+                <td class="team">NAC Breda</td>
+                <td class="pct">81.0%</td>
+                <td class="details">230/284 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">48</td>
+                <td class="league">D1</td>
+                <td class="team">Leverkusen</td>
+                <td class="pct">81.0%</td>
+                <td class="details">421/520 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">139</td>
+                <td class="league">N1</td>
+                <td class="team">Utrecht</td>
+                <td class="pct">80.7%</td>
+                <td class="details">413/512 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">176</td>
+                <td class="league">B1</td>
+                <td class="team">Mechelen</td>
+                <td class="pct">80.6%</td>
+                <td class="details">375/465 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">143</td>
+                <td class="league">T1</td>
+                <td class="team">Karagumruk</td>
+                <td class="pct">80.5%</td>
+                <td class="details">132/164 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">42</td>
+                <td class="league">SC2</td>
+                <td class="team">East Fife</td>
+                <td class="pct">80.5%</td>
+                <td class="details">428/532 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">183</td>
+                <td class="league">T1</td>
+                <td class="team">Fenerbahce</td>
+                <td class="pct">80.4%</td>
+                <td class="details">434/540 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">114</td>
+                <td class="league">E1</td>
+                <td class="team">Leicester</td>
+                <td class="pct">80.3%</td>
+                <td class="details">502/625 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">175</td>
+                <td class="league">F1</td>
+                <td class="team">Lyon</td>
+                <td class="pct">80.3%</td>
+                <td class="details">453/564 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">11</td>
+                <td class="league">SC2</td>
+                <td class="team">Cove Rangers</td>
+                <td class="pct">80.3%</td>
+                <td class="details">167/208 matchs</td>
+            </tr>
+            
+            <tr>
+                <td class="rank">60</td>
+                <td class="league">SC2</td>
+                <td class="team">Montrose</td>
+                <td class="pct">80.3%</td>
+                <td class="details">427/532 matchs</td>
+            </tr>
+            </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+    </html>
+    

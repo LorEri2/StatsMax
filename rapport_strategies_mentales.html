@@ -1,0 +1,542 @@
+
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Analyse Stratégies Avancées</title>
+        <style>
+            body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; padding: 30px; color: #333; }
+            .container { max-width: 1000px; margin: 0 auto; }
+            h1 { text-align: center; color: #2c3e50; margin-bottom: 40px; }
+            
+            .section { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 40px; }
+            
+            h2 { margin-top: 0; font-size: 1.5em; display: flex; align-items: center; gap: 10px; }
+            .title-wtn { color: #27ae60; border-bottom: 3px solid #27ae60; padding-bottom: 10px; }
+            .title-bot { color: #c0392b; border-bottom: 3px solid #c0392b; padding-bottom: 10px; }
+            
+            .desc { color: #7f8c8d; font-style: italic; margin-bottom: 20px; }
+
+            table { width: 100%; border-collapse: collapse; }
+            th { text-align: left; padding: 12px 15px; background-color: #f8f9fa; color: #555; font-weight: 600; }
+            td { padding: 12px 15px; border-bottom: 1px solid #eee; }
+            tr:hover { background-color: #fafafa; }
+
+            .rank { font-weight: bold; color: #bbb; width: 30px; }
+            .league { font-size: 0.85em; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; }
+            .team { font-weight: 700; font-size: 1.05em; }
+            .details { font-size: 0.9em; color: #666; }
+            
+            .pct-green { font-weight: bold; color: #27ae60; font-size: 1.1em; }
+            .pct-red { font-weight: bold; color: #c0392b; font-size: 1.1em; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🧠 Analyse Comportementale (Historique)</h1>
+
+            <div class="section">
+                <h2 class="title-wtn">🛡️ Les "Forteresses" (Win to Nil)</h2>
+                <p class="desc">Équipes qui gagnent le plus souvent <strong>sans encaisser de but</strong>. Idéal pour les paris "Vainqueur sans encaisser" ou "Score exact multi-choix".</p>
+                <table>
+                    <thead><tr><th>#</th><th>Ligue</th><th>Équipe</th><th>% Réussite</th><th>Historique</th></tr></thead>
+                    <tbody>
+                        
+        <tr>
+            <td class="rank">25</td>
+            <td class="league">P1</td>
+            <td class="team">Porto</td>
+            <td class="pct-green">47.5%</td>
+            <td class="details">240 matchs sur 505</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">9</td>
+            <td class="league">G1</td>
+            <td class="team">Olympiakos</td>
+            <td class="pct-green">47.0%</td>
+            <td class="details">232 matchs sur 494</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">8</td>
+            <td class="league">SC0</td>
+            <td class="team">Celtic</td>
+            <td class="pct-green">46.9%</td>
+            <td class="details">269 matchs sur 573</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">39</td>
+            <td class="league">P1</td>
+            <td class="team">Benfica</td>
+            <td class="pct-green">45.1%</td>
+            <td class="details">228 matchs sur 505</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">7</td>
+            <td class="league">D1</td>
+            <td class="team">Bayern Munich</td>
+            <td class="pct-green">41.3%</td>
+            <td class="details">215 matchs sur 520</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">10</td>
+            <td class="league">SC0</td>
+            <td class="team">Rangers</td>
+            <td class="pct-green">40.8%</td>
+            <td class="details">230 matchs sur 564</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">1</td>
+            <td class="league">SP1</td>
+            <td class="team">Barcelona</td>
+            <td class="pct-green">39.5%</td>
+            <td class="details">230 matchs sur 582</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">22</td>
+            <td class="league">I1</td>
+            <td class="team">Juventus</td>
+            <td class="pct-green">39.4%</td>
+            <td class="details">229 matchs sur 581</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">23</td>
+            <td class="league">SP1</td>
+            <td class="team">Ath Madrid</td>
+            <td class="pct-green">38.7%</td>
+            <td class="details">225 matchs sur 582</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">3</td>
+            <td class="league">E0</td>
+            <td class="team">Man City</td>
+            <td class="pct-green">38.4%</td>
+            <td class="details">223 matchs sur 581</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">19</td>
+            <td class="league">G1</td>
+            <td class="team">AEK</td>
+            <td class="pct-green">38.4%</td>
+            <td class="details">165 matchs sur 430</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">52</td>
+            <td class="league">P1</td>
+            <td class="team">Sp Lisbon</td>
+            <td class="pct-green">37.8%</td>
+            <td class="details">191 matchs sur 505</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">41</td>
+            <td class="league">N1</td>
+            <td class="team">Ajax</td>
+            <td class="pct-green">37.7%</td>
+            <td class="details">193 matchs sur 512</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">30</td>
+            <td class="league">F1</td>
+            <td class="team">Paris SG</td>
+            <td class="pct-green">37.5%</td>
+            <td class="details">211 matchs sur 563</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">38</td>
+            <td class="league">G1</td>
+            <td class="team">Panathinaikos</td>
+            <td class="pct-green">34.8%</td>
+            <td class="details">172 matchs sur 494</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">53</td>
+            <td class="league">G1</td>
+            <td class="team">PAOK</td>
+            <td class="pct-green">34.8%</td>
+            <td class="details">173 matchs sur 497</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">35</td>
+            <td class="league">SP1</td>
+            <td class="team">Real Madrid</td>
+            <td class="pct-green">33.5%</td>
+            <td class="details">195 matchs sur 582</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">12</td>
+            <td class="league">B1</td>
+            <td class="team">Club Brugge</td>
+            <td class="pct-green">33.3%</td>
+            <td class="details">165 matchs sur 495</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">34</td>
+            <td class="league">N1</td>
+            <td class="team">PSV Eindhoven</td>
+            <td class="pct-green">32.5%</td>
+            <td class="details">167 matchs sur 514</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">49</td>
+            <td class="league">I1</td>
+            <td class="team">Inter</td>
+            <td class="pct-green">31.5%</td>
+            <td class="details">183 matchs sur 581</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">2</td>
+            <td class="league">E0</td>
+            <td class="team">Liverpool</td>
+            <td class="pct-green">31.3%</td>
+            <td class="details">182 matchs sur 581</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">44</td>
+            <td class="league">N1</td>
+            <td class="team">Feyenoord</td>
+            <td class="pct-green">31.1%</td>
+            <td class="details">159 matchs sur 512</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">18</td>
+            <td class="league">B1</td>
+            <td class="team">St. Gilloise</td>
+            <td class="pct-green">30.4%</td>
+            <td class="details">49 matchs sur 161</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">28</td>
+            <td class="league">E0</td>
+            <td class="team">Arsenal</td>
+            <td class="pct-green">30.3%</td>
+            <td class="details">176 matchs sur 581</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">51</td>
+            <td class="league">T1</td>
+            <td class="team">Galatasaray</td>
+            <td class="pct-green">30.2%</td>
+            <td class="details">162 matchs sur 536</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">14</td>
+            <td class="league">I1</td>
+            <td class="team">Napoli</td>
+            <td class="pct-green">29.9%</td>
+            <td class="details">174 matchs sur 581</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">21</td>
+            <td class="league">P1</td>
+            <td class="team">Sp Braga</td>
+            <td class="pct-green">29.9%</td>
+            <td class="details">151 matchs sur 505</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">50</td>
+            <td class="league">I1</td>
+            <td class="team">Roma</td>
+            <td class="pct-green">29.3%</td>
+            <td class="details">170 matchs sur 580</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">26</td>
+            <td class="league">D1</td>
+            <td class="team">Dortmund</td>
+            <td class="pct-green">29.0%</td>
+            <td class="details">151 matchs sur 520</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">5</td>
+            <td class="league">E0</td>
+            <td class="team">Chelsea</td>
+            <td class="pct-green">28.9%</td>
+            <td class="details">168 matchs sur 581</td>
+        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2 class="title-bot">🤬 Les "Bottlers" (Fragiles)</h2>
+                <p class="desc">Équipes qui <strong>ne gagnent pas</strong> le match alors qu'elles <strong>menaient à la mi-temps</strong>. Idéal pour le Live Betting (Double chance X2 à la mi-temps).</p>
+                <table>
+                    <thead><tr><th>#</th><th>Ligue</th><th>Équipe</th><th>% d'Échec</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        
+        <tr>
+            <td class="rank">177</td>
+            <td class="league">I2</td>
+            <td class="team">Carrarese</td>
+            <td class="pct-red">46.2%</td>
+            <td class="details">A raté 6 fois (sur 13 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">194</td>
+            <td class="league">N1</td>
+            <td class="team">Excelsior</td>
+            <td class="pct-red">45.1%</td>
+            <td class="details">A raté 32 fois (sur 71 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">295</td>
+            <td class="league">F2</td>
+            <td class="team">Boulogne</td>
+            <td class="pct-red">44.4%</td>
+            <td class="details">A raté 8 fois (sur 18 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">93</td>
+            <td class="league">D2</td>
+            <td class="team">Magdeburg</td>
+            <td class="pct-red">44.4%</td>
+            <td class="details">A raté 16 fois (sur 36 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">231</td>
+            <td class="league">P1</td>
+            <td class="team">Tondela</td>
+            <td class="pct-red">44.0%</td>
+            <td class="details">A raté 22 fois (sur 50 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">124</td>
+            <td class="league">T1</td>
+            <td class="team">Genclerbirligi</td>
+            <td class="pct-red">43.9%</td>
+            <td class="details">A raté 43 fois (sur 98 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">192</td>
+            <td class="league">N1</td>
+            <td class="team">Volendam</td>
+            <td class="pct-red">43.8%</td>
+            <td class="details">A raté 7 fois (sur 16 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">260</td>
+            <td class="league">B1</td>
+            <td class="team">Westerlo</td>
+            <td class="pct-red">43.4%</td>
+            <td class="details">A raté 33 fois (sur 76 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">183</td>
+            <td class="league">N1</td>
+            <td class="team">NAC Breda</td>
+            <td class="pct-red">43.1%</td>
+            <td class="details">A raté 25 fois (sur 58 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">36</td>
+            <td class="league">F2</td>
+            <td class="team">Rodez</td>
+            <td class="pct-red">41.5%</td>
+            <td class="details">A raté 22 fois (sur 53 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">299</td>
+            <td class="league">P1</td>
+            <td class="team">Casa Pia</td>
+            <td class="pct-red">40.0%</td>
+            <td class="details">A raté 10 fois (sur 25 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">281</td>
+            <td class="league">I1</td>
+            <td class="team">Como</td>
+            <td class="pct-red">40.0%</td>
+            <td class="details">A raté 24 fois (sur 60 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">58</td>
+            <td class="league">F2</td>
+            <td class="team">Le Mans</td>
+            <td class="pct-red">40.0%</td>
+            <td class="details">A raté 16 fois (sur 40 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">289</td>
+            <td class="league">EC</td>
+            <td class="team">Wealdstone</td>
+            <td class="pct-red">39.6%</td>
+            <td class="details">A raté 21 fois (sur 53 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">253</td>
+            <td class="league">I2</td>
+            <td class="team">Sudtirol</td>
+            <td class="pct-red">39.4%</td>
+            <td class="details">A raté 13 fois (sur 33 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">204</td>
+            <td class="league">G1</td>
+            <td class="team">Panserraikos</td>
+            <td class="pct-red">39.3%</td>
+            <td class="details">A raté 11 fois (sur 28 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">308</td>
+            <td class="league">EC</td>
+            <td class="team">Boston Utd</td>
+            <td class="pct-red">38.9%</td>
+            <td class="details">A raté 7 fois (sur 18 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">176</td>
+            <td class="league">EC</td>
+            <td class="team">Tamworth</td>
+            <td class="pct-red">38.6%</td>
+            <td class="details">A raté 22 fois (sur 57 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">195</td>
+            <td class="league">F2</td>
+            <td class="team">Laval</td>
+            <td class="pct-red">38.5%</td>
+            <td class="details">A raté 37 fois (sur 96 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">278</td>
+            <td class="league">P1</td>
+            <td class="team">Estrela</td>
+            <td class="pct-red">38.5%</td>
+            <td class="details">A raté 5 fois (sur 13 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">19</td>
+            <td class="league">EC</td>
+            <td class="team">Hartlepool</td>
+            <td class="pct-red">38.0%</td>
+            <td class="details">A raté 70 fois (sur 184 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">238</td>
+            <td class="league">I2</td>
+            <td class="team">Cesena</td>
+            <td class="pct-red">37.9%</td>
+            <td class="details">A raté 33 fois (sur 87 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">232</td>
+            <td class="league">T1</td>
+            <td class="team">Konyaspor</td>
+            <td class="pct-red">37.7%</td>
+            <td class="details">A raté 46 fois (sur 122 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">317</td>
+            <td class="league">I2</td>
+            <td class="team">Reggiana</td>
+            <td class="pct-red">37.5%</td>
+            <td class="details">A raté 9 fois (sur 24 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">38</td>
+            <td class="league">D2</td>
+            <td class="team">Bielefeld</td>
+            <td class="pct-red">37.3%</td>
+            <td class="details">A raté 31 fois (sur 83 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">249</td>
+            <td class="league">D2</td>
+            <td class="team">Karlsruhe</td>
+            <td class="pct-red">37.0%</td>
+            <td class="details">A raté 44 fois (sur 119 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">148</td>
+            <td class="league">F2</td>
+            <td class="team">Annecy</td>
+            <td class="pct-red">36.8%</td>
+            <td class="details">A raté 14 fois (sur 38 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">234</td>
+            <td class="league">SP2</td>
+            <td class="team">Albacete</td>
+            <td class="pct-red">36.2%</td>
+            <td class="details">A raté 38 fois (sur 105 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">144</td>
+            <td class="league">E3</td>
+            <td class="team">Colchester</td>
+            <td class="pct-red">35.9%</td>
+            <td class="details">A raté 74 fois (sur 206 leads)</td>
+        </tr>
+        
+        <tr>
+            <td class="rank">271</td>
+            <td class="league">G1</td>
+            <td class="team">OFI Crete</td>
+            <td class="pct-red">35.6%</td>
+            <td class="details">A raté 21 fois (sur 59 leads)</td>
+        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+    </html>
+    
