@@ -1,0 +1,307 @@
+Match Number,Round Number,Date,Location,Home Team,Away Team,Result
+1,1,08/08/2025 19:15,Estádio Municipal de Rio Maior,Casa Pia AC,Sporting CP,0 - 2
+7,1,09/08/2025 14:30,Estádio da Madeira,CD Nacional,Gil Vicente FC,0 - 2
+4,1,09/08/2025 19:30,Estádio Municipal de Arouca,FC Arouca,AFS,3 - 1
+8,1,10/08/2025 16:00,Estádio Municipal de Famalicão,FC Famalicão,Santa Clara,3 - 0
+2,1,10/08/2025 19:30,Estádio Municipal de Braga,SC Braga,CD Tondela,3 - 0
+6,1,10/08/2025 19:30,Parque Joaquim de Almeida Freitas,Moreirense FC,FC Alverca,2 - 1
+5,1,11/08/2025 17:45,Estadio António Coimbra da Mota,Estoril Praia,Estrela Amadora,1 - 1
+9,1,11/08/2025 19:45,Estádio do Dragão,FC Porto,Vitória SC,3 - 0
+3,1,23/09/2025 19:15,Estádio da Luz,SL Benfica,Rio Ave FC,1 - 1
+10,2,15/08/2025 14:45,Estádio do CD Aves,AFS,Casa Pia AC,0 - 2
+17,2,16/08/2025 14:30,Estádio João Cardoso,CD Tondela,FC Famalicão,0 - 1
+15,2,16/08/2025 17:00,Estádio D. Afonso Henriques,Vitória SC,Estoril Praia,3 - 2
+18,2,16/08/2025 19:30,Estádio José Gomes,Estrela Amadora,SL Benfica,0 - 1
+14,2,17/08/2025 14:30,Estádio do Rio Ave FC,Rio Ave FC,CD Nacional,1 - 1
+11,2,17/08/2025 17:00,Complexo Desportivo FC Alverca,FC Alverca,SC Braga,0 - 3
+13,2,17/08/2025 17:00,Estádio de São Miguel,Santa Clara,Moreirense FC,0 - 1
+16,2,17/08/2025 19:30,Estádio José Alvalade,Sporting CP,FC Arouca,6 - 0
+12,2,18/08/2025 19:15,Estádio Cidade de Barcelos,Gil Vicente FC,FC Porto,0 - 2
+27,3,23/08/2025 15:00,Parque Joaquim de Almeida Freitas,Moreirense FC,Vitória SC,2 - 0
+19,3,23/08/2025 17:00,Estádio da Madeira,CD Nacional,Sporting CP,1 - 4
+20,3,23/08/2025 19:30,Estádio Municipal de Arouca,FC Arouca,Rio Ave FC,3 - 3
+22,3,23/08/2025 19:30,Estádio da Luz,SL Benfica,CD Tondela,3 - 0
+21,3,24/08/2025 14:30,Estádio Municipal de Famalicão,FC Famalicão,Gil Vicente FC,0 - 0
+24,3,24/08/2025 17:00,Estádio do Dragão,FC Porto,Casa Pia AC,4 - 0
+23,3,24/08/2025 19:30,Estádio Municipal de Braga,SC Braga,AFS,2 - 2
+25,3,25/08/2025 19:15,Estádio José Gomes,Estrela Amadora,FC Alverca,2 - 2
+26,3,06/09/2025 19:30,Estadio António Coimbra da Mota,Estoril Praia,Santa Clara,0 - 1
+31,4,29/08/2025 19:15,Estádio Cidade de Barcelos,Gil Vicente FC,Moreirense FC,2 - 0
+29,4,30/08/2025 14:30,Estádio Municipal de Rio Maior,Casa Pia AC,CD Nacional,0 - 2
+28,4,30/08/2025 17:00,Estádio do CD Aves,AFS,FC Famalicão,0 - 1
+34,4,30/08/2025 17:00,Estádio D. Afonso Henriques,Vitória SC,FC Arouca,1 - 1
+35,4,30/08/2025 19:30,Estádio José Alvalade,Sporting CP,FC Porto,1 - 2
+33,4,31/08/2025 14:30,Estádio João Cardoso,CD Tondela,Estoril Praia,2 - 2
+30,4,31/08/2025 17:00,Complexo Desportivo FC Alverca,FC Alverca,SL Benfica,1 - 2
+32,4,31/08/2025 19:30,Estádio de São Miguel,Santa Clara,Estrela Amadora,0 - 0
+36,4,31/08/2025 19:30,Estádio do Rio Ave FC,Rio Ave FC,SC Braga,2 - 2
+38,5,12/09/2025 19:15,Complexo Desportivo FC Alverca,FC Alverca,CD Tondela,1 - 0
+43,5,12/09/2025 19:15,Estádio da Luz,SL Benfica,Santa Clara,1 - 1
+41,5,13/09/2025 14:30,Parque Joaquim de Almeida Freitas,Moreirense FC,Rio Ave FC,3 - 1
+44,5,13/09/2025 14:30,Estadio António Coimbra da Mota,Estoril Praia,AFS,3 - 1
+45,5,13/09/2025 17:00,Estádio do Dragão,FC Porto,CD Nacional,1 - 0
+40,5,13/09/2025 19:30,Estádio Municipal de Famalicão,FC Famalicão,Sporting CP,1 - 2
+37,5,14/09/2025 14:30,Estádio José Gomes,Estrela Amadora,Vitória SC,0 - 2
+39,5,14/09/2025 17:00,Estádio Municipal de Arouca,FC Arouca,Casa Pia AC,0 - 2
+42,5,14/09/2025 19:30,Estádio Municipal de Braga,SC Braga,Gil Vicente FC,0 - 1
+52,6,19/09/2025 19:15,Estádio do Rio Ave FC,Rio Ave FC,FC Porto,0 - 3
+50,6,20/09/2025 14:30,Estádio de São Miguel,Santa Clara,FC Alverca,2 - 1
+51,6,20/09/2025 14:30,Estádio da Madeira,CD Nacional,FC Arouca,1 - 2
+46,6,20/09/2025 17:00,Estádio do CD Aves,AFS,SL Benfica,0 - 3
+54,6,20/09/2025 19:30,Estádio D. Afonso Henriques,Vitória SC,SC Braga,1 - 1
+49,6,21/09/2025 14:30,Estádio João Cardoso,CD Tondela,Estrela Amadora,0 - 0
+48,6,21/09/2025 17:00,Estádio Cidade de Barcelos,Gil Vicente FC,Estoril Praia,2 - 0
+47,6,21/09/2025 19:30,Estádio Municipal de Rio Maior,Casa Pia AC,FC Famalicão,1 - 1
+53,6,22/09/2025 19:15,Estádio José Alvalade,Sporting CP,Moreirense FC,3 - 0
+61,7,26/09/2025 19:15,Estádio da Luz,SL Benfica,Gil Vicente FC,2 - 1
+63,7,27/09/2025 14:30,Parque Joaquim de Almeida Freitas,Moreirense FC,Casa Pia AC,2 - 1
+59,7,27/09/2025 15:30,Estádio de São Miguel,Santa Clara,CD Tondela,1 - 2
+62,7,27/09/2025 17:00,Estádio José Gomes,Estrela Amadora,AFS,3 - 0
+55,7,27/09/2025 19:30,Estadio António Coimbra da Mota,Estoril Praia,Sporting CP,0 - 1
+56,7,28/09/2025 14:30,Complexo Desportivo FC Alverca,FC Alverca,Vitória SC,2 - 0
+60,7,28/09/2025 17:00,Estádio Municipal de Braga,SC Braga,CD Nacional,0 - 1
+58,7,28/09/2025 19:30,Estádio Municipal de Famalicão,FC Famalicão,Rio Ave FC,0 - 0
+57,7,29/09/2025 19:00,Estádio Municipal de Arouca,FC Arouca,FC Porto,0 - 4
+65,8,03/10/2025 19:15,Estádio Municipal de Rio Maior,Casa Pia AC,Estoril Praia,2 - 2
+68,8,04/10/2025 14:30,Estádio Cidade de Barcelos,Gil Vicente FC,Estrela Amadora,2 - 0
+69,8,04/10/2025 14:30,Estádio da Madeira,CD Nacional,Moreirense FC,3 - 2
+64,8,04/10/2025 17:00,Estádio do CD Aves,AFS,FC Alverca,1 - 3
+70,8,04/10/2025 19:30,Estádio D. Afonso Henriques,Vitória SC,Santa Clara,2 - 1
+66,8,05/10/2025 14:30,Estádio Municipal de Arouca,FC Arouca,FC Famalicão,1 - 1
+67,8,05/10/2025 16:30,Estádio do Rio Ave FC,Rio Ave FC,CD Tondela,3 - 0
+71,8,05/10/2025 18:15,Estádio José Alvalade,Sporting CP,SC Braga,1 - 1
+72,8,05/10/2025 20:15,Estádio do Dragão,FC Porto,SL Benfica,0 - 0
+75,9,24/10/2025 19:15,Complexo Desportivo FC Alverca,FC Alverca,Gil Vicente FC,0 - 4
+79,9,25/10/2025 17:00,Estádio de São Miguel,Santa Clara,AFS,2 - 0
+74,9,25/10/2025 19:30,Estádio José Gomes,Estrela Amadora,Rio Ave FC,1 - 2
+80,9,25/10/2025 19:30,Estádio da Luz,SL Benfica,FC Arouca,5 - 0
+73,9,26/10/2025 15:30,Estadio António Coimbra da Mota,Estoril Praia,CD Nacional,1 - 1
+76,9,26/10/2025 15:30,Estádio Municipal de Famalicão,FC Famalicão,Vitória SC,2 - 0
+81,9,26/10/2025 18:00,Estádio João Cardoso,CD Tondela,Sporting CP,0 - 3
+78,9,26/10/2025 20:30,Estádio Municipal de Braga,SC Braga,Casa Pia AC,4 - 0
+77,9,27/10/2025 20:15,Parque Joaquim de Almeida Freitas,Moreirense FC,FC Porto,1 - 2
+86,10,31/10/2025 20:15,Estádio José Alvalade,Sporting CP,FC Alverca,2 - 0
+87,10,01/11/2025 15:30,Estádio da Madeira,CD Nacional,FC Famalicão,0 - 1
+83,10,01/11/2025 18:00,Estádio Municipal de Rio Maior,Casa Pia AC,Estrela Amadora,3 - 5
+85,10,01/11/2025 18:00,Estádio do Rio Ave FC,Rio Ave FC,Estoril Praia,0 - 4
+90,10,01/11/2025 20:30,Estádio D. Afonso Henriques,Vitória SC,SL Benfica,0 - 3
+82,10,02/11/2025 15:30,Estádio do CD Aves,AFS,CD Tondela,2 - 2
+84,10,02/11/2025 18:00,Estádio Municipal de Arouca,FC Arouca,Moreirense FC,0 - 2
+89,10,02/11/2025 20:30,Estádio do Dragão,FC Porto,SC Braga,2 - 1
+88,10,03/11/2025 20:45,Estádio Cidade de Barcelos,Gil Vicente FC,Santa Clara,1 - 0
+98,11,07/11/2025 20:15,Estadio António Coimbra da Mota,Estoril Praia,FC Arouca,4 - 3
+93,11,08/11/2025 15:30,Complexo Desportivo FC Alverca,FC Alverca,Rio Ave FC,1 - 1
+99,11,08/11/2025 18:00,Estádio João Cardoso,CD Tondela,Vitória SC,0 - 1
+95,11,08/11/2025 20:30,Estádio de São Miguel,Santa Clara,Sporting CP,1 - 2
+91,11,09/11/2025 15:30,Estádio do CD Aves,AFS,Gil Vicente FC,1 - 1
+92,11,09/11/2025 15:30,Estádio José Gomes,Estrela Amadora,CD Nacional,1 - 1
+94,11,09/11/2025 18:00,Estádio Municipal de Famalicão,FC Famalicão,FC Porto,0 - 1
+96,11,09/11/2025 20:30,Estádio Municipal de Braga,SC Braga,Moreirense FC,2 - 1
+97,11,09/11/2025 20:30,Estádio da Luz,SL Benfica,Casa Pia AC,2 - 2
+102,12,28/11/2025 20:15,Estádio D. Afonso Henriques,Vitória SC,AFS,
+105,12,29/11/2025 15:30,Estádio Municipal de Rio Maior,Casa Pia AC,FC Alverca,
+106,12,29/11/2025 15:30,Parque Joaquim de Almeida Freitas,Moreirense FC,FC Famalicão,
+108,12,29/11/2025 18:00,Estádio da Madeira,CD Nacional,SL Benfica,
+101,12,29/11/2025 20:30,Estádio Cidade de Barcelos,Gil Vicente FC,CD Tondela,
+107,12,30/11/2025 15:30,Estádio do Rio Ave FC,Rio Ave FC,Santa Clara,
+104,12,30/11/2025 18:00,Estádio José Alvalade,Sporting CP,Estrela Amadora,
+103,12,30/11/2025 20:30,Estádio do Dragão,FC Porto,Estoril Praia,
+100,12,01/12/2025 20:15,Estádio Municipal de Arouca,FC Arouca,SC Braga,
+113,13,05/12/2025 20:15,Estádio da Luz,SL Benfica,Sporting CP,
+112,13,06/12/2025 15:30,Estádio de São Miguel,Santa Clara,Casa Pia AC,
+109,13,06/12/2025 18:00,Estádio do CD Aves,AFS,Rio Ave FC,
+117,13,06/12/2025 20:30,Estádio Municipal de Famalicão,FC Famalicão,SC Braga,
+110,13,07/12/2025 15:30,Estadio António Coimbra da Mota,Estoril Praia,Moreirense FC,
+111,13,07/12/2025 18:00,Complexo Desportivo FC Alverca,FC Alverca,CD Nacional,
+115,13,07/12/2025 18:00,Estádio José Gomes,Estrela Amadora,FC Arouca,
+116,13,07/12/2025 20:30,Estádio João Cardoso,CD Tondela,FC Porto,
+114,13,08/12/2025 20:30,Estádio D. Afonso Henriques,Vitória SC,Gil Vicente FC,
+118,14,14/12/2025 15:30,Estádio Municipal de Rio Maior,Casa Pia AC,Gil Vicente FC,
+119,14,14/12/2025 15:30,Estádio da Madeira,CD Nacional,CD Tondela,
+120,14,14/12/2025 15:30,Estádio Municipal de Braga,SC Braga,Santa Clara,
+121,14,14/12/2025 15:30,Estádio José Alvalade,Sporting CP,AFS,
+122,14,14/12/2025 15:30,Estádio Municipal de Famalicão,FC Famalicão,Estoril Praia,
+123,14,14/12/2025 15:30,Estádio do Dragão,FC Porto,Estrela Amadora,
+124,14,14/12/2025 15:30,Estádio Municipal de Arouca,FC Arouca,FC Alverca,
+125,14,14/12/2025 15:30,Parque Joaquim de Almeida Freitas,Moreirense FC,SL Benfica,
+126,14,14/12/2025 15:30,Estádio do Rio Ave FC,Rio Ave FC,Vitória SC,
+127,15,21/12/2025 15:30,Estádio do CD Aves,AFS,CD Nacional,
+128,15,21/12/2025 15:30,Estádio José Gomes,Estrela Amadora,Moreirense FC,
+129,15,21/12/2025 15:30,Complexo Desportivo FC Alverca,FC Alverca,FC Porto,
+130,15,21/12/2025 15:30,Estádio Cidade de Barcelos,Gil Vicente FC,Rio Ave FC,
+131,15,21/12/2025 15:30,Estádio da Luz,SL Benfica,FC Famalicão,
+132,15,21/12/2025 15:30,Estádio D. Afonso Henriques,Vitória SC,Sporting CP,
+133,15,21/12/2025 15:30,Estádio João Cardoso,CD Tondela,Casa Pia AC,
+134,15,21/12/2025 15:30,Estádio de São Miguel,Santa Clara,FC Arouca,
+135,15,21/12/2025 15:30,Estadio António Coimbra da Mota,Estoril Praia,SC Braga,
+136,16,28/12/2025 15:30,Estádio Municipal de Rio Maior,Casa Pia AC,Vitória SC,
+137,16,28/12/2025 15:30,Estádio Municipal de Arouca,FC Arouca,Gil Vicente FC,
+138,16,28/12/2025 15:30,Parque Joaquim de Almeida Freitas,Moreirense FC,CD Tondela,
+139,16,28/12/2025 15:30,Estádio do Dragão,FC Porto,AFS,
+140,16,28/12/2025 15:30,Estádio Municipal de Famalicão,FC Famalicão,Estrela Amadora,
+141,16,28/12/2025 15:30,Estadio António Coimbra da Mota,Estoril Praia,FC Alverca,
+142,16,28/12/2025 15:30,Estádio José Alvalade,Sporting CP,Rio Ave FC,
+143,16,28/12/2025 15:30,Estádio da Madeira,CD Nacional,Santa Clara,
+144,16,28/12/2025 15:30,Estádio Municipal de Braga,SC Braga,SL Benfica,
+145,17,04/01/2026 15:30,Estádio do CD Aves,AFS,Moreirense FC,
+146,17,04/01/2026 15:30,Complexo Desportivo FC Alverca,FC Alverca,FC Famalicão,
+147,17,04/01/2026 15:30,Estádio Cidade de Barcelos,Gil Vicente FC,Sporting CP,
+148,17,04/01/2026 15:30,Estádio de São Miguel,Santa Clara,FC Porto,
+149,17,04/01/2026 15:30,Estádio da Luz,SL Benfica,Estoril Praia,
+150,17,04/01/2026 15:30,Estádio D. Afonso Henriques,Vitória SC,CD Nacional,
+151,17,04/01/2026 15:30,Estádio do Rio Ave FC,Rio Ave FC,Casa Pia AC,
+152,17,04/01/2026 15:30,Estádio João Cardoso,CD Tondela,FC Arouca,
+153,17,04/01/2026 15:30,Estádio José Gomes,Estrela Amadora,SC Braga,
+154,18,18/01/2026 15:30,Estádio José Alvalade,Sporting CP,Casa Pia AC,
+155,18,18/01/2026 15:30,Estádio João Cardoso,CD Tondela,SC Braga,
+156,18,18/01/2026 15:30,Estádio do Rio Ave FC,Rio Ave FC,SL Benfica,
+157,18,18/01/2026 15:30,Estádio do CD Aves,AFS,FC Arouca,
+158,18,18/01/2026 15:30,Estádio José Gomes,Estrela Amadora,Estoril Praia,
+159,18,18/01/2026 15:30,Complexo Desportivo FC Alverca,FC Alverca,Moreirense FC,
+160,18,18/01/2026 15:30,Estádio Cidade de Barcelos,Gil Vicente FC,CD Nacional,
+161,18,18/01/2026 15:30,Estádio de São Miguel,Santa Clara,FC Famalicão,
+162,18,18/01/2026 15:30,Estádio D. Afonso Henriques,Vitória SC,FC Porto,
+163,19,25/01/2026 15:30,Estádio Municipal de Rio Maior,Casa Pia AC,AFS,
+164,19,25/01/2026 15:30,Estádio Municipal de Braga,SC Braga,FC Alverca,
+165,19,25/01/2026 15:30,Estádio do Dragão,FC Porto,Gil Vicente FC,
+166,19,25/01/2026 15:30,Parque Joaquim de Almeida Freitas,Moreirense FC,Santa Clara,
+167,19,25/01/2026 15:30,Estádio da Madeira,CD Nacional,Rio Ave FC,
+168,19,25/01/2026 15:30,Estadio António Coimbra da Mota,Estoril Praia,Vitória SC,
+169,19,25/01/2026 15:30,Estádio Municipal de Arouca,FC Arouca,Sporting CP,
+170,19,25/01/2026 15:30,Estádio Municipal de Famalicão,FC Famalicão,CD Tondela,
+171,19,25/01/2026 15:30,Estádio da Luz,SL Benfica,Estrela Amadora,
+172,20,01/02/2026 15:30,Estádio José Alvalade,Sporting CP,CD Nacional,
+173,20,01/02/2026 15:30,Estádio do Rio Ave FC,Rio Ave FC,FC Arouca,
+174,20,01/02/2026 15:30,Estádio Cidade de Barcelos,Gil Vicente FC,FC Famalicão,
+175,20,01/02/2026 15:30,Estádio João Cardoso,CD Tondela,SL Benfica,
+176,20,01/02/2026 15:30,Estádio do CD Aves,AFS,SC Braga,
+177,20,01/02/2026 15:30,Estádio Municipal de Rio Maior,Casa Pia AC,FC Porto,
+178,20,01/02/2026 15:30,Complexo Desportivo FC Alverca,FC Alverca,Estrela Amadora,
+179,20,01/02/2026 15:30,Estádio de São Miguel,Santa Clara,Estoril Praia,
+180,20,01/02/2026 15:30,Estádio D. Afonso Henriques,Vitória SC,Moreirense FC,
+181,21,08/02/2026 15:30,Estádio Municipal de Famalicão,FC Famalicão,AFS,
+182,21,08/02/2026 15:30,Estádio da Madeira,CD Nacional,Casa Pia AC,
+183,21,08/02/2026 15:30,Estádio da Luz,SL Benfica,FC Alverca,
+184,21,08/02/2026 15:30,Parque Joaquim de Almeida Freitas,Moreirense FC,Gil Vicente FC,
+185,21,08/02/2026 15:30,Estádio José Gomes,Estrela Amadora,Santa Clara,
+186,21,08/02/2026 15:30,Estadio António Coimbra da Mota,Estoril Praia,CD Tondela,
+187,21,08/02/2026 15:30,Estádio Municipal de Arouca,FC Arouca,Vitória SC,
+188,21,08/02/2026 15:30,Estádio do Dragão,FC Porto,Sporting CP,
+189,21,08/02/2026 15:30,Estádio Municipal de Braga,SC Braga,Rio Ave FC,
+190,22,15/02/2026 15:30,Estádio D. Afonso Henriques,Vitória SC,Estrela Amadora,
+191,22,15/02/2026 15:30,Estádio João Cardoso,CD Tondela,FC Alverca,
+192,22,15/02/2026 15:30,Estádio Municipal de Rio Maior,Casa Pia AC,FC Arouca,
+193,22,15/02/2026 15:30,Estádio José Alvalade,Sporting CP,FC Famalicão,
+194,22,15/02/2026 15:30,Estádio do Rio Ave FC,Rio Ave FC,Moreirense FC,
+195,22,15/02/2026 15:30,Estádio Cidade de Barcelos,Gil Vicente FC,SC Braga,
+196,22,15/02/2026 15:30,Estádio de São Miguel,Santa Clara,SL Benfica,
+197,22,15/02/2026 15:30,Estádio do CD Aves,AFS,Estoril Praia,
+198,22,15/02/2026 15:30,Estádio da Madeira,CD Nacional,FC Porto,
+199,23,22/02/2026 15:30,Estádio da Luz,SL Benfica,AFS,
+200,23,22/02/2026 15:30,Estádio Municipal de Famalicão,FC Famalicão,Casa Pia AC,
+201,23,22/02/2026 15:30,Estadio António Coimbra da Mota,Estoril Praia,Gil Vicente FC,
+202,23,22/02/2026 15:30,Estádio José Gomes,Estrela Amadora,CD Tondela,
+203,23,22/02/2026 15:30,Complexo Desportivo FC Alverca,FC Alverca,Santa Clara,
+204,23,22/02/2026 15:30,Estádio Municipal de Arouca,FC Arouca,CD Nacional,
+205,23,22/02/2026 15:30,Estádio do Dragão,FC Porto,Rio Ave FC,
+206,23,22/02/2026 15:30,Parque Joaquim de Almeida Freitas,Moreirense FC,Sporting CP,
+207,23,22/02/2026 15:30,Estádio Municipal de Braga,SC Braga,Vitória SC,
+208,24,01/03/2026 15:30,Estádio José Alvalade,Sporting CP,Estoril Praia,
+209,24,01/03/2026 15:30,Estádio D. Afonso Henriques,Vitória SC,FC Alverca,
+210,24,01/03/2026 15:30,Estádio do Dragão,FC Porto,FC Arouca,
+211,24,01/03/2026 15:30,Estádio do Rio Ave FC,Rio Ave FC,FC Famalicão,
+212,24,01/03/2026 15:30,Estádio João Cardoso,CD Tondela,Santa Clara,
+213,24,01/03/2026 15:30,Estádio da Madeira,CD Nacional,SC Braga,
+214,24,01/03/2026 15:30,Estádio Cidade de Barcelos,Gil Vicente FC,SL Benfica,
+215,24,01/03/2026 15:30,Estádio do CD Aves,AFS,Estrela Amadora,
+216,24,01/03/2026 15:30,Estádio Municipal de Rio Maior,Casa Pia AC,Moreirense FC,
+217,25,08/03/2026 15:30,Complexo Desportivo FC Alverca,FC Alverca,AFS,
+218,25,08/03/2026 15:30,Estadio António Coimbra da Mota,Estoril Praia,Casa Pia AC,
+219,25,08/03/2026 15:30,Estádio Municipal de Famalicão,FC Famalicão,FC Arouca,
+220,25,08/03/2026 15:30,Estádio João Cardoso,CD Tondela,Rio Ave FC,
+221,25,08/03/2026 15:30,Estádio José Gomes,Estrela Amadora,Gil Vicente FC,
+222,25,08/03/2026 15:30,Parque Joaquim de Almeida Freitas,Moreirense FC,CD Nacional,
+223,25,08/03/2026 15:30,Estádio de São Miguel,Santa Clara,Vitória SC,
+224,25,08/03/2026 15:30,Estádio Municipal de Braga,SC Braga,Sporting CP,
+225,25,08/03/2026 15:30,Estádio da Luz,SL Benfica,FC Porto,
+226,26,15/03/2026 15:30,Estádio da Madeira,CD Nacional,Estoril Praia,
+227,26,15/03/2026 15:30,Estádio do Rio Ave FC,Rio Ave FC,Estrela Amadora,
+228,26,15/03/2026 15:30,Estádio Cidade de Barcelos,Gil Vicente FC,FC Alverca,
+229,26,15/03/2026 15:30,Estádio D. Afonso Henriques,Vitória SC,FC Famalicão,
+230,26,15/03/2026 15:30,Estádio do Dragão,FC Porto,Moreirense FC,
+231,26,15/03/2026 15:30,Estádio Municipal de Rio Maior,Casa Pia AC,SC Braga,
+232,26,15/03/2026 15:30,Estádio do CD Aves,AFS,Santa Clara,
+233,26,15/03/2026 15:30,Estádio Municipal de Arouca,FC Arouca,SL Benfica,
+234,26,15/03/2026 15:30,Estádio José Alvalade,Sporting CP,CD Tondela,
+235,27,22/03/2026 15:30,Estádio João Cardoso,CD Tondela,AFS,
+236,27,22/03/2026 15:30,Estádio José Gomes,Estrela Amadora,Casa Pia AC,
+237,27,22/03/2026 15:30,Parque Joaquim de Almeida Freitas,Moreirense FC,FC Arouca,
+238,27,22/03/2026 15:30,Estadio António Coimbra da Mota,Estoril Praia,Rio Ave FC,
+239,27,22/03/2026 15:30,Complexo Desportivo FC Alverca,FC Alverca,Sporting CP,
+240,27,22/03/2026 15:30,Estádio Municipal de Famalicão,FC Famalicão,CD Nacional,
+241,27,22/03/2026 15:30,Estádio de São Miguel,Santa Clara,Gil Vicente FC,
+242,27,22/03/2026 15:30,Estádio Municipal de Braga,SC Braga,FC Porto,
+243,27,22/03/2026 15:30,Estádio da Luz,SL Benfica,Vitória SC,
+244,28,03/04/2026 15:30,Estádio Cidade de Barcelos,Gil Vicente FC,AFS,
+245,28,03/04/2026 15:30,Estádio da Madeira,CD Nacional,Estrela Amadora,
+246,28,03/04/2026 15:30,Estádio do Rio Ave FC,Rio Ave FC,FC Alverca,
+247,28,03/04/2026 15:30,Estádio do Dragão,FC Porto,FC Famalicão,
+248,28,03/04/2026 15:30,Estádio José Alvalade,Sporting CP,Santa Clara,
+249,28,03/04/2026 15:30,Parque Joaquim de Almeida Freitas,Moreirense FC,SC Braga,
+250,28,03/04/2026 15:30,Estádio Municipal de Rio Maior,Casa Pia AC,SL Benfica,
+251,28,03/04/2026 15:30,Estádio Municipal de Arouca,FC Arouca,Estoril Praia,
+252,28,03/04/2026 15:30,Estádio D. Afonso Henriques,Vitória SC,CD Tondela,
+253,29,11/04/2026 15:30,Estádio Municipal de Braga,SC Braga,FC Arouca,
+254,29,11/04/2026 15:30,Estádio João Cardoso,CD Tondela,Gil Vicente FC,
+255,29,11/04/2026 15:30,Estádio do CD Aves,AFS,Vitória SC,
+256,29,11/04/2026 15:30,Estadio António Coimbra da Mota,Estoril Praia,FC Porto,
+257,29,11/04/2026 15:30,Estádio José Gomes,Estrela Amadora,Sporting CP,
+258,29,11/04/2026 15:30,Complexo Desportivo FC Alverca,FC Alverca,Casa Pia AC,
+259,29,11/04/2026 15:30,Estádio Municipal de Famalicão,FC Famalicão,Moreirense FC,
+260,29,11/04/2026 15:30,Estádio de São Miguel,Santa Clara,Rio Ave FC,
+261,29,11/04/2026 15:30,Estádio da Luz,SL Benfica,CD Nacional,
+262,30,18/04/2026 15:30,Estádio do Rio Ave FC,Rio Ave FC,AFS,
+263,30,18/04/2026 15:30,Parque Joaquim de Almeida Freitas,Moreirense FC,Estoril Praia,
+264,30,18/04/2026 15:30,Estádio da Madeira,CD Nacional,FC Alverca,
+265,30,18/04/2026 15:30,Estádio Municipal de Rio Maior,Casa Pia AC,Santa Clara,
+266,30,18/04/2026 15:30,Estádio José Alvalade,Sporting CP,SL Benfica,
+267,30,18/04/2026 15:30,Estádio Cidade de Barcelos,Gil Vicente FC,Vitória SC,
+268,30,18/04/2026 15:30,Estádio Municipal de Arouca,FC Arouca,Estrela Amadora,
+269,30,18/04/2026 15:30,Estádio do Dragão,FC Porto,CD Tondela,
+270,30,18/04/2026 15:30,Estádio Municipal de Braga,SC Braga,FC Famalicão,
+271,31,25/04/2026 15:30,Estádio Cidade de Barcelos,Gil Vicente FC,Casa Pia AC,
+272,31,25/04/2026 15:30,Estádio João Cardoso,CD Tondela,CD Nacional,
+273,31,25/04/2026 15:30,Estádio de São Miguel,Santa Clara,SC Braga,
+274,31,25/04/2026 15:30,Estádio do CD Aves,AFS,Sporting CP,
+275,31,25/04/2026 15:30,Estadio António Coimbra da Mota,Estoril Praia,FC Famalicão,
+276,31,25/04/2026 15:30,Estádio José Gomes,Estrela Amadora,FC Porto,
+277,31,25/04/2026 15:30,Complexo Desportivo FC Alverca,FC Alverca,FC Arouca,
+278,31,25/04/2026 15:30,Estádio da Luz,SL Benfica,Moreirense FC,
+279,31,25/04/2026 15:30,Estádio D. Afonso Henriques,Vitória SC,Rio Ave FC,
+280,32,02/05/2026 15:30,Estádio da Madeira,CD Nacional,AFS,
+281,32,02/05/2026 15:30,Parque Joaquim de Almeida Freitas,Moreirense FC,Estrela Amadora,
+282,32,02/05/2026 15:30,Estádio do Dragão,FC Porto,FC Alverca,
+283,32,02/05/2026 15:30,Estádio do Rio Ave FC,Rio Ave FC,Gil Vicente FC,
+284,32,02/05/2026 15:30,Estádio Municipal de Famalicão,FC Famalicão,SL Benfica,
+285,32,02/05/2026 15:30,Estádio José Alvalade,Sporting CP,Vitória SC,
+286,32,02/05/2026 15:30,Estádio Municipal de Rio Maior,Casa Pia AC,CD Tondela,
+287,32,02/05/2026 15:30,Estádio Municipal de Arouca,FC Arouca,Santa Clara,
+288,32,02/05/2026 15:30,Estádio Municipal de Braga,SC Braga,Estoril Praia,
+289,33,09/05/2026 15:30,Estádio D. Afonso Henriques,Vitória SC,Casa Pia AC,
+290,33,09/05/2026 15:30,Estádio Cidade de Barcelos,Gil Vicente FC,FC Arouca,
+291,33,09/05/2026 15:30,Estádio João Cardoso,CD Tondela,Moreirense FC,
+292,33,09/05/2026 15:30,Estádio do CD Aves,AFS,FC Porto,
+293,33,09/05/2026 15:30,Estádio José Gomes,Estrela Amadora,FC Famalicão,
+294,33,09/05/2026 15:30,Complexo Desportivo FC Alverca,FC Alverca,Estoril Praia,
+295,33,09/05/2026 15:30,Estádio do Rio Ave FC,Rio Ave FC,Sporting CP,
+296,33,09/05/2026 15:30,Estádio de São Miguel,Santa Clara,CD Nacional,
+297,33,09/05/2026 15:30,Estádio da Luz,SL Benfica,SC Braga,
+298,34,16/05/2026 15:30,Parque Joaquim de Almeida Freitas,Moreirense FC,AFS,
+299,34,16/05/2026 15:30,Estádio Municipal de Famalicão,FC Famalicão,FC Alverca,
+300,34,16/05/2026 15:30,Estádio José Alvalade,Sporting CP,Gil Vicente FC,
+301,34,16/05/2026 15:30,Estádio do Dragão,FC Porto,Santa Clara,
+302,34,16/05/2026 15:30,Estadio António Coimbra da Mota,Estoril Praia,SL Benfica,
+303,34,16/05/2026 15:30,Estádio da Madeira,CD Nacional,Vitória SC,
+304,34,16/05/2026 15:30,Estádio Municipal de Rio Maior,Casa Pia AC,Rio Ave FC,
+305,34,16/05/2026 15:30,Estádio Municipal de Arouca,FC Arouca,CD Tondela,
+306,34,16/05/2026 15:30,Estádio Municipal de Braga,SC Braga,Estrela Amadora,

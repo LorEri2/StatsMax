@@ -17,15 +17,25 @@ LIGUES_A_IGNORER = []
 # 1. CONFIGURATION & DICTIONNAIRES
 # ==============================================================================
 LEAGUE_NAME_MAPPING = {
-    'E0': 'Premier League', 'E1': 'Championship', 'D1': 'Bundesliga',
-    'D2': 'Bundesliga 2', 'F1': 'Ligue 1', 'F2': 'Ligue 2',
-    'I1': 'Serie A', 'I2': 'Serie B', 'SP1': 'La Liga',
-    'SP2': 'La Liga 2', 'N1': 'Eredivisie', 'P1': 'Liga Portugal',
-    'B1': 'Jupiler Pro League', 'SC0': 'Scottish Premiership',
-    'T1': 'Süper Lig (Turquie)', 'G1': 'Super League (Grèce)',
-    'la-liga-2025': 'La Liga (2025)', 'premier-league-2025': 'Premier League (2025)',
-    'ligue-1-2025': 'Ligue 1 (2025)', 'serie-a-2025': 'Serie A (2025)',
-    'bundesliga-2025': 'Bundesliga (2025)',
+    'epl-2025-GMTStandardTime': 'Premier League', 
+    'championship-2025-GMTStandardTime': 'Championship', 
+    'bundesliga-2025-UTC': 'Bundesliga',
+    'D2': 'Bundesliga 2', #A faire
+    'ligue-1-2025-UTC': 'Ligue 1', 
+    'F2': 'Ligue 2', # A faire
+    'serie-a-2025-UTC': 'Serie A', 
+    'I2': 'Serie B', # A faire
+    'SP2': 'La Liga 2', # A faire
+    'primeira-liga-2025-UTC': 'Liga Portugal',
+    'B1': 'Jupiler Pro League',# A faire
+    'SC0': 'Scottish Premiership',# A faire
+    'super-lig-2025-TurkeyStandardTime': 'Süper Lig',
+    'G1': 'Super League (Grèce)',# A faire
+    'eredivisie-2025-WEuropeStandardTime': 'Eredivisie',
+    'la-liga-2025-UTC': 'La Liga',
+
+
+
 }
 
 STATS_COLUMNS_BASE = [
@@ -94,71 +104,182 @@ def calculer_score_forme(df_equipe, equipe):
     return sum(scores), ", ".join(reversed(res_str))
 
 # ==============================================================================
-# 3. CHARGEMENT DES DONNÉES
+# 3. CHARGEMENT ET NORMALISATION DES DONNÉES
 # ==============================================================================
 
-def charger_csvs_locaux(liste_fichiers):
-    dfs = []
-    print(f"Chargement de {len(liste_fichiers)} fichiers CSV...")
+def normaliser_csv_specifique(df):
+    """Convertit le format 'Match Number, Result' en format standard 'FTHG, FTAG'."""
+    if 'Home Team' in df.columns:
+        df.rename(columns={'Home Team': 'HomeTeam', 'Away Team': 'AwayTeam'}, inplace=True)
+        
+    # 2. Gérer le score "1 - 3" dans la colonne "Result"
+    if 'Result' in df.columns:
+        # Créer les colonnes si elles n'existent pas
+        if 'FTHG' not in df.columns: df['FTHG'] = np.nan
+        if 'FTAG' not in df.columns: df['FTAG'] = np.nan
+        
+        try:
+            # On prend les lignes avec score et on fait une copie
+            mask_score = df['Result'].notna() & (df['Result'] != '')
+            df_score = df.loc[mask_score].copy()
+            
+            if not df_score.empty:
+                split_data = df_score['Result'].str.split(' - ', expand=True)
+                if len(split_data.columns) == 2:
+                    # On assigne les valeurs converties
+                    df.loc[mask_score, 'FTHG'] = pd.to_numeric(split_data[0].str.strip(), errors='coerce')
+                    df.loc[mask_score, 'FTAG'] = pd.to_numeric(split_data[1].str.strip(), errors='coerce')
+                    
+                    # Calculer le FTR
+                    conditions = [
+                        (df['FTHG'] > df['FTAG']),
+                        (df['FTHG'] < df['FTAG'])
+                    ]
+                    choices = ['H', 'A']
+                    df.loc[mask_score, 'FTR'] = np.select(conditions, choices, default='D')
+        except Exception as e:
+            print(f"Erreur parsing scores: {e}")
+
+    if 'HTHG' not in df.columns: df['HTHG'] = 0
+    if 'HTAG' not in df.columns: df['HTAG'] = 0
+    
+    return df
+
+def charger_tout_depuis_csv(liste_fichiers):
+    """Charge tout, fusionne et NETTOIE LES DOUBLONS."""
+    
+    all_dfs = []
+    print(f"Chargement de {len(liste_fichiers)} fichiers...")
+    
+    # 1. Chargement Brut
     for f in liste_fichiers:
         try:
             df_t = pd.read_csv(f, on_bad_lines='skip')
         except:
             try: df_t = pd.read_csv(f, encoding='latin1', on_bad_lines='skip')
             except: continue
+        
+        df_t = normaliser_csv_specifique(df_t)
+        
+        # Date Parsing
         df_t['Date'] = pd.to_datetime(df_t['Date'], dayfirst=True, errors='coerce')
         if df_t['Date'].isna().all():
              df_t = pd.read_csv(f, on_bad_lines='skip')
+             df_t = normaliser_csv_specifique(df_t)
              df_t['Date'] = pd.to_datetime(df_t['Date'], dayfirst=False, errors='coerce')
+        
         df_t['LeagueCode'] = os.path.basename(f).replace('.csv', '')
-        dfs.append(df_t)
-    if not dfs: return None
-    df_final = pd.concat(dfs, ignore_index=True)
+        all_dfs.append(df_t)
+        
+    if not all_dfs: return None, pd.DataFrame()
+    
+    # 2. Fusion Globale
+    df_master = pd.concat(all_dfs, ignore_index=True)
+    
+    # 3. NETTOYAGE DES DOUBLONS (CRUCIAL)
+    # On veut garder la ligne qui a un score (FTHG) si elle existe.
+    # On trie : les lignes avec FTHG valide (non NaN) en premier (ou dernier selon le sort)
+    # En Pandas, sort_values met les NaN à la fin par défaut.
+    # Donc si on garde le 'first', on garde celui qui a un score.
+    if 'FTHG' in df_master.columns:
+        df_master = df_master.sort_values(by=['Date', 'FTHG'], na_position='last')
+    
+    # On supprime les doublons basés sur Date + Equipes
+    # (Si deux fichiers contiennent le même match, on en garde un seul)
+    taille_avant = len(df_master)
+    df_master = df_master.drop_duplicates(subset=['Date', 'HomeTeam', 'AwayTeam'], keep='first')
+    taille_apres = len(df_master)
+    
+    if taille_avant > taille_apres:
+        print(f"🧹 Nettoyage : {taille_avant - taille_apres} matchs en double supprimés.")
+
+    # 4. Séparation Historique / Futur
     cols_req = ['Date', 'HomeTeam', 'AwayTeam']
-    df_final = df_final.dropna(subset=cols_req)
-    df_final = df_final.dropna(subset=['Date'])
+    df_master = df_master.dropna(subset=cols_req)
+    
+    # Un match est "JOUÉ" s'il a un score FTHG (et n'est pas NaN)
+    mask_joue = df_master['FTHG'].notna()
+    
+    df_final_hist = df_master[mask_joue].copy()
+    
+    # Futur : Pas de score ET date >= aujourd'hui
+    df_final_future = df_master[~mask_joue].copy()
+    df_final_future = df_final_future[df_final_future['Date'] >= pd.Timestamp.now().normalize()]
+    
+    # Nettoyage Historique Stats
     for col in ['FTHG', 'FTAG', 'HTHG', 'HTAG']:
-        if col in df_final.columns:
-            df_final[col] = pd.to_numeric(df_final[col], errors='coerce').fillna(0)
-    if 'FTHG' in df_final.columns:
-        df_final['TotalGoals'] = df_final['FTHG'] + df_final['FTAG']
-        df_final['Cond_Moins_0_5_FT'] = df_final['TotalGoals'] < 0.5
-        df_final['Cond_Plus_1_5_FT'] = df_final['TotalGoals'] > 1.5
-        df_final['Cond_Moins_1_5_FT'] = df_final['TotalGoals'] < 1.5
-        df_final['Cond_Plus_2_5_FT'] = df_final['TotalGoals'] > 2.5
-        df_final['Cond_Moins_2_5_FT'] = df_final['TotalGoals'] < 2.5
-        df_final['Cond_Plus_3_5_FT'] = df_final['TotalGoals'] > 3.5
-        df_final['Cond_Moins_3_5_FT'] = df_final['TotalGoals'] < 3.5
-    if 'HTHG' in df_final.columns:
-        df_final['TotalHTGoals'] = df_final['HTHG'] + df_final['HTAG']
-        df_final['Cond_Plus_0_5_HT'] = df_final['TotalHTGoals'] > 0.5
-        df_final['Cond_Moins_0_5_HT'] = df_final['TotalHTGoals'] < 0.5
-        df_final['Cond_Plus_1_5_HT'] = df_final['TotalHTGoals'] > 1.5
-        df_final['Cond_Moins_1_5_HT'] = df_final['TotalHTGoals'] < 1.5
-    if 'FTR' in df_final.columns:
-        df_final['FTR'] = df_final['FTR'].fillna('NA')
-        df_final['Cond_Draw_FT'] = df_final['FTR'] == 'D'
-    return df_final.sort_values('Date')
+        if col in df_final_hist.columns:
+            df_final_hist[col] = pd.to_numeric(df_final_hist[col], errors='coerce').fillna(0)
+            
+    # Booléens
+    if 'FTHG' in df_final_hist.columns:
+        df_final_hist['TotalGoals'] = df_final_hist['FTHG'] + df_final_hist['FTAG']
+        df_final_hist['Cond_Moins_0_5_FT'] = df_final_hist['TotalGoals'] < 0.5
+        df_final_hist['Cond_Plus_1_5_FT'] = df_final_hist['TotalGoals'] > 1.5
+        df_final_hist['Cond_Moins_1_5_FT'] = df_final_hist['TotalGoals'] < 1.5
+        df_final_hist['Cond_Plus_2_5_FT'] = df_final_hist['TotalGoals'] > 2.5
+        df_final_hist['Cond_Moins_2_5_FT'] = df_final_hist['TotalGoals'] < 2.5
+        df_final_hist['Cond_Plus_3_5_FT'] = df_final_hist['TotalGoals'] > 3.5
+        df_final_hist['Cond_Moins_3_5_FT'] = df_final_hist['TotalGoals'] < 3.5
+    if 'HTHG' in df_final_hist.columns:
+        df_final_hist['TotalHTGoals'] = df_final_hist['HTHG'] + df_final_hist['HTAG']
+        df_final_hist['Cond_Plus_0_5_HT'] = df_final_hist['TotalHTGoals'] > 0.5
+        df_final_hist['Cond_Moins_0_5_HT'] = df_final_hist['TotalHTGoals'] < 0.5
+        df_final_hist['Cond_Plus_1_5_HT'] = df_final_hist['TotalHTGoals'] > 1.5
+        df_final_hist['Cond_Moins_1_5_HT'] = df_final_hist['TotalHTGoals'] < 1.5
+    if 'FTR' in df_final_hist.columns:
+        df_final_hist['FTR'] = df_final_hist['FTR'].fillna('NA')
+        df_final_hist['Cond_Draw_FT'] = df_final_hist['FTR'] == 'D'
+        
+    return df_final_hist.sort_values('Date'), df_final_future.sort_values('Date')
 
 def decouvrir_ligues(dossier):
     fichiers = glob.glob(f"{dossier}/**/*.csv", recursive=True)
     ligues = {}
+    print("\nRecherche des fichiers (Filtre activé)...")
     for f in fichiers:
         code = os.path.basename(f).replace('.csv', '')
-        if code in LIGUES_A_IGNORER: continue
-        if code.lower() == 'fixtures': continue
+        
+        # FILTRE SUR LE DICTIONNAIRE UTILISATEUR
+        if code not in LEAGUE_NAME_MAPPING: 
+            continue
+            
+        if code.lower() == 'fixtures': continue 
         try:
             df = pd.read_csv(f, encoding='latin1', on_bad_lines='skip')
+            # Petite pré-lecture
+            if 'Home Team' in df.columns: 
+                df.rename(columns={'Home Team': 'HomeTeam', 'Away Team': 'AwayTeam'}, inplace=True)
+            
             teams = sorted(list(set(df['HomeTeam'].dropna()) | set(df['AwayTeam'].dropna())))
-            if teams: ligues[code] = teams
+            if teams: 
+                ligues[code] = teams
+                print(f"  ✅ Ajouté: {code}")
         except: pass
     return ligues, fichiers
 
+def charger_fixtures_externes(dossier):
+    """Charge le fichier fixtures.csv global (pour les ligues D2/D3)."""
+    fichier = os.path.join(dossier, "fixtures.csv")
+    if not os.path.exists(fichier): return pd.DataFrame()
+    try:
+        df = pd.read_csv(fichier, on_bad_lines='skip')
+        df = normaliser_csv_specifique(df)
+        df['Date'] = pd.to_datetime(df['Date'], dayfirst=True, errors='coerce')
+        if df['Date'].isna().all():
+             df = pd.read_csv(fichier, on_bad_lines='skip')
+             df = normaliser_csv_specifique(df)
+             df['Date'] = pd.to_datetime(df['Date'], dayfirst=False, errors='coerce')
+        df = df.dropna(subset=['Date', 'HomeTeam', 'AwayTeam'])
+        df = df[df['Date'] >= pd.Timestamp.now().normalize()]
+        return df
+    except: return pd.DataFrame()
+
 # ==============================================================================
-# 4. ANALYSE
+# 4. ANALYSE HYBRIDE
 # ==============================================================================
 
-def analyser_donnees(df, ligues_dict):
+def analyser_donnees(df, ligues_dict, df_future_embedded, df_fixtures_global):
     resultats = []
     conditions = {
         'FT Marque': 'Cond_FT_Score', 'FT CS': 'Cond_FT_CS', 'FT No CS': 'Cond_FT_No_CS',
@@ -176,6 +297,32 @@ def analyser_donnees(df, ligues_dict):
             df_eq = df[(df['HomeTeam'] == eq) | (df['AwayTeam'] == eq)].copy()
             if df_eq.empty: continue
             rec = {'Équipe': eq, 'Ligue': nom_ligue}
+            
+            # -- LOGIQUE PROCHAIN MATCH (HYBRIDE) --
+            prochain = "Pas de match prévu"
+            match_trouve = False
+            
+            # 1. Chercher dans le fichier de la ligue
+            if not df_future_embedded.empty:
+                futurs = df_future_embedded[(df_future_embedded['HomeTeam'] == eq) | (df_future_embedded['AwayTeam'] == eq)]
+                if not futurs.empty:
+                    match = futurs.iloc[0]
+                    if match['HomeTeam'] == eq: adv = match['AwayTeam']; cote = "Dom"
+                    else: adv = match['HomeTeam']; cote = "Ext"
+                    prochain = f"{adv} ({cote}) - {match['Date'].strftime('%d/%m')}"
+                    match_trouve = True
+            
+            # 2. Si pas trouvé, chercher dans fixtures.csv
+            if not match_trouve and not df_fixtures_global.empty:
+                futurs = df_fixtures_global[(df_fixtures_global['HomeTeam'] == eq) | (df_fixtures_global['AwayTeam'] == eq)]
+                if not futurs.empty:
+                    match = futurs.iloc[0]
+                    if match['HomeTeam'] == eq: adv = match['AwayTeam']; cote = "Dom"
+                    else: adv = match['HomeTeam']; cote = "Ext"
+                    prochain = f"{adv} ({cote}) - {match['Date'].strftime('%d/%m')}"
+            
+            rec['Prochain_Match'] = prochain
+
             score, str_forme = calculer_score_forme(df_eq, eq)
             rec['Form_Score'] = score
             rec['Form_Last_5_Str'] = str_forme
@@ -201,11 +348,10 @@ def analyser_donnees(df, ligues_dict):
     return pd.DataFrame(resultats)
 
 # ==============================================================================
-# 5. GÉNÉRATION HTML (V5: RECHERCHE PAR ÉQUIPE)
+# 5. GÉNÉRATION HTML
 # ==============================================================================
 
 def generer_html(df_complet, df_brisees, nom_fichier):
-    # Convertir le DataFrame complet en JSON pour l'utiliser en JavaScript
     json_data = df_complet.fillna('').to_json(orient='records')
 
     stats_config = {
@@ -216,7 +362,6 @@ def generer_html(df_complet, df_brisees, nom_fichier):
         'MT +0.5': 'mt_p05', 'MT -0.5': 'mt_m05', 'MT +1.5': 'mt_p15', 'MT -1.5': 'mt_m15'
     }
 
-    # --- Données Alertes Rouges pour Dashboard ---
     alertes_rouges = []
     for stat in stats_config:
         col_rec = f'{stat}_Record'
@@ -233,7 +378,6 @@ def generer_html(df_complet, df_brisees, nom_fichier):
                     'Année': row.get(col_an, '-'), 'Série': curr
                 })
 
-    # --- Helpers Rendu Python (Statique) ---
     def render_table_alertes(data_list):
         if not data_list: return '<div class="empty-state">✅ Aucune alerte rouge.</div>'
         df = pd.DataFrame(data_list).sort_values(['Ligue', 'Équipe'])
@@ -273,16 +417,14 @@ def generer_html(df_complet, df_brisees, nom_fichier):
         html += "</tbody></table>"
         return html
 
-    # --- Construction Navbar ---
     navbar_html = '<div class="top-navbar"><div class="nav-scroll">'
     navbar_html += '<div class="nav-item active" onclick="showView(\'view-dashboard\', this)">📊 Tableau de Bord</div>'
-    navbar_html += '<div class="nav-item search-btn" onclick="showView(\'view-team-search\', this)">🔍 Recherche Équipe</div>' # NOUVEAU BOUTON
+    navbar_html += '<div class="nav-item search-btn" onclick="showView(\'view-team-search\', this)">🔍 Recherche Équipe</div>'
     navbar_html += '<div class="nav-item" onclick="showView(\'view-forme\', this)">📈 État de Forme</div>'
     for stat, id_tag in stats_config.items():
         navbar_html += f'<div class="nav-item" onclick="showView(\'view-{id_tag}\', this)">{stat}</div>'
     navbar_html += '</div></div>'
 
-    # --- Vues ---
     dashboard_html = f"""
     <div id="view-dashboard" class="view-section active">
         <div class="header"><h1>📊 Tableau de Bord</h1><p>Généré le {datetime.datetime.now().strftime('%d/%m/%Y à %H:%M')}</p></div>
@@ -292,17 +434,15 @@ def generer_html(df_complet, df_brisees, nom_fichier):
             <div class="kpi-card kpi-gray"><div class="kpi-value">{len(df_brisees)}</div><div class="kpi-label">Séries Brisées</div></div>
         </div>
         <div class="card"><h2>🚨 Alertes Actives (Série = Record)</h2>{render_table_alertes(alertes_rouges)}</div>
-        <div class="card"><h2>📉 Séries Brisées (Récemment)</h2>
+        <div class="card"><h2>📉 Séries Brisées</h2>
         {('<table class="data-table"><thead><tr><th>Ligue</th><th>Équipe</th><th>Stat</th><th>Arrêtée à</th></tr><tbody>' + ''.join([f"<tr><td>{r['Ligue']}</td><td class='fw-bold'>{r['Équipe']}</td><td>{r['Statistique']}</td><td class='text-center text-red fw-bold'>{r['Série Précédente']}</td></tr>" for _, r in df_brisees.iterrows()]) + '</tbody></table>') if not df_brisees.empty else '<div class="empty-state">Aucune.</div>'}
         </div>
     </div>
     """
 
-    # --- VUE RECHERCHE ÉQUIPE (NOUVEAU) ---
     search_html = f"""
     <div id="view-team-search" class="view-section" style="display:none;">
         <div class="header"><h1>🔍 Fiche d'Identité Équipe</h1></div>
-        
         <div class="card filter-box">
             <div class="select-group">
                 <label>1. Choisir la Ligue</label>
@@ -313,18 +453,15 @@ def generer_html(df_complet, df_brisees, nom_fichier):
                 <select id="sel-team" onchange="displayTeamStats()" disabled><option value="">-- En attente --</option></select>
             </div>
         </div>
-
         <div id="team-result-container"></div>
     </div>
     """
 
     forme_view_html = f'<div id="view-forme" class="view-section" style="display:none;"><div class="header"><h1>📈 État de Forme</h1></div><div class="card">{render_table_forme(df_complet)}</div></div>'
-    
     stats_views_html = ""
     for stat, id_tag in stats_config.items():
         stats_views_html += f'<div id="view-{id_tag}" class="view-section" style="display:none;"><div class="header"><h1>Statistiques : {stat}</h1></div><div class="card">{render_table_stats_tab(df_complet, stat)}</div></div>'
 
-    # --- CSS ---
     css = """
     <style>
         :root { --bg: #f1f5f9; --nav-bg: #1e293b; --card-bg: #ffffff; --primary: #3b82f6; --text: #0f172a; --red: #ef4444; --green: #10b981; --orange: #f97316; }
@@ -337,18 +474,13 @@ def generer_html(df_complet, df_brisees, nom_fichier):
         .search-btn { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
         .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
         .card { background: var(--card-bg); border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 25px; }
-        
-        /* Filter Box */
         .filter-box { display: flex; gap: 20px; align-items: center; background: #fff; border-left: 5px solid var(--primary); }
         .select-group { flex: 1; }
-        .select-group label { display: block; font-size: 0.85em; color: #64748b; margin-bottom: 5px; font-weight: bold; }
         select { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 1em; outline: none; }
-        select:focus { border-color: var(--primary); }
-
-        /* Team Card Details */
-        .team-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        .team-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
         .team-title h2 { margin: 0; font-size: 1.8em; color: var(--nav-bg); }
         .team-badge { background: var(--nav-bg); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8em; }
+        .next-match-box { background-color: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-size: 1.2em; }
         .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
         .stat-box { border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; background: #f8fafc; }
         .stat-box.alert { background: #fef2f2; border-color: #fecaca; }
@@ -357,11 +489,9 @@ def generer_html(df_complet, df_brisees, nom_fichier):
         .stat-rec { font-size: 0.85em; color: #94a3b8; }
         .stat-box.alert .stat-val { color: var(--red); }
         .stat-box.alert .stat-name { color: #991b1b; font-weight: bold; }
-
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .kpi-card { background: white; padding: 20px; border-radius: 10px; text-align: center; border-top: 4px solid #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .kpi-red { border-color: var(--red); color: var(--red); } .kpi-blue { border-color: var(--primary); color: var(--primary); } .kpi-value { font-size: 2.5em; font-weight: 800; }
-        
         .data-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.95em; }
         .data-table th { text-align: left; padding: 12px; background: #f8fafc; border-bottom: 2px solid #e2e8f0; color: #64748b; }
         .data-table td { padding: 12px; border-bottom: 1px solid #e2e8f0; }
@@ -378,23 +508,19 @@ def generer_html(df_complet, df_brisees, nom_fichier):
 
     js = f"""
     <script>
-        // DATA INJECTION
         const GLOBAL_DATA = {json_data};
         
-        // NAVIGATION
         function showView(viewId, navItem) {{
             document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
             document.getElementById(viewId).style.display = 'block';
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             navItem.classList.add('active');
             window.scrollTo(0, 0);
-            
             if(viewId === 'view-team-search' && document.getElementById('sel-league').options.length <= 1) {{
                 populateLeagues();
             }}
         }}
 
-        // SEARCH LOGIC
         function populateLeagues() {{
             const leagues = [...new Set(GLOBAL_DATA.map(item => item.Ligue))].sort();
             const sel = document.getElementById('sel-league');
@@ -409,9 +535,7 @@ def generer_html(df_complet, df_brisees, nom_fichier):
             const league = document.getElementById('sel-league').value;
             const teamSel = document.getElementById('sel-team');
             teamSel.innerHTML = '<option value="">-- Sélectionner --</option>';
-            
             if(!league) {{ teamSel.disabled = true; return; }}
-            
             const teams = [...new Set(GLOBAL_DATA.filter(i => i.Ligue === league).map(i => i['Équipe']))].sort();
             teams.forEach(t => {{
                 const opt = document.createElement('option');
@@ -426,11 +550,9 @@ def generer_html(df_complet, df_brisees, nom_fichier):
             const container = document.getElementById('team-result-container');
             if(!teamName) {{ container.innerHTML = ''; return; }}
 
-            // Get first row for this team to get form data
             const teamData = GLOBAL_DATA.find(i => i['Équipe'] === teamName);
             if(!teamData) return;
 
-            // Get Form Pills
             let pills = "";
             if(teamData.Form_Last_5_Str) {{
                 pills = teamData.Form_Last_5_Str.split(',').map(res => {{
@@ -439,36 +561,25 @@ def generer_html(df_complet, df_brisees, nom_fichier):
                 }}).join('');
             }}
 
+            let nextMatchHTML = '';
+            if(teamData.Prochain_Match && teamData.Prochain_Match !== 'Pas de match prévu' && teamData.Prochain_Match !== 'Calendrier introuvable') {{
+                nextMatchHTML = `<div class="next-match-box">⚽ Prochain Match : <strong>${{teamData.Prochain_Match}}</strong></div>`;
+            }} else {{
+                nextMatchHTML = `<div class="next-match-box" style="background:#f3f4f6; color:#6b7280; border-color:#e5e7eb;">🚫 ${{teamData.Prochain_Match}}</div>`;
+            }}
+
             let html = `<div class="card">
                 <div class="team-header">
                     <div class="team-title"><h2>${{teamName}}</h2></div>
                     <div class="team-badge">${{teamData.Ligue}}</div>
                 </div>
+                ${{nextMatchHTML}}
                 <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
                     <strong>Forme :</strong> ${{pills}} <span style="color:#64748b; margin-left:10px;">(Score: ${{teamData.Form_Score.toFixed(1)}})</span>
                 </div>
                 <div class="stat-grid">`;
 
-            // Define stats columns to look for
-            const stats = [
-                {{k:'ft_marque', l:'FT Marque'}}, {{k:'ft_cs', l:'FT CleanSheet'}}, {{k:'ft_no_cs', l:'FT Encaisse'}},
-                {{k:'ft_nuls', l:'FT Nul'}},
-                {{k:'ft_m05', l:'FT -0.5'}}, {{k:'ft_p15', l:'FT +1.5'}},
-                {{k:'ft_m15', l:'FT -1.5'}}, {{k:'ft_p25', l:'FT +2.5'}},
-                {{k:'mt_p05', l:'MT +0.5'}}, {{k:'mt_m05', l:'MT -0.5'}}
-            ];
-
-            // Loop through GLOBAL_DATA is not efficient, but easier: we have one row per team? 
-            // Ah wait, GLOBAL_DATA has one row per team per league containing ALL stats columns.
-            // My Python script creates one big row with all columns like 'FT Marque_Record', etc.
-            
-            // Let's define the keys dynamically based on the Python STATS_COLUMNS_BASE
-            const statKeys = [
-                'FT Marque', 'FT CS', 'FT No CS', 'FT Nuls',
-                'FT -0.5', 'FT +1.5', 'FT -1.5', 'FT +2.5', 
-                'MT +0.5', 'MT -0.5'
-            ];
-
+            const statKeys = ['FT Marque', 'FT CS', 'FT No CS', 'FT Nuls', 'FT -0.5', 'FT +1.5', 'FT -1.5', 'FT +2.5', 'MT +0.5', 'MT -0.5'];
             statKeys.forEach(stat => {{
                 let rec = teamData[stat + '_Record'];
                 let curr = teamData[stat + '_EnCours'];
@@ -478,15 +589,9 @@ def generer_html(df_complet, df_brisees, nom_fichier):
                     let isAlert = (curr > 0 && curr === rec);
                     let cls = isAlert ? 'alert' : '';
                     let icon = isAlert ? '🚨 ' : '';
-                    
-                    html += `<div class="stat-box ${{cls}}">
-                        <div class="stat-name">${{icon}}${{stat}}</div>
-                        <div class="stat-val">Série : ${{curr}}</div>
-                        <div class="stat-rec">Record : ${{rec}} (${{an}})</div>
-                    </div>`;
+                    html += `<div class="stat-box ${{cls}}"><div class="stat-name">${{icon}}${{stat}}</div><div class="stat-val">Série : ${{curr}}</div><div class="stat-rec">Record : ${{rec}} (${{an}})</div></div>`;
                 }}
             }});
-
             html += `</div></div>`;
             container.innerHTML = html;
         }}
@@ -507,7 +612,7 @@ def generer_html(df_complet, df_brisees, nom_fichier):
 
     try:
         with open(nom_fichier, 'w', encoding='utf-8') as f: f.write(full_html)
-        print(f"\n✨ Rapport HTML généré (V5 Interactive) : {os.path.abspath(nom_fichier)}")
+        print(f"\n✨ Rapport HTML généré (V12 Anti-Doublons) : {os.path.abspath(nom_fichier)}")
     except Exception as e: print(f"Erreur HTML: {e}")
 
 # ==============================================================================
@@ -542,9 +647,17 @@ if __name__ == "__main__":
     if not ligues:
         print(f"ERREUR: Aucun fichier CSV trouvé dans {DOSSIER_PRINCIPAL_DATA}")
         exit()
-    df_global = charger_csvs_locaux(fichiers)
-    if df_global is None: exit()
-    df_resultats = analyser_donnees(df_global, ligues)
+    
+    # 1. Chargement TOUT depuis les fichiers de ligue (Historique + Futurs intégrés + Nettoyage Doublons)
+    df_hist, df_fixtures_embedded = charger_tout_depuis_csv(fichiers)
+    if df_hist is None: exit()
+    
+    # 2. Chargement du fichier "fixtures.csv" GLOBAL
+    df_fixtures_global = charger_fixtures_externes(DOSSIER_PRINCIPAL_DATA)
+    
+    # 3. Analyse
+    df_resultats = analyser_donnees(df_hist, ligues, df_fixtures_embedded, df_fixtures_global)
+    
     CACHE_FILE = "cache_series.csv"
     df_brisees = comparer_cache(df_resultats, CACHE_FILE)
     df_resultats.to_csv(CACHE_FILE, index=False)
